@@ -1,0 +1,113 @@
+<div class="panel panel-default">
+    <div class="panel-heading">
+        Super Macros
+    </div>
+    <div class="row">
+        <div class="col-md-4"  style="padding-right: 0px; border-right: 1px solid #ddd">
+            <div>
+                <table class="table" style="margin-bottom: 0px">
+                    <colgroup>
+                        <col width="40px"/>
+                        <col width="100%"/>
+                        <col width="39px"/>
+                        <col width="39px"/>
+                        <col width="15px"/>
+                    </colgroup>
+                    <thead class="thead-light">
+                        <tr>
+                            <th>#</th>
+                            <th class="celula-trunca-texto" title="Descrição da Super Macro">Descrição</th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+            <div redimensionar="259" style="overflow-y: scroll;">
+                <table class="table">
+                    <colgroup>
+                        <col width="40px"/>
+                        <col width="100%"/>
+                        <col width="39px"/>
+                        <col width="39px"/>
+                    </colgroup>
+                    <tbody>
+                        <tr *ngFor="let sm of superMacros"  class="clickable-row" (click)="selecionar(sm)" [ngClass]="{'linha-selecionada': sm.id == superMacroSelecionada.id}">
+                            <td>{{sm.id}}</td>
+                            <td class="celula-trunca-texto" title="{{sm.descricao}}">{{sm.descricao}}</td>
+                            <td class="celula-trunca-texto" title="Editar">
+                                <button style="text-align: center; margin-left: 2px;" title="Editar" type="button" class="btn btn-info botao-reduzido"  data-toggle="modal" data-target="#dialogCreateSM" (click)="selecionar(sm)" [disabled]="!editavel">
+                                    <span class="glyphicon glyphicon-edit"></span>
+                                </button>
+                            </td>
+                            <td class="celula-trunca-texto" title="Excluir">
+                                <button style="text-align: center; margin-left: 2px;" title="Excluir" type="button" class="btn btn-danger botao-reduzido" (click)="removeSM(sm)" [disabled]="!editavel">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot class="status-tabela">
+                        <tr *ngIf="status == LOADING"><td colspan="4"><i>Carregando Super Macros...</i></td></tr>
+                        <tr *ngIf="superMacros != null && superMacros.length == 0 && status == COMPLETE"><td colspan="4"><i>Não Há Super Macros para serem listadas</i></td></tr>
+                        <tr *ngIf="status == ERROR && superMacros.length == 0"><td class="erro" colspan="4"><i>Falha na obtenção de Super Macros!</i></td></tr>
+                    </tfoot>
+                </table>
+            </div>
+            <div class="panel-footer">
+                <button type="button" class="btn btn-primary botao-barra" style="width: 150px;" data-toggle="modal" data-target="#dialogCreateSM" (click)="novaSM()" [disabled]="!editavel">Nova Super Macro</button>
+            </div>
+        </div>
+        <div class="col-md-8" style="padding-left: 0px;">
+            <div class="barra-titulo">
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <td colspan="3" class="celula-trunca-texto" style="text-align: center;">
+                                <h4 *ngIf="superMacroSelecionada.id == 0" style="display: inline-block; color: gray;" title=""><i>Selecione uma Super Macro...</i></h4>
+                                <h4 *ngIf="superMacroSelecionada.id > 0" style="display: inline-block" title="">Super Macro: <b>{{superMacroSelecionada.descricao}}</b> (Macro Padrão: <b>{{superMacroSelecionada.macro_padrao.nome}}</b>)</h4>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div>
+                <app-macro-super-macro [ancestral]="eu">Carregando...</app-macro-super-macro>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="dialogCreateSM" tabindex="-1" role="dialog" aria-labelledby="dialogCreateSMTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Nova Super Macro</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <fieldset>
+                    <form id="superMacroForm" class="form-group" style="text-align: left; width: 400px; margin: 15px auto;" (submit)="criarAlterarSuperMacro($event)">
+                        <div class="alert alert-info" [ngClass]="{'alert-info': !erroAviso, 'alert-danger': erroAviso}" *ngIf="aviso">
+                            <strong *ngIf="!erroAviso">Informação!</strong><strong *ngIf="erroAviso">Falha!</strong> {{aviso}}
+                        </div>
+                        <label class="style1">Descrição: *</label><br>
+                        <input class="form-control" type="text" name="descricao" [(ngModel)]="superMacroSelecionada.descricao" size="60" [disabled]="!editavel" required><p></p>
+                        <label class="style1">Macro Padrão</label><br>
+                        <select class="form-control" name="macro-padrao" [(ngModel)]="macroPadraoIdTemp" (change)="aplicarMacroPadrao()" [disabled]="!editavel" required>   
+                            <option hidden disabled [value]="0" selected> -- Selecione -- </option>  
+                            <option *ngFor="let m of macros" [value]="m.id">{{m.nome}}</option>       
+                        </select><br>
+                    </form>
+                </fieldset>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" form="superMacroForm" class="btn btn-primary botao-barra"  [disabled]="!editavel">Enviar</button>
+                <button type="button" class="btn btn-secondary botao-barra" data-dismiss="modal">Fechar</button>
+            </div>
+        </div>
+    </div>
+</div>

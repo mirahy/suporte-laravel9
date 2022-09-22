@@ -1,0 +1,116 @@
+<div class="row">
+    <div class="col-md-14">
+        <div class="panel panel-default">
+            <div class="panel-heading">Pessoas UFGD</div>
+			<fieldset [disabled]="!editavel">
+                <form id="filtrosForm" class="form-horizontal">
+                    <br>
+                    <div class="form-group">
+                        <label for="tipoFiltro" class="col-md-3 control-label">'Tipo' da Pessoa:</label>
+                        <div class="col-md-8">
+                            <ng-container *ngIf="!estatusList">
+                                <select class="form-control" id="tipoFiltro" name="tipoFiltro" disabled >   
+                                    <option hidden disabled selected value> -- </option>
+                                </select>
+                            </ng-container>
+                            <ng-container *ngIf="estatusList && estatusList.length == 0">
+                                <select class="form-control" id="tipoFiltro" name="tipoFiltro" disabled >   
+                                    <option hidden disabled selected value> -- Não Tipos de Pessoas para serem selecionados -- </option>
+                                </select>
+                            </ng-container>
+                            <ng-container *ngIf="estatusList && estatusList.length > 0">
+                                <select class="form-control" id="tipoFiltro" name="tipoFiltro" [(ngModel)]="estatusSelecionadoId" (change)="selecionaEstatus()" required>   
+                                    <option hidden disabled selected value> -- Selecione -- </option>                
+                                    <option *ngFor="let e of estatusList; let idx = index" [value]="idx">{{e.estatus}}</option>
+                                </select>
+                            </ng-container>
+                        </div>
+                    </div>
+					<ng-container *ngIf="estatusSelecionadoTipoPessoa == TIPO_PESSOA_ACADEMICO_GRADUACAO || estatusSelecionadoTipoPessoa == TIPO_PESSOA_ACADEMICO_POS">
+						<div class="form-group">
+							<label for="faculdadeFiltro" class="col-md-3 control-label">Faculdade:</label>
+							<div class="col-md-8">
+								<ng-container *ngIf="faculdades.length == 0">
+									<select class="form-control" id="faculdadeFiltro" name="faculdadeFiltro"  disabled >   
+										<option hidden disabled selected value> -- Não há Faculdades para serem selecionadas -- </option>
+									</select>
+								</ng-container>
+								<ng-container *ngIf="faculdades.length > 0">
+									<select class="form-control" id="faculdadeFiltro" name="faculdadeFiltro" [(ngModel)]="faculdadeTemp" (change)="selecionaFaculdade()" required>   
+										<option selected value> -- Selecione -- </option>                
+										<option *ngFor="let f of faculdades" [value]="f">{{f}}</option>
+									</select>
+								</ng-container>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="cursoFiltro" class="col-md-3 control-label">Curso:</label>
+							<div class="col-md-8">
+								<ng-container *ngIf="!faculdadeTemp">
+									<select class="form-control" id="cursoFiltro" name="curso"  disabled >   
+										<option hidden disabled selected value> -- </option>
+									</select>
+								</ng-container>
+								<ng-container *ngIf="faculdadeTemp && cursos.length == 0">
+									<select class="form-control" id="faculdadeFiltro" name="faculdadeFiltro"  disabled >   
+										<option hidden disabled selected value> -- Não há Cursos para serem selecionados -- </option>
+									</select>
+								</ng-container>
+								<ng-container *ngIf="faculdadeTemp && cursos.length > 0">
+									<select class="form-control" id="cursoFiltro" name="curso"  [disabled]="!editavel" [(ngModel)]="cursoTemp" (change)="selecionaCurso()" required>   
+										<option selected value> -- Selecione -- </option>                    
+										<option *ngFor="let c of cursos" [value]="c">{{c}}</option>
+									</select>
+								</ng-container>
+							</div>
+						</div>
+					</ng-container>
+					<ng-container *ngIf="estatusSelecionadoTipoPessoa == TIPO_PESSOA_FUNCIONARIO">
+						<table style="width: 100%;">
+							<div class="form-group">
+								<label for="lotacao-raiz" class="col-md-3 control-label">Lotação: </label>
+								
+								<div class="col-md-8">
+									<select id="lotacao-raiz" class="form-control" name="lotacao-raiz" [(ngModel)]="lotacoesSelected[0]" (change)="selecionaLotacao(0, 0)">
+										<option value selected> -- Raiz -- </option>  
+										<option *ngFor="let nodo of arvoreLotacoes.filhosArray" [value]="nodo.id">{{getDescLotacaoNodo(nodo)}}</option>
+									</select>
+								</div>
+							</div>
+							<ng-container *ngFor="let lot of lotacoesTrees; let idxx = index">
+								<div *ngIf="lot" class="form-group">
+									<label class="col-md-3 control-label"></label>
+									<div class="col-md-8">
+										<select class="form-control" name="lotacao-{{idxx+1}}" [(ngModel)]="lotacoesSelected[idxx+1]" (change)="selecionaLotacao(lot.id, idxx+1)">
+											<option value selected> -- </option>  
+											<option *ngFor="let oo of lot.filhosArray" [value]="oo.id">{{getDescLotacaoNodo(oo)}}</option>
+										</select>
+									</div>
+								</div>
+							</ng-container>
+						</table>
+					</ng-container>
+                    
+					<div class="panel-footer">
+						<button *ngIf="estatusSelecionadoTipoPessoa == null" class="btn btn-primary" disabled>Obter Dados</button>
+						<form *ngIf="estatusSelecionadoTipoPessoa == TIPO_PESSOA_ACADEMICO_GRADUACAO || estatusSelecionadoTipoPessoa == TIPO_PESSOA_ACADEMICO_POS" 
+								id="formDadosAcademicos" action="/formulario-pessoas-estatus-lotacao/academico" method="POST" (submit)="obterDadosAcademicos($event)">
+							<input type="hidden" name="estatus" [value]="estatusSelecionadoEstatus" />
+							<input type="hidden" name="faculdade" [value]="faculdadeTemp" />
+							<input type="hidden" name="curso" [value]="cursoTemp" />
+							<input type="hidden" name="tipo_pessoa" [value]="estatusSelecionadoTipoPessoa" />
+							<button type="submit" class="btn btn-primary" [disabled]="!editavel || !estatusSelecionadoEstatus">Obter Dados</button>
+						</form>
+						<form *ngIf="estatusSelecionadoTipoPessoa == TIPO_PESSOA_FUNCIONARIO" 
+								id="formDadosFuncionarios" action="/formulario-pessoas-estatus-lotacao/funcionario" method="POST" (submit)="obterDadosFuncionarios($event)">
+							<input type="hidden" name="estatus" [value]="estatusSelecionadoEstatus" />
+							<input type="hidden" name="lotacao" [value]="lotacaoTemp" />
+							<input type="hidden" name="tipo_pessoa" [value]="estatusSelecionadoTipoPessoa" />
+							<button type="submit" class="btn btn-primary" [disabled]="!editavel || !estatusSelecionadoEstatus">Obter Dados</button>
+						</form>
+					</div>
+                </form>
+            </fieldset>
+        </div>
+    </div>
+</div>

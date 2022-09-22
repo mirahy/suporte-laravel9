@@ -1,0 +1,148 @@
+<div>
+    <table class="table" style="margin-bottom: 0px">
+        <colgroup>
+            <col width="50px"/>
+            <col width="39px"/>
+            <col width="39px"/>
+            <col width="33%"/>
+            <col width="50px"/>
+            <col width="34%"/>
+            <col width="33%"/>
+            <col width="39px"/>
+            <col width="39px"/>
+            <col width="15px"/>
+        </colgroup>
+        <thead class="thead-light">
+            <tr>
+                <th title="Ordem de checagem de diretivas" colspan="3">ORD.</th>
+                <th title="Campo de dados da sala a ser checado">CAMPO</th>
+                <th title="Operador: Determina a forma de comparação entre o campo e o valor">OPR.</th>
+                <th title="Valor desejado para ser comparado ao CAMPO, para a validação da diretiva">VALOR</th>
+                <th title="Macro a ser aplicada, caso a diretiva seja validada">MACRO</th>
+                <th></th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+    </table>
+</div>
+<div redimensionar="260" style="overflow-y: scroll;">
+    <table class="table">
+        <colgroup>
+            <col width="50px"/>
+            <col width="39px"/>
+            <col width="39px"/>
+            <col width="33%"/>
+            <col width="50px"/>
+            <col width="34%"/>
+            <col width="33%"/>
+            <col width="39px"/>
+            <col width="39px"/>
+        </colgroup>
+        <tbody>
+            <tr *ngFor="let msm of macroSuperMacros">
+                <ng-container *ngIf="msmTemp.id != msm.id">
+                    <td>{{msm.ordem}}</td>
+                    <td class="celula-trunca-texto" title="Editar">
+                        <button style="text-align: center; margin-left: 2px;" type="button" class="btn btn-success botao-reduzido" (click)="changeOrder(msm.ordem, msm.ordem-1)" [disabled]="msm.ordem <= 1">
+                            <span class="glyphicon glyphicon-arrow-up"></span>
+                        </button>
+                    </td>
+                    <td class="celula-trunca-texto" title="Excluir">
+                        <button style="text-align: center; margin-left: 2px;" type="button" class="btn btn-success botao-reduzido" (click)="changeOrder(msm.ordem, msm.ordem+1)" [disabled]="msm.ordem >= macroSuperMacros.length">
+                            <span class="glyphicon glyphicon-arrow-down"></span>
+                        </button>
+                    </td>
+                    <td class="celula-trunca-texto" title="{{msm.campo}}">{{msm.campo}}</td>
+                    <td>{{msm.operador}}</td>
+                    <td class="celula-trunca-texto" title="{{msm.valor}}">{{msm.valor}}</td>
+                    <td class="celula-trunca-texto" title="{{msm.macro.nome}}">{{msm.macro.nome}}</td>
+                    <td class="celula-trunca-texto" title="Editar">
+                        <button style="text-align: center; margin-left: 2px;" title="Editar" type="button" class="btn btn-info botao-reduzido" (click)="editar(msm)">
+                            <span class="glyphicon glyphicon-edit"></span>
+                        </button>
+                    </td>
+                    <td class="celula-trunca-texto" title="Excluir">
+                        <button style="text-align: center; margin-left: 2px;" title="Excluir" type="button" class="btn btn-danger botao-reduzido" (click)="deletar(msm)">
+                            <span class="glyphicon glyphicon-remove"></span>
+                        </button>
+                    </td>
+                </ng-container>
+                <ng-container *ngIf="msmTemp.id == msm.id">
+                    <td colspan="3">{{msm.ordem}}</td>
+                    <td class="celula-trunca-texto" title="{{msmTemp.campo}}">
+                        <select  class="form-control form-control-micro" [(ngModel)]="msmTemp.campo" required >
+                            <option *ngFor="let c of campos" value="{{c}}">{{c}}</option>
+                        </select>
+					</td>
+                    <td>{{msm.operador}}</td>
+                    <td class="celula-trunca-texto" title="{{msmTemp.valor}}">
+						<input type="text" class="form-control form-control-micro" [(ngModel)]="msmTemp.valor" required/>
+					</td>
+                    <td class="celula-trunca-texto">
+                        <select  class="form-control form-control-micro" [(ngModel)]="msmTemp.macro" required >
+                            <option *ngFor="let m of macros" [value]="m.id">{{m.nome}}</option>
+                        </select>
+                    </td>
+                    <td class="celula-trunca-texto" title="Concluir Edição" style="text-align: center;">
+                        <button style="text-align: center; margin-left: 2px;" title="Concluir Edição" type="button" class="btn btn-success botao-reduzido" (click)="concluirEdicao()" [disabled]="invalid">
+                            <span class="glyphicon glyphicon-ok"></span>
+                        </button>
+                    </td>
+                    <td class="celula-trunca-texto" title="Cancelar" style="text-align: center;">
+                        <button style="text-align: center; margin-left: 2px;" title="Cancelar" type="button" class="btn btn-secondary botao-reduzido" (click)="reset()">
+                            <span class="glyphicon glyphicon-retweet"></span>
+                        </button>
+                    </td>
+                </ng-container>
+            </tr>
+            <tr *ngIf="!emCriacao && macroSuperMacros != null && superMacro.id > 0 && status == COMPLETE">
+                <td *ngIf="msmTemp.id == 0" class="celula-trunca-texto" title="Novo" style="text-align: center;" colspan="7">
+                    <button style="text-align: center; margin-left: 2px;" title="Novo" type="button" class="btn btn-primary botao-reduzido" (click)="novo()">
+                        <span class="glyphicon glyphicon-plus"></span>
+                    </button>
+                </td>
+            </tr>
+            <tr *ngIf="emCriacao">
+                    <td colspan="3">-</td>
+                    <td class="celula-trunca-texto" title="{{msmTemp.campo}}">
+                        <select  class="form-control form-control-micro" [(ngModel)]="msmTemp.campo" required >
+                            <option *ngFor="let c of campos" value="{{c}}">{{c}}</option>
+                        </select>
+					</td>
+                    <td>{{operadores[0]}}</td>
+                    <td class="celula-trunca-texto" title="{{msmTemp.valor}}">
+						<input type="text" class="form-control form-control-micro" [(ngModel)]="msmTemp.valor" required/>
+					</td>
+                    <td class="celula-trunca-texto">
+                        <select  class="form-control form-control-micro" [(ngModel)]="msmTemp.macro" required >
+                            <option *ngFor="let m of macros" [value]="m.id">{{m.nome}}</option>
+                        </select>
+                    </td>
+                    <td *ngIf="msmTemp.id == 0" class="celula-trunca-texto" title="Concluir"  style="text-align: center;" >
+                        <button style="text-align: center; margin-left: 2px;" title="Concluir" type="button" class="btn btn-success botao-reduzido" (click)="concluirEdicao()"  [disabled]="invalid">
+                            <span class="glyphicon glyphicon-ok"></span>
+                        </button>
+                    </td>
+                    <td *ngIf="msmTemp.id == 0" class="celula-trunca-texto" title="Cancelar"  style="text-align: center;" >
+                        <button style="text-align: center; margin-left: 2px;" title="Calcelar" type="button" class="btn btn-secondary botao-reduzido" (click)="reset()">
+                            <span class="glyphicon glyphicon-retweet"></span>
+                        </button>
+                    </td>
+                </tr>
+        </tbody>
+        <tfoot class="status-tabela">
+            <tr *ngIf="status == LOADING"><td colspan="7"><i>Carregando Buscadores...</i></td></tr>
+            <tr *ngIf="macroSuperMacros != null && macroSuperMacros.length == 0 && status == COMPLETE && !emCriacao">
+                <td colspan="7">
+                    <i>Não Há Diretivas para serem listadas</i><br />
+                    <button *ngIf="msmTemp.id > 0" style="text-align: center; margin-left: 2px; margin-top: 5px;" title="Nova" type="button" class="btn btn-primary botao-reduzido" (click)="novo()">
+                        <span class="glyphicon glyphicon-plus"></span>
+                    </button>
+                </td>
+            </tr>
+            <tr *ngIf="status == ERROR"><td class="erro" colspan="7"><i>Falha na obtenção das Diretivas!</i></td></tr>
+            
+        </tfoot>
+    </table>
+</div>

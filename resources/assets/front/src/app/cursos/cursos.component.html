@@ -1,0 +1,96 @@
+<div>
+    <table class="table" style="margin-bottom: 0px">
+        <colgroup>
+            <col width="100%"/>
+            <col width="100px"/>
+            <col width="110px"/>
+            <col width="39px"/>
+            <col width="39px"/>
+            <col width="15px"/>
+        </colgroup>
+        <thead class="thead-light">
+            <tr>
+                <th class="celula-trunca-texto" title="Nome do Curso">Nome do Curso</th>
+                <th class="celula-trunca-texto" title="ID do Curso no SIGECAD">ID SIGECAD</th>
+                <th class="celula-trunca-texto" title="Referência IDs de Categorias a serem somadas">Cat. IDs Refs</th>
+                <th></th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+    </table>
+</div>
+<div redimensionar="315" style="overflow-y: scroll;">
+    <table class="table">
+        <colgroup>
+            <col width="100%"/>
+            <col width="100px"/>
+            <col width="110px"/>
+            <col width="39px"/>
+            <col width="39px"/>
+        </colgroup>
+        <tbody>
+            <tr *ngFor="let curso of faculdadeSelecionada.cursos" [ngClass]="{'linha-desativada' : !curso.ativo}">
+                <td class="celula-trunca-texto" title="{{curso.nome}}">{{curso.nome}}</td>
+                <td title="ID do Curso no SIGECAD">{{curso.curso_key}}</td>
+                <td title="Referência IDs de Categorias a serem somadas">{{curso.auto_increment_ref}}</td>
+                <td class="celula-trunca-texto" title="Editar">
+                    <button style="text-align: center; margin-left: 2px;" title="Editar" type="button" class="btn btn-info botao-reduzido"  data-toggle="modal" data-target="#dialogCreateCurso" (click)="seleciona(curso)" [disabled]="!editavel">
+                        <span class="glyphicon glyphicon-edit"></span>
+                    </button>
+                </td>
+                <td class="celula-trunca-texto" title="Excluir">
+                    <button style="text-align: center; margin-left: 2px;" title="Excluir" type="button" class="btn btn-danger botao-reduzido" (click)="remove(curso)" [disabled]="!editavel">
+                        <span class="glyphicon glyphicon-remove"></span>
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+        <tfoot class="status-tabela">
+            <tr *ngIf="faculdadeSelecionada.cursos != null && faculdadeSelecionada.cursos.length == 0 && status == COMPLETE"><td colspan="4"><i>Não Há Cursos para serem listados</i></td></tr>
+        </tfoot>
+    </table>
+</div>
+<div class="panel-footer">
+    <button type="button"  style="width: 130px;" class="btn btn-primary botao-barra" data-toggle="modal" data-target="#dialogCreateCurso" (click)="novo()" [disabled]="!editavel || faculdadeSelecionada.id == 0">Novo Curso</button>
+</div>
+
+<div class="modal fade" id="dialogCreateCurso" tabindex="-1" role="dialog" aria-labelledby="dialogCreateCursoTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Cursos</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <fieldset>
+                    <form id="cursoForm" class="form-group" style="text-align: left; width: 400px; margin: 15px auto;" (submit)="criaAltera($event)">
+                        <div class="alert alert-info" [ngClass]="{'alert-info': !erroAviso, 'alert-danger': erroAviso}" *ngIf="aviso">
+                            <strong *ngIf="!erroAviso">Informação!</strong><strong *ngIf="erroAviso">Falha!</strong> {{aviso}}
+                        </div>
+
+                        <label class="style1">Nome: *</label><br>
+                        <input class="form-control" type="text" name="nome" placeholder="Ex. Sistemas de Informação" [(ngModel)]="cursoTemp.nome" size="60" [disabled]="!editavel" required><p></p>
+
+                        <label class="style1" for="curso-key">Curso ID SIGECAD: </label><br>
+                        <input class="form-control" type="text" name="curso-key" placeholder="0" [(ngModel)]="cursoTemp.curso_key" style="width: 100px;" [disabled]="!editavel"><p></p>
+                    
+                        <label class="style1" for="auto-increment-ref">Referência IDs de Categorias a serem somadas: </label><br>
+                        <input class="form-control" type="number" name="auto-increment-ref" placeholder="0" [(ngModel)]="cursoTemp.auto_increment_ref" style="width: 100px;" [disabled]="!editavel"><p></p>
+                    
+                        <label class="style1" for="curso-ativo">Curso Ativo: </label><br>
+                        <span class="big-check">
+                            <input  type="checkbox" name="curso-ativo" [(ngModel)]="cursoTemp.ativo" [disabled]="!editavel">
+                        </span><p></p>
+                    </form>
+                </fieldset>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" form="cursoForm" class="btn btn-primary botao-barra"  [disabled]="!editavel">Enviar</button>
+                <button type="button" class="btn btn-secondary botao-barra" data-dismiss="modal">Fechar</button>
+            </div>
+        </div>
+    </div>
+</div>

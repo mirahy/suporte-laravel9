@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: {{ .Values.applicationName }}
+  name: {{ .Values.applicationName }}
+  namespace: {{ .Release.Namespace }}
+spec:
+  ports:
+  - name: {{ .Values.service.name }}
+    port: {{ .Values.service.port }}
+    targetPort: {{ .Values.applicationPort }}
+    protocol: {{ .Values.service.protocol }}
+  selector:
+    app: {{ .Values.applicationName }}
+  type: {{ .Values.service.type }}
+  sessionAffinity: ClientIP

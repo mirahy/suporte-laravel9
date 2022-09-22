@@ -1,0 +1,1 @@
+$('.botao-tooltip').tooltip();

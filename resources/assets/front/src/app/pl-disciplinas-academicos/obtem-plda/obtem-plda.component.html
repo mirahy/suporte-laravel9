@@ -1,0 +1,110 @@
+
+<fieldset [disabled]="!editavel">
+    <form id="filtrosForm" class="form-horizontal">
+        <br>
+        <div class="form-group">
+            <label for="periodoLetivoFiltro" class="col-md-3 control-label">Período Letivo:</label>
+            <div class="col-md-8">
+                <table>
+                    <colgroup>
+                        <col width="100%"/>
+                        <col width="269px">
+                    </colgroup>
+                    <tr>
+                        <td>
+                            <select class="form-control" id="periodoLetivoFiltro" name="periodo-letivo" [(ngModel)]="periodoLetivoSelecionadoId" (change)="selecionaPeriodoLetivo()" required>   
+                                <option hidden disabled selected value> -- Selecione -- </option> 
+                                <option *ngFor="let p of periodoLetivos" [value]="p.id">{{p.nome}}</option>       
+                            </select>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            
+        </div>
+        <div class="form-group">
+            <label for="faculdadeFiltro" class="col-md-3 control-label">Faculdade:</label>
+            <div class="col-md-8">
+                <ng-container *ngIf="!periodoLetivoSelecionadoId">
+                    <select class="form-control" id="faculdadeFiltro" name="faculdadeFiltro"  disabled >   
+                        <option hidden disabled selected value> -- </option>
+                    </select>
+                </ng-container>
+                <ng-container *ngIf="periodoLetivoSelecionadoId && faculdades.length == 0">
+                    <select class="form-control" id="faculdadeFiltro" name="faculdadeFiltro"  disabled >   
+                        <option hidden disabled selected value> -- Não há Faculdades para serem selecionadas -- </option>
+                    </select>
+                </ng-container>
+                <ng-container *ngIf="periodoLetivoSelecionadoId && faculdades.length > 0">
+                    <select class="form-control" id="faculdadeFiltro" name="faculdadeFiltro" [(ngModel)]="faculdadeSelecionadaId" (change)="selecionaFaculdade()" required>   
+                        <option hidden disabled selected value> -- Selecione -- </option>                
+                        <option *ngFor="let f of faculdades" [value]="f.id">{{f.sigla}}</option>
+                    </select>
+                </ng-container>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="cursoFiltro" class="col-md-3 control-label">Curso:</label>
+            <div class="col-md-8">
+                <ng-container *ngIf="!faculdadeSelecionadaId">
+                    <select class="form-control" id="cursoFiltro" name="curso"  disabled >   
+                        <option hidden disabled selected value> -- </option>
+                    </select>
+                </ng-container>
+                <ng-container *ngIf="faculdadeSelecionadaId && faculdadeTemp.cursos.length == 0">
+                    <select class="form-control" id="cursoFiltro" name="curso"  disabled >   
+                        <option hidden disabled selected value> -- Não há Cursos para serem selecionados -- </option>
+                    </select>
+                </ng-container>
+                <ng-container *ngIf="faculdadeSelecionadaId && faculdadeTemp.cursos.length > 0">
+                    <select class="form-control" id="cursoFiltro" name="curso"  [(ngModel)]="cursoSelecionadoId" (change)="selecionaCurso()" required>   
+                        <option hidden disabled selected value> -- Selecione -- </option>                    
+                        <option *ngFor="let c of faculdadeTemp.cursos" [value]="c.id">{{c.curso_key + " - " + c.nome}}</option>
+                    </select>
+                </ng-container>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="diciplinaFiltro" class="col-md-3 control-label">Disciplina:</label>
+            <div class="col-md-8">
+                <table>
+                    <colgroup>
+                        <col width="100%"/>
+                        <col width="269px">
+                    </colgroup>
+                    <tr>
+                        <td>
+                            <ng-container *ngIf="!cursoSelecionadoId">
+                                <select class="form-control" id="diciplinaFiltro" name="disciplinaFiltro"  disabled >   
+                                    <option hidden disabled selected value> -- </option>
+                                </select>
+                            </ng-container>
+                            <ng-container *ngIf="!carregandoEstudantesFlag && cursoSelecionadoId && plDisciplinasAcademicos.length == 0">
+                                <select class="form-control" id="diciplinaFiltro" name="diciplinaFiltro"  disabled >   
+                                    <option hidden disabled selected value> -- Não há Disciplinas para serem selecionadas -- </option>
+                                </select>
+                            </ng-container>
+                            <ng-container *ngIf="carregandoEstudantesFlag && cursoSelecionadoId && plDisciplinasAcademicos.length == 0">
+                                <select class="form-control" id="diciplinaFiltro" name="diciplinaFiltro"  disabled >   
+                                    <option hidden disabled selected value> -- Carregando... -- </option>
+                                </select>
+                            </ng-container>
+                            <ng-container *ngIf="cursoSelecionadoId && plDisciplinasAcademicos.length > 0 && !modoLista">
+                                <select name="diciplinaFiltro" id="diciplinaFiltro" class="form-control" [(ngModel)]="disciplinaSelecionadaNome" (change)="selecionaDisciplina()">
+                                    <option hidden disabled selected value> -- Selecione -- </option>
+                                    <option *ngFor="let d of plDisciplinasAcademicos" [value]="d.disciplina">{{d.disciplina}}</option>
+                                </select>
+                            </ng-container>
+                            <ng-container *ngIf="cursoSelecionadoId && plDisciplinasAcademicos.length > 0 && modoLista">
+                                <select name="diciplinaFiltro" id="diciplinaFiltro" class="form-control" [(ngModel)]="disciplinaSelecionadaNomes" (change)="selecionaDisciplina()" multiple>
+                                    <option *ngFor="let d of plDisciplinasAcademicos" [value]="d.disciplina">{{d.disciplina}}</option>
+                                </select>
+                            </ng-container>
+                        </td>
+                    </tr>
+                </table>
+                
+            </div>
+        </div>
+    </form>
+</fieldset>

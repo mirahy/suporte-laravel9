@@ -1,0 +1,82 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: {{ .Values.applicationName }}
+    version: v1
+  name: {{ .Values.applicationName }}
+  namespace: {{ .Release.Namespace }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Values.applicationName }}
+      version: v1
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 50%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.applicationName }}
+        version: v1
+    spec:
+      {{- if .Values.volume.enabled }}
+      volumes:
+        - name: {{ .Values.applicationName }}-vol
+          persistentVolumeClaim:
+            claimName: {{ .Values.applicationName }}-vol-nfs
+      {{- end }}
+      containers:
+      - name: {{ .Values.applicationName }}
+        image: {{ .Values.image.repository }}
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        ports:
+        -  containerPort: {{ .Values.applicationPort }}
+           name: http
+           protocol: TCP
+        resources:
+          limits:
+            memory: {{ .Values.resources.limits.memory }}
+            cpu: {{ .Values.resources.limits.cpu }}
+          requests:
+            memory: {{ .Values.resources.requests.memory }}
+            cpu: {{ .Values.resources.requests.cpu }}
+        {{- if .Values.volume.enabled }}
+        volumeMounts:
+          - name: {{ .Values.applicationName }}-vol
+            mountPath: {{ .Values.volume.mountPath }}
+        {{- end }}
+        {{- if .Values.env }}
+        env:
+          # Define the environment variables
+          {{- range $key, $val := .Values.env.normal }} 
+          - name: {{ $key }}
+            valueFrom:
+              configMapKeyRef:
+                name: {{ $.Release.Name }}-configmap
+                key: {{ $key }}
+          {{- end }}
+          {{- range $key, $val := .Values.env.secret }} 
+          - name: {{ $key }}
+            valueFrom:
+              secretKeyRef:
+                name: {{ $.Release.Name }}-secret
+                key: {{ $key }}
+          {{- end }}
+        {{- end }}
+        readinessProbe:
+          tcpSocket:
+            port: {{ .Values.applicationPort }}
+          initialDelaySeconds: 5
+          periodSeconds: 15
+        livenessProbe:
+          tcpSocket:
+            port: {{ .Values.applicationPort }}
+          initialDelaySeconds: 30
+          periodSeconds: 60
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30

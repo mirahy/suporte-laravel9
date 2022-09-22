@@ -1,0 +1,261 @@
+<div class="row"><div class="col-md-14">
+<div class="panel panel-default">
+	<div class="panel-heading" style="padding: 3px 15px;">
+		<table>
+			<colgroup>
+				<col width="40%" />
+				<col width="60%" />
+				<col width="39px" />
+				<col width="39px" />
+				<col width="39px" />
+			</colgroup>
+			<tbody>
+				<tr>
+					<td class="celula-trunca-texto">
+						Lote de Salas Simplificados
+					</td>
+					<td style="text-align: center;">
+						<select class="form-control" [(ngModel)]="grupoSelecionadoId" (change)="selecionaGrupoLotes()">
+							<option hidden disabled value selected> -- Selecione Um Grupo de Lotes -- </option>
+							<option *ngFor="let g of gruposLotesSimplificados" [value]="g.id">{{g.descricao}} {{g.auto_export_estudantes ? '✅👥' : ''}}</option>
+						</select>
+					</td>
+					<td title="Novo">
+						<button style="text-align: center; margin-left: 10px;" title="Novo" type="button"
+							class="btn btn-primary botao-reduzido" data-toggle="modal"
+							data-target="#dialogCreateGrupoLSS" (click)="resetGrupo()" [disabled]="!editavel">
+							<span class="glyphicon glyphicon-plus"></span>
+						</button>
+					</td>
+					<td title="Editar">
+						<button style="text-align: center; margin-left: 10px;" title="Editar" type="button"
+							class="btn btn-info botao-reduzido" data-toggle="modal"
+							data-target="#dialogCreateGrupoLSS" [disabled]="!editavel || !grupoLotesSimplificadosSelecionado.id">
+							<span class="glyphicon glyphicon-edit"></span>
+						</button>
+					</td>
+					<td title="Excluir">
+						<button style="text-align: center; margin-left: 10px;" title="Excluir" type="button"
+							class="btn btn-danger botao-reduzido" (click)="removeGrupo()" [disabled]="!editavel || !grupoLotesSimplificadosSelecionado.id">
+							<span class="glyphicon glyphicon-remove"></span>
+						</button>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<div class="row" *ngIf="grupoLotesSimplificadosSelecionado.id">
+		<div class="col-md-3" style="padding-right: 0px; border-right: 1px solid #ddd">
+			<div>
+				<table class="table" style="margin-bottom: 0px">
+					<colgroup>
+						<col width="40px" />
+						<col width="100%" />
+						<col width="39px" />
+						<col width="39px" />
+						<col width="15px" />
+					</colgroup>
+					<thead class="thead-light">
+						<tr>
+							<th>#</th>
+							<th class="celula-trunca-texto" title="Descrição do Lote">Descrição</th>
+							<th></th>
+							<th></th>
+							<th></th>
+						</tr>
+					</thead>
+				</table>
+			</div>
+			<div redimensionar="259" style="overflow-y: scroll;">
+				<table class="table">
+					<colgroup>
+						<col width="40px" />
+						<col width="100%" />
+						<col width="39px" />
+						<col width="39px" />
+					</colgroup>
+					<tbody>
+						<tr *ngFor="let lote of lotes" class="clickable-row" (click)="selecionar(lote)"
+							[ngClass]="{'linha-selecionada': lote.id == loteSelecionado.id}">
+							<td>{{lote.id}}</td>
+							<td class="celula-trunca-texto" title="{{lote.descricao}}">{{lote.descricao}}</td>
+							<td title="Editar">
+								<button style="text-align: center; margin-left: 2px;" title="Editar" type="button"
+									class="btn btn-info botao-reduzido" data-toggle="modal"
+									data-target="#dialogCreateLSS" (click)="selecionar(lote)" [disabled]="!editavel">
+									<span class="glyphicon glyphicon-edit"></span>
+								</button>
+							</td>
+							<td title="Excluir">
+								<button style="text-align: center; margin-left: 2px;" title="Excluir" type="button"
+									class="btn btn-danger botao-reduzido" (click)="removeLote(lote)" [disabled]="!editavel">
+									<span class="glyphicon glyphicon-remove"></span>
+								</button>
+							</td>
+						</tr>
+					</tbody>
+					<tfoot class="status-tabela">
+						<tr *ngIf="status == LOADING">
+							<td colspan="4"><i>Carregando Lotes...</i></td>
+						</tr>
+						<tr *ngIf="lotes != null && lotes.length == 0 && status == COMPLETE">
+							<td colspan="4"><i>Não Há Lotes para serem listados</i></td>
+						</tr>
+						<tr *ngIf="status == ERROR && lotes.length == 0">
+							<td class="erro" colspan="4"><i>Falha na obtenção de lotes!</i></td>
+						</tr>
+					</tfoot>
+				</table>
+			</div>
+			<div class="panel-footer">
+				<button style="text-align: center;" title="Novo Lote" type="button" data-toggle="modal" data-target="#dialogCreateLSS"
+					class="btn btn-primary" (click)="novoLote()" [disabled]="!editavel">
+					<span class="glyphicon glyphicon-plus"></span>
+				</button>
+				<button style="text-align: center; margin-left: 10px;" title="Inserir Usuários" type="button"
+					class="btn btn-info" (click)="inserirEstudantesGrupo()" [disabled]="!editavel">
+					<span class="glyphicon glyphicon-user"></span>
+				</button>
+			</div>
+		</div>
+		<div class="col-md-9" style="padding-left: 0px;">
+			<div class="barra-titulo">
+				<table class="table">
+					<tbody>
+						<tr>
+							<td colspan="3" class="celula-trunca-texto" style="text-align: center;">
+								<h4 *ngIf="loteSelecionado.id == 0" style="display: inline-block; color: gray;"
+									title="">
+									<i>Selecione um Lote...</i>
+								</h4>
+								<h4 *ngIf="loteSelecionado.id > 0" style="display: inline-block" title="">
+									<b>{{loteSelecionado.descricao}}</b> 
+									|  Moodle: {{loteSelecionado.servidor_moodle.nome}}
+								</h4>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div>
+				<app-sala-simplificada [ancestral]="eu">Carregando...</app-sala-simplificada>
+			</div>
+			<div class="panel-footer">
+				<button type="button" class="btn btn-warning" (click)="exportarSalasMoodle()" [disabled]="!editavel || loteSelecionado.id == 0">Exportar Salas para Moodle</button>
+				<button type="button" class="btn btn-info" style="width: 160px;" (click)="exportarEstudantes()" [disabled]="!editavel || loteSelecionado.id == 0">Exportar Estudantes</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+</div></div>
+
+<div class="modal fade" id="dialogCreateGrupoLSS" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" *ngIf="!grupoLoteSimplificadoTemp.id">Novo Grupo de Lotes</h5>
+				<h5 class="modal-title" *ngIf="grupoLoteSimplificadoTemp.id">Alterar Grupo de Lotes</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<fieldset>
+					<form id="grupoLoteForm" class="form-group" style="text-align: left; width: 400px; margin: 15px auto;"
+						(submit)="criarAlterarGrupoLote($event)">
+						<div class="alert alert-info" [ngClass]="{'alert-info': !erroAviso, 'alert-danger': erroAviso}"
+							*ngIf="aviso">
+							<strong *ngIf="!erroAviso">Informação!</strong><strong *ngIf="erroAviso">Falha!</strong>
+							{{aviso}}
+						</div>
+						<label class="style1">Descrição: *</label><br>
+						<input class="form-control" type="text" name="descricao-grupo" placeholder="-- Descrição do Grupo de Lotes --"
+							[(ngModel)]="grupoLoteSimplificadoTemp.descricao" size="60" [disabled]="!editavel" required><br>
+						<label class="style1" for="gl-auto-export">Habilitar Auto Exportação de Estudantes: </label><br>
+						<span class="big-check">
+							<input id="gl-auto-export" type="checkbox" name="gl-auto-export" [(ngModel)]="grupoLoteSimplificadoTemp.auto_export_estudantes" [disabled]="!editavel">
+						</span><p></p>
+					</form>
+				</fieldset>
+			</div>
+			<div class="modal-footer">
+				<button type="submit" form="grupoLoteForm" class="btn btn-primary botao-barra"
+					[disabled]="!editavel">Enviar</button>
+				<button type="button" class="btn btn-secondary botao-barra" data-dismiss="modal">Fechar</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="dialogCreateLSS" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" *ngIf="!loteSelecionado.id">Novo Lote de Salas Simplificados</h5>
+				<h5 class="modal-title" *ngIf="loteSelecionado.id">Alterar Lote de Salas Simplificados</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<fieldset>
+					<form id="loteSalasSimplificadoForm" class="form-group" style="text-align: left; width: 400px; margin: 15px auto;"
+						(submit)="criarAlterarLoteSalasSimplificado($event)">
+						<div class="alert alert-info" [ngClass]="{'alert-info': !erroAviso, 'alert-danger': erroAviso}"
+							*ngIf="aviso">
+							<strong *ngIf="!erroAviso">Informação!</strong><strong *ngIf="erroAviso">Falha!</strong>
+							{{aviso}}
+						</div>
+						<label class="style1">Descrição: *</label><br>
+						<input class="form-control" type="text" name="descricao-lote" placeholder="-- Descrição do lote --"
+							[(ngModel)]="loteSelecionado.descricao" size="60" [disabled]="!editavel" required><br>	
+						<label class="style1">Servidor Moodle: *</label><br>
+						<select class="form-control" name="links-moodle" [(ngModel)]="servidorMoodleSelecionadoId" (change)="selecionaServidorMoodle()" [disabled]="!editavel" required>   
+							<option hidden disabled value selected> -- Selecione -- </option>  
+							<option *ngFor="let s of servidoresMoodle" [value]="s.id">{{s?.nome}} ({{s.url}})</option>       
+						</select><br>
+						<label class="style1">Super Macro: </label><br>
+						<select class="form-control" name="super-macro" [(ngModel)]="superMacroSelecionadaId" (change)="selecionaSuperMacro()" [disabled]="!editavel">   
+							<option value selected> -- Selecione -- </option>  
+							<option *ngFor="let sm of superMacros" [value]="sm.id">{{sm.descricao}}</option>       
+						</select><br>
+						<label class="style1">Sufixo:</label><br>
+						<input class="form-control" type="text" name="sufixo" placeholder="-- Sufixo a ser inserido ao final dos nomes das salas --"
+							[(ngModel)]="loteSelecionado.sufixo" size="60" [disabled]="!editavel"><br>	
+						<label class="style1">Sala Provão ID: </label><br>
+						<input class="form-control" type="number" name="sala-provao-id" placeholder="-- ID da Sala Provão --"
+							[(ngModel)]="loteSelecionado.sala_provao_id" size="60" [disabled]="!editavel"><br>
+					</form>
+				</fieldset>
+			</div>
+			<div class="modal-footer">
+				<button type="submit" form="loteSalasSimplificadoForm" class="btn btn-primary botao-barra"
+					[disabled]="!editavel">Enviar</button>
+				<button type="button" class="btn btn-secondary botao-barra" data-dismiss="modal">Fechar</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="dialogExportResult" tabindex="-1" role="dialog" aria-labelledby="dialogExportResultTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Resposta do Servidor Moodle</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" style="width: 450px;">
+                <div class="alert alert-info" [ngClass]="{'alert-info': !erroAviso, 'alert-danger': erroAviso}" *ngIf="aviso">
+                    <strong *ngIf="!erroAviso">Informação!</strong><strong *ngIf="erroAviso">Falha!</strong> {{aviso}}
+                </div>
+                <div redimensionar="300" style="max-height: 250px;" id="saidaExport"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary botao-barra" data-dismiss="modal" [disabled]="!editavel">Fechar</button>
+            </div>
+        </div>
+    </div>
+</div>

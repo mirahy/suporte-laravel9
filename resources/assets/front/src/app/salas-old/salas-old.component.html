@@ -1,0 +1,187 @@
+<div class="row">
+    <div class="col-md-14">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                Lista de Solicitações de Criação de Salas
+            </div>
+            <div>
+                <table class="table" style="margin-bottom: 0px">
+                    <caption>
+                        <table>
+                            <tr>
+                                <td class="col-md-1"><label for="filtro" class="col-md-1 control-label">Buscar:</label></td>
+                                <td class="col-md-8"><input id="filtro" type="text" class="form-control" name="filtro" [(ngModel)]="criteria" required autofocus></td>
+                            </tr>
+                        </table>
+                    </caption>
+                    <colgroup>
+                        <col width="40px"/>
+                        <col width="25%"/>
+                        <col width="70px"/>
+                        <col width="25%"/>
+                        <col width="25%"/>
+                        <col width="25%"/>
+                        <col width="125px"/>
+                        <col width="100px"/>
+                        <col width="32px"/>
+                        <col width="32px"/>
+                        <col width="32px"/>
+                        <col width="36px"/>
+                        <col width="15px"/>
+                    </colgroup>
+                    <thead class="thead-light">
+                        <tr>
+                            <th style="text-align: center">ID</th>
+                            <th class="celula-trunca-texto" title="PROFESSOR">PROFESSOR</th>
+                            <th class="celula-trunca-texto" title="FACULDADE">FAC.</th>
+                            <th class="celula-trunca-texto" title="CURSO">CURSO</th>
+                            <th class="celula-trunca-texto" title="SALA">SALA</th>
+                            <th class="celula-trunca-texto" title="OBSERVACAO">OBSERVACAO</th>
+                            <th>DATA/HORA</th>
+                            <th style="text-align: center">STATUS</th>
+                            <th colspan="4" style="text-align: center">AÇÕES</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+            <div redimensionar="256" style="overflow-y: scroll;">
+                <table class="table">
+                    <colgroup>
+                        <col width="40px"/>
+                        <col width="25%"/>
+                        <col width="70px"/>
+                        <col width="25%"/>
+                        <col width="25%"/>
+                        <col width="25%"/>
+                        <col width="125px"/>
+                        <col width="100px"/>
+                        <col width="32px"/>
+                        <col width="32px"/>
+                        <col width="32px"/>
+                        <col width="36px"/>
+                    </colgroup>
+                    <tbody>
+                        <tr *ngFor="let sala of (salas | filtroSalas:criteria)">
+                            <td>{{sala.id | zeros:4}}</td>
+                            <td class="celula-trunca-texto" title="{{sala.nome_professor}}">{{sala.nome_professor}}</td>
+                            <td title="{{sala.faculdade}}">{{sala.faculdade}}</td>
+                            <td class="celula-trunca-texto" title="{{sala.curso}}">{{sala.curso}}</td>
+                            <td class="celula-trunca-texto" title="{{sala.nome_sala}}">{{sala.nome_sala}}</td>
+                            <td class="celula-trunca-texto" title="{{sala.observacao}}">{{sala.observacao}}</td>
+                            <td>{{sala.created_at | formatadorData:true}}</td>
+                            <td class="celula-status {{sala.status.chave}}">{{sala.status.descricao}}</td>
+                            <td >
+                                <a title="Gerar Backup" style="text-align: center; margin-left: -2px;" type="button" class="btn btn-primary botao-reduzido" href="/exec-old/{{sala.id}}">
+                                    <span class="glyphicon glyphicon-save"></span>
+                                </a>
+                            </td>
+                            <td>
+                                <button style="text-align: center; margin-left: -2px;" title="{{sala.status.chave == STATUS_INICIAL_PADRAO ? 'Editar' : 'Vizualizar'}}" type="button" class="btn btn-info botao-reduzido"  data-toggle="modal" data-target="#dialogSalas" (click)="editarVisualizar(sala)">
+                                    <span class="glyphicon glyphicon-{{sala.status.chave == STATUS_INICIAL_PADRAO ? 'edit' : 'search'}}"></span>
+                                </button>
+                            </td>
+                            <td>
+                                <button style="text-align: center; margin-left: -2px;" title="Demanda Concluída" type="button" class="btn btn-success botao-reduzido" data-toggle="modal" data-target="#dialogStatus" (click)="preparaSetStatusSala(sala,true)" [disabled]="sala.status.chave != STATUS_INICIAL_PADRAO">
+                                    <span class="glyphicon glyphicon-ok"></span>
+                                </button>
+                            </td>
+                            <td>
+                                <button style="text-align: center; margin-left: -2px;" title="Rejeitar Demanda" type="button" class="btn btn-danger botao-reduzido" data-toggle="modal" data-target="#dialogStatus" (click)="preparaSetStatusSala(sala,false)"  [disabled]="sala.status.chave != STATUS_INICIAL_PADRAO">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot class="status-tabela">
+                        <tr *ngIf="status == LOADING"><td colspan="12"><i>Carregando Salas...</i></td></tr>
+                        <tr *ngIf="salas != null && (salas | filtroSalas:criteria).length == 0 && status == COMPLETE"><td colspan="12"><i>Não Há Salas para serem listadas</i></td></tr>
+                        <tr *ngIf="status == ERROR"><td class="erro" colspan="12"><i>Falha na obtenção de Salas!</i></td></tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+    
+<!-- Modal -->
+<div class="modal fade" id="dialogSalas" tabindex="-1" role="dialog" aria-labelledby="dialogSalasTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Sala #{{sala.id | zeros:4}}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" redimensionar="285">
+                <fieldset>
+                    <form id="salaForm" class="form-group" style="max-width: 500px;">
+                        <div class="alert alert-info" [ngClass]="{'alert-info': !erroAviso, 'alert-danger': erroAviso}" *ngIf="aviso">
+                            <strong *ngIf="!erroAviso">Informação!</strong><strong *ngIf="erroAviso">Falha!</strong> {{aviso}}
+                        </div>
+                        <label class="style1">Nome completo: *</label><br>
+                        <input class="form-control" type="text" name="nome_professor" placeholder="Nome completo" [(ngModel)]="sala.nome_professor" size="60" [readonly]="!editavel" ><p></p>
+
+                        <label class="style1">E-mail: *</label><br>
+                        <input class="form-control" type="email" name="email" placeholder="Preferência institucional" [(ngModel)]="sala.email" size="60" [readonly]="!editavel"><p></p>
+
+                        <label class="style1">Faculdade: *</label><br>
+                        <input class="form-control" type="text" name="faculdade" placeholder="Ex.: FACET" [(ngModel)]="sala.faculdade" size="60" [readonly]="!editavel"><p></p>
+
+                        <label class="style1">Curso: *</label><br>
+                        <input class="form-control" type="text" name="curso" placeholder="Ex.: Sistemas de Informação" [(ngModel)]="sala.curso" size="60" [readonly]="!editavel"><p></p>
+
+                        <label class="style1">Nome da Disciplina: *</label><br>
+                        <input class="form-control" type="text" name="nome_sala" placeholder="Ex.: Algoritimos III" [(ngModel)]="sala.nome_sala" size="60" [readonly]="!editavel"><p></p>
+
+                        <label class="style1">Modalidade da Disciplina: *</label><br>
+                        <select class="form-control" name="modalidade" [(ngModel)]="sala.modalidade" [disabled]="!editavel">                         
+                            <option *ngFor="let m of modalidades" value="{{m.sigla}}">{{m.descricao}}</option>
+                        </select><br>
+                        
+                        <label class="style1">Objetivo da Disciplina: *</label><br>
+                        <select class="form-control" name="objetivo_sala" [(ngModel)]="sala.objetivo_sala" [disabled]="!editavel">                         
+                            <option *ngFor="let o of objetivosSalas" value="{{o.sigla}}">{{o.descricao}}</option>
+                        </select><br>
+                        
+                        <label class="style1">Chave de Inscrição para Estudantes acessarem a sala:</label><br>
+                        <input class="form-control" type="text" name="senha_aluno" placeholder="" [(ngModel)]="sala.senha_aluno" size="60" [readonly]="!editavel"><p></p>
+
+                        <label class="style1">Chave de Inscrição para o Professor acessar a sala: *</label><br>
+                        <input class="form-control" type="text" name="senha_professor" placeholder="" [(ngModel)]="sala.senha_professor" size="60" [readonly]="!editavel"><p></p>
+
+                        <label class="style1">Observações:</label><br>
+                        <textarea class="form-control" name="observacao" placeholder="Ex:. Utilizem o conteúdo da sala do ano passado: Link da sala" [(ngModel)]="sala.observacao" [readonly]="!editavel"></textarea><p></p>
+                        
+                    </form>
+                </fieldset>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary botao-barra" (click)="atualizarSala()" [disabled]="!editavel">Atualizar</button>
+                <button type="button" class="btn btn-secondary botao-barra" data-dismiss="modal">Fechar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="dialogStatus" tabindex="-1" role="dialog" aria-labelledby="dialogStatusTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Atualizar Status: {{statusTemp}}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" style="width: 350px;">
+                <label class="style1">{{tituloMensagem}}</label><br>
+                <textarea class="form-control" [(ngModel)]="mensagem" [readonly]="!editavel"></textarea><p></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary botao-barra" (click)="statusSala()" [disabled]="!editavel">Ok</button>
+                <button type="button" class="btn btn-secondary botao-barra" data-dismiss="modal">Fechar</button>
+            </div>
+        </div>
+    </div>
+</div>

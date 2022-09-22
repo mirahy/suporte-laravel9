@@ -1,0 +1,143 @@
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        Recursos
+    </div>
+        <div class="row">
+            <div class="col-md-7"  style="padding-right: 0px; border-right: 1px solid #ddd">
+                <div>
+                    <table class="table"style="margin-bottom: 0px">
+                        <colgroup>
+                            <col width="50px"/>
+                            <col width="30%"/>
+                            <col width="70%"/>
+                            <col width="15px"/>
+                        </colgroup>
+                        <thead class="thead-light">
+                            <tr>
+                                <th style="text-align: center">ID</th>
+                                <th class="celula-trunca-texto" title="NOME">NOME</th>
+                                <th class="celula-trunca-texto" title="NOME">DESCRICAO</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+                <div redimensionar="261" style="overflow-y: scroll;">
+                    <table class="table" data-toggle="table" >
+                        <colgroup>
+                            <col width="50px"/>
+                            <col width="30%"/>
+                            <col width="70%"/>
+                        </colgroup>
+                        <tbody>
+                            <tr *ngFor="let recurso of recursos" class="clickable-row" (click)="selecionarRecurso(recurso)" [ngClass]="{'linha-selecionada': recurso.id == recursoSelecionado.id}">
+                                <td>{{recurso.id}}</td>
+                                <td class="celula-trunca-texto" title="{{recurso.nome}}">{{recurso.nome}}</td>
+                                <td class="celula-trunca-texto" title="{{recurso.descricao}}">{{recurso.descricao}}</td>
+                            </tr>
+                        </tbody>
+                        <tfoot class="status-tabela">
+                            <tr *ngIf="status == LOADING"><td colspan="6"><i>Carregando Lista de Recursos...</i></td></tr>
+                            <tr *ngIf="macros != null && macros.length == 0 && status == COMPLETE"><td colspan="6"><i>Não Há Recursos para serem listadas</i></td></tr>
+                            <tr *ngIf="status == ERROR"><td class="erro" colspan="6"><i>Falha na obtenção dos Recursos!</i></td></tr>
+                        </tfoot>
+                    </table>
+                </div>
+                <div class="panel-footer">
+                    <button type="button" class="btn btn-primary botao-barra" data-toggle="modal" data-target="#dialogCriar" (click)="selecionarMacro(null)" [disabled]="!editavel">Novo</button>
+                </div>
+            </div>
+            <div class="col-md-5" style="padding-left: 0px; ">
+                <div class="barra-titulo">
+                    <table class="table">
+                        <tbody>
+                            <tr>
+                                <td colspan="3" class="celula-trunca-texto" style="text-align: center;">
+                                    <h4 *ngIf="recursoSelecionado == null || recursoSelecionado.id == 0" style="display: inline-block; color: gray;" title=""><i>Selecione um Recurso...</i></h4>
+                                    <h4 *ngIf="recursoSelecionado != null && recursoSelecionado.id > 0" style="display: inline-block;" title="">Recurso: {{recursoSelecionado.nome}}</h4>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div>
+                    <div>
+                        <table class="table"style="margin-bottom: 0px">
+                            <colgroup>
+                                <col width="50px"/>
+                                <col width="100%"/>
+                                <col width="50px"/>
+                                <col width="15px"/>
+                            </colgroup>
+                            <thead class="thead-light">
+                                <tr>
+                                    <th style="text-align: center">ID</th>
+                                    <th class="celula-trunca-texto" title="NOME">GESTOR RECURSO</th>
+                                    <th class="celula-trunca-texto" title="NOME">X</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                    <div redimensionar="261" style="overflow-y: scroll;">
+                        <table class="table" data-toggle="table" >
+                            <colgroup>
+                                <col width="50px"/>
+                                <col width="100%"/>
+                                <col width="50px"/>
+                            </colgroup>
+                            <tbody *ngIf="status == COMPLETE_GESTORES">
+                                <tr *ngFor="let gestor of recursoSelecionado.gestores">
+                                    <td>{{gestor.id}}</td>
+                                    <td class="celula-trunca-texto" title="{{gestor.name}}">{{gestor.name}}</td>
+                                    <td>
+                                        <button style="text-align: center; margin-left: -2px;" title="Remover Gestor" type="button" class="btn btn-danger botao-reduzido" (click)="removeGestor(gestor)">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr *ngIf="recursoSelecionado.id > 0 && recursoSelecionado.gestores != null && recursoSelecionado.gestores.length > 0 && statusGestores == COMPLETE_GESTORES">
+                                    <td colspan="3" style="text-align: center;">
+                                        <button style="text-align: center;" title="Adicionar" type="button"  data-toggle="modal" data-target="#dialogUsuarios" class="btn btn-primary botao-reduzido">
+                                            <span class="glyphicon glyphicon-plus"></span>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tfoot class="status-tabela">
+                                <tr *ngIf="recursoSelecionado.id == 0 || statusGestores == RECNULL_GESTORES"><td colspan="6"><i>Nenhum Recurso Selecionado</i></td></tr>
+                                <tr *ngIf="statusGestores == LOADING_GESTORES"><td colspan="6"><i>Carregando Lista de Gestores do Recurso...</i></td></tr>
+                                <tr *ngIf="recursoSelecionado.id > 0 && recursoSelecionado.gestores != null && recursoSelecionado.gestores.length == 0 && statusGestores == COMPLETE_GESTORES"><td colspan="6">
+                                    <i>Não Há Gestores para este Recurso</i><br>
+                                    <button style="text-align: center; margin-left: 2px; margin-top: 5px;" title="Adicionar" data-toggle="modal" data-target="#dialogUsuarios" type="button" class="btn btn-primary botao-reduzido">
+                                        <span class="glyphicon glyphicon-plus"></span>
+                                    </button>
+                                </td></tr>
+                                <tr *ngIf="status == ERROR_GESTORES"><td class="erro" colspan="6"><i>Falha na obtenção dos Gestores deste Recurso!</i></td></tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>
+
+<div class="modal fade" id="dialogUsuarios" tabindex="-1" role="dialog" aria-labelledby="dialogUsuariosTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Selecionar Gestor de Recurso</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" style="width: 600px;">
+                <app-select-usuario></app-select-usuario>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary botao-barra" data-dismiss="modal">Fechar</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,1 @@
+Release {{ .Release.Name }}(revisão {{ .Release.Revision }}) realizada com sucesso no namespace {{ .Release.Namespace }}!!

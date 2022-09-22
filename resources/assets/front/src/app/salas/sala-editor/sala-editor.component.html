@@ -1,0 +1,87 @@
+<!-- Modal -->
+<div class="modal fade" id="dialogSalas" tabindex="-1" role="dialog" aria-labelledby="dialogSalasTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Sala #{{sala.nome}}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" redimensionar="285" style="overflow-y: scroll;">
+                <fieldset>
+                    <form id="salaForm" class="form-group" style="max-width: 500px;">
+                        <div class="alert alert-info" [ngClass]="{'alert-info': !erroAviso, 'alert-danger': erroAviso}" *ngIf="aviso">
+                            <strong *ngIf="!erroAviso  && sala.status.chave == STATUS_INICIAL_PADRAO">Informação!</strong><strong *ngIf="erroAviso && sala.status.chave == STATUS_INICIAL_PADRAO">Falha!</strong> {{aviso}}
+                        </div>
+                        <label class="style1">Nome completo: *</label><br>
+                        <input *ngIf="usuarios.length == 0" class="form-control" type="text" name="nome_professor" placeholder="Nome completo" [(ngModel)]="sala.nome_professor" size="60" disabled>
+                        <ng-container *ngIf="usuarios.length > 0">
+                            <p-autoComplete class="prime-autocomplete" name="nome_professor" [suggestions]="filteredUsuarios" placeholder="Nome do Professor" (onSelect)="selecionaUsuario($event)"
+                            (completeMethod)="buscaUsuario($event)" (onClear)="limpaUsuario($event)" size="60" [readonly]="!editavel" [(ngModel)]="nome_professor_temp" [required]="true" [forceSelection]="true"></p-autoComplete>
+                            <br>
+                        </ng-container><p></p>
+
+
+                        <label class="style1">E-mail: *</label><br>
+                        <input class="form-control" type="email" name="email" placeholder="Preferência institucional" [(ngModel)]="sala.email" size="60" [readonly]="!editavel"><p></p>
+                         
+                        <label class="style1">Período Letivo: *</label><br>
+                        <select class="form-control" name="periodo_letivo"  [disabled]="!editavel" [(ngModel)]="sala.periodo_letivo_id" (change)="selecionaPeriodoLetivo()" required>   
+                            <option hidden disabled selected value> -- Selecione -- </option>
+                            <ng-container *ngFor="let pl of periodoLetivos">
+                                <option *ngIf="pl.ativo || sala.periodo_letivo_id == pl.id" [value]="pl.id">{{pl.nome + (pl.descricao ? " (" + pl.descricao + ")" : "")}}</option>
+                            </ng-container>  
+                        </select><p></p>
+
+                        <label class="style1">Faculdade: *</label><br>
+                        <select class="form-control" name="faculdade"  [disabled]="!editavel" [(ngModel)]="faculdadeSelecionadaId" (change)="selecionaFaculdade()" required>   
+                            <option hidden disabled selected value> -- Selecione -- </option>      
+                            <ng-container *ngFor="let f of faculdades">
+                                <option *ngIf="f.ativo || faculdadeSelecionadaId == f.id" [value]="f.id">{{f.sigla}}</option>
+                            </ng-container>        
+                        </select><p></p>
+        
+                        <label class="style1">Curso: *</label><br>
+                        <ng-container *ngIf="!faculdadeSelecionadaId">
+                            <select class="form-control" name="curso"  disabled >   
+                                <option hidden disabled selected value> -- </option>
+                            </select>
+                        </ng-container>
+                        <ng-container *ngIf="faculdadeSelecionadaId">
+                            <select class="form-control" name="curso"  [disabled]="!editavel" [(ngModel)]="sala.curso"  (change)="selecionaCurso()" required>   
+                                <option hidden disabled selected value> -- Selecione -- </option>    
+                                <ng-container *ngFor="let c of faculdadeTemp.cursos">
+                                    <option  *ngIf="c.ativo || sala.curso == c.id" [value]="c.id">{{c.nome}}</option>
+                                </ng-container>
+                            </select>
+                        </ng-container><p></p>
+
+                        <label class="style1">Nome da Disciplina: *</label><br>
+                        <p-autoComplete class="prime-autocomplete" name="nome_sala" [suggestions]="filteredDisciplina" placeholder="Ex.: Algoritmos" (onSelect)="selecionaDisciplina($event)"
+                        (completeMethod)="buscaDisciplina($event)" [readonly]="!editavel || sala.curso == ''" [(ngModel)]="sala.nome_sala" [required]="true"></p-autoComplete>
+                        <br><p></p>
+
+                        <label class="style1">Modalidade da Disciplina: *</label><br>
+                        <select class="form-control" name="modalidade" [(ngModel)]="sala.modalidade" [disabled]="!editavel">                         
+                            <option *ngFor="let m of modalidades" value="{{m.sigla}}">{{m.descricao}}</option>
+                        </select><p></p>
+
+                        <label class="style1">Objetivo da Disciplina: *</label><br>
+                        <select class="form-control" name="objetivo_sala" [(ngModel)]="sala.objetivo_sala" [disabled]="!editavel">                         
+                            <option *ngFor="let o of objetivosSalas" value="{{o.sigla}}">{{o.descricao}}</option>
+                        </select><p></p>
+
+                        <label class="style1">Chave de Inscrição para Estudantes acessarem a sala:</label><br>
+                        <input class="form-control" type="text" name="senha_aluno" placeholder="" [(ngModel)]="sala.senha_aluno" size="60" [readonly]="!editavel"><p></p>
+
+                    </form>
+                </fieldset>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary botao-barra" (click)="atualizarSala()" [disabled]="!editavel">Atualizar</button>
+                <button type="button" class="btn btn-secondary botao-barra" data-dismiss="modal">Fechar</button>
+            </div>
+        </div>
+    </div>
+</div>

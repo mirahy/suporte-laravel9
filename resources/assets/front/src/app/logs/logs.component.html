@@ -1,0 +1,13 @@
+<div class="row">
+	<div class="col-md-8" style="margin: auto; float: initial;">
+		<div class="panel panel-default">
+			<div class="panel-heading">Logs</div>
+			<div class="panel-body">
+				<h3>Logs Exportações de Estudantes</h3>
+				<ng-container *ngFor="let e of logsExportsEstudantes">
+					<a target="_blank" style="margin: 5px;" href="{{pathLogsExportacaoEstudantes}}/{{e}}" class="btn btn-primary botao">{{e}}</a>
+				</ng-container>
+			</div>			
+		</div>
+	</div>
+</div>

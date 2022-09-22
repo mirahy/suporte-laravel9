@@ -1,0 +1,97 @@
+
+<div class="row">
+    <div class="col-md-10 col-md-offset-1">
+        <div class="panel panel-default">
+            <div class="panel-heading">Usuários</div>
+            <table class="table">
+                <caption>
+                    <table>
+                        <tr>
+                            <td class="col-md-1"><label for="filtro" class="col-md-1 control-label">Buscar:</label></td>
+                            <td class="col-md-8"><input id="filtro" type="text" class="form-control" name="filtro" [(ngModel)]="criteria" autofocus></td>
+                        </tr>
+                    </table>
+                </caption>
+                <colgroup>
+                    <col width="50px"/>
+                    <col width="100%"/>
+                    <col width="170px"/>
+                    <col width="135px"/>
+                    <col width="54px"/>
+                </colgroup>
+                <thead class="thead-light">
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Nome</th>
+                        <th scope="col">Login</th>
+                        <th scope="col">Permissão</th>
+                        <th scope="col"></th>
+                    </tr>
+                </thead>
+            </table>
+            <div redimensionar="310" style="overflow-y:scroll">
+                <table class="table">
+                    <colgroup>
+                        <col width="50px"/>
+                        <col width="100%"/>
+                        <col width="170px"/>
+                        <col width="135px"/>
+                        <col width="39px"/>
+                    </colgroup>
+                    <tbody>
+                        <tr *ngFor="let u of (usuarios | filtroUsuario:criteria)">
+                            <td>{{u.id}}</td>
+                            <td>{{u.name}}</td>
+                            <td>{{u.email}}</td>
+                            <td *ngIf="usuarioTemp.id != u.id">{{u.permissao}}</td>
+                            <td *ngIf="usuarioTemp.id != u.id">
+                                <button type="button" class="btn btn-primary botao-reduzido" (click)="habilitarEdicao(u.clone())">
+                                    <span class="glyphicon glyphicon-edit"></span>
+                                </button>
+                            </td>
+                            <td colspan="2" *ngIf="usuarioTemp.id == u.id">
+                                <select id="selectPermissao" class="form-control form-control-micro" (change)="altararPermissao()" (blur)="resetEdit()" [(ngModel)]="usuarioTemp.permissao">
+                                    <option value="ADMINISTRADOR">ADMINISTRADOR</option>
+                                    <option value="USUARIO">USUARIO</option>
+                                    <option value="INATIVO">INATIVO</option>
+                                </select>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot class="status-tabela">
+                        <tr *ngIf="status == LOADING"><td colspan="6"><i>Carregando Usuários...</i></td></tr>
+                        <tr *ngIf="salas != null && (usuarios).length == 0 && status == COMPLETE"><td colspan="6"><i>Não Há Usuários para serem listadas</i></td></tr>
+                        <tr *ngIf="status == ERROR"><td class="erro" colspan="6"><i>Falha na obtenção de Usuários!</i></td></tr>
+                    </tfoot>
+                </table>
+            </div>
+            <div class="panel-footer">
+                <button type="button" class="btn btn-primary botao-barra"  data-toggle="modal" data-target="#dialogNovoUsuario" (click)="resetEdit()" [disabled]="!editavel">Novo</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="dialogNovoUsuario" tabindex="-1" role="dialog" aria-labelledby="dialogNovoUsuarioTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Novo Usuário</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" style="width: 400px;">
+                <label class="style1">Nome</label><br>
+                <input class="form-control" type="text" name="username" placeholder="Fulano da Silva" [(ngModel)]="usuarioTemp.name" size="60"><p></p>
+
+                <label class="style1">Login: *</label><br>
+                <input class="form-control" type="email" name="email" placeholder="11122233344" [(ngModel)]="usuarioTemp.email" size="60"><p></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary botao-barra" (click)="novoUsuario()" [disabled]="!editavel">Criar</button>
+                <button type="button" class="btn btn-secondary botao-barra" data-dismiss="modal">Fechar</button>
+            </div>
+        </div>
+    </div>
+</div>

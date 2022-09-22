@@ -1,0 +1,353 @@
+<div>
+	<table class="table" style="margin-bottom: 0px">
+		<colgroup>
+			<col *ngIf="COLUNAS.id" width="40px"/>
+			<col *ngIf="COLUNAS.periodo_letivo" width="70px"/>
+			<col *ngIf="COLUNAS.nome_professor" width="100%"/>
+			<col *ngIf="COLUNAS.faculdade" width="70px"/>
+			<col *ngIf="COLUNAS.curso_key" width="70px"/>
+			<col *ngIf="COLUNAS.curso" width="100%"/>
+			<col *ngIf="COLUNAS.nome_sala" width="100%"/>
+			<col *ngIf="COLUNAS.disciplina_key" width="100px"/>
+			<col *ngIf="COLUNAS.carga_horaria_total_disciplina" width="70px"/>
+			<col *ngIf="COLUNAS.avaliacao" width="70px"/>
+			<col *ngIf="COLUNAS.turma_nome" width="70px"/>
+			<col *ngIf="COLUNAS.turma_id" width="70px"/>
+			<col *ngIf="COLUNAS.sala_moodle_id" width="70px"/>
+			<col width="39px" />
+			<col width="39px" />
+			<col width="39px" />
+			<col width="39px" />
+			<col width="15px" />
+		</colgroup>
+		<thead class="thead-light">
+			<tr style="cursor: pointer;" data-toggle="modal" data-target="#dialogCheckColunas">
+				<th *ngIf="COLUNAS.id" style="text-align: center">#</th>
+				<th *ngIf="COLUNAS.periodo_letivo" title="PERÍODO LETIVO">PL</th>
+				<th *ngIf="COLUNAS.nome_professor" class="celula-trunca-texto" title="PROFESSOR">PROFESSOR</th>
+				<th *ngIf="COLUNAS.faculdade" title="FACULDADE">FAC.</th>
+				<th *ngIf="COLUNAS.curso_key" title="CHAVE DO CURSO SIGECAD">CR. KEY</th>
+				<th *ngIf="COLUNAS.curso" class="celula-trunca-texto" title="CURSO">CURSO</th>
+				<th *ngIf="COLUNAS.nome_sala" class="celula-trunca-texto" title="SALA">SALA</th>
+				<th *ngIf="COLUNAS.disciplina_key" title="CHAVE DA DISCIPLINA SIGECAD">DISC. KEY</th>
+				<th *ngIf="COLUNAS.carga_horaria_total_disciplina" title="CARGA HORÁRIA">C. HOR.</th>
+				<th *ngIf="COLUNAS.avaliacao" title="MÉTODO DE AVALIACAO">AVAL.</th>
+				<th *ngIf="COLUNAS.turma_nome" title="TURMA">TURMA</th>
+				<th *ngIf="COLUNAS.turma_id" title="ID DA TURMA SIGECAD">TUR.ID</th>
+				<th *ngIf="COLUNAS.sala_moodle_id" title="ID DA SALA NO MOODLE">SM ID</th>
+				<th></th>
+				<th></th>
+				<th></th>
+				<th></th>
+				<th></th>
+			</tr>
+		</thead>
+	</table>
+</div>
+<div redimensionar="316" style="overflow-y: scroll;">
+	<table class="table">
+		<colgroup>
+			<col *ngIf="COLUNAS.id" width="40px"/>
+			<col *ngIf="COLUNAS.periodo_letivo" width="70px"/>
+			<col *ngIf="COLUNAS.nome_professor" width="100%"/>
+			<col *ngIf="COLUNAS.faculdade" width="70px"/>
+			<col *ngIf="COLUNAS.curso_key" width="70px"/>
+			<col *ngIf="COLUNAS.curso" width="100%"/>
+			<col *ngIf="COLUNAS.nome_sala" width="100%"/>
+			<col *ngIf="COLUNAS.disciplina_key" width="100px"/>
+			<col *ngIf="COLUNAS.carga_horaria_total_disciplina" width="70px"/>
+			<col *ngIf="COLUNAS.avaliacao" width="70px"/>
+			<col *ngIf="COLUNAS.turma_nome" width="70px"/>
+			<col *ngIf="COLUNAS.turma_id" width="70px"/>
+			<col *ngIf="COLUNAS.sala_moodle_id" width="70px"/>
+			<col width="39px" />
+			<col width="39px" />
+			<col width="39px" />
+			<col width="39px" />
+		</colgroup>
+		<tbody>
+			<tr *ngFor="let s of salasSimplificadas" class="clickable-row" (click)="selecionar(s)" [ngClass]="{'linha-selecionada': s.id == salaSimplificadaTemp.id}">
+				<ng-container>
+					<td *ngIf="COLUNAS.id">{{s.id}}</td>
+					<td *ngIf="COLUNAS.periodo_letivo">{{s.periodo_letivo?.nome}}</td>
+					<td *ngIf="COLUNAS.nome_professor" class="celula-trunca-texto" title="{{s.professor?.name}}">{{s.professor?.name}}</td>
+					<td *ngIf="COLUNAS.faculdade" title="{{s.curso?.faculdade?.sigla}}">{{s.curso?.faculdade?.sigla}}</td>
+					<td *ngIf="COLUNAS.curso_key" title="{{s.curso?.curso_key}}">{{s.curso?.curso_key}}</td>
+					<td *ngIf="COLUNAS.curso" class="celula-trunca-texto" title="{{s.curso?.nome}}">{{s.curso?.nome}}</td>
+					<td *ngIf="COLUNAS.nome_sala" class="celula-trunca-texto" title="{{s.nome_sala}}">{{s.nome_sala}}</td>
+					<td *ngIf="COLUNAS.disciplina_key" title="{{s.disciplina_key}}">{{s.disciplina_key}}</td>
+					<td *ngIf="COLUNAS.carga_horaria_total_disciplina" title="{{s.carga_horaria_total_disciplina}}">{{s.carga_horaria_total_disciplina}}</td>
+					<td *ngIf="COLUNAS.avaliacao" title="{{s.avaliacao}}">{{s.avaliacao}}</td>
+					<td *ngIf="COLUNAS.turma_nome" title="{{s.turma_nome}}">{{s.turma_nome}}</td>
+					<td *ngIf="COLUNAS.turma_id" title="{{s.turma_id}}">{{s.turma_id}}</td>
+					<td *ngIf="COLUNAS.sala_moodle_id" title="{{s.sala_moodle_id}}" style="text-align: center;">
+						<ng-container *ngIf="s.link_moodle"><a href="{{s.link_moodle}}" target="_blank">
+							<span class="glyphicon glyphicon-link"></span> {{s.sala_moodle_id}}</a>
+						</ng-container>
+						<ng-container *ngIf="!s.link_moodle">{{s.sala_moodle_id}}</ng-container>
+					</td>
+					<td title="Visualizar Dados">
+						<button style="text-align: center; margin-left: 2px;" title="Visualizar Dados" type="button" data-toggle="modal" 
+							data-target="#dialogViewSalaSimplificada" class="btn btn-info botao-reduzido" [disabled]="!editavel">
+							<span class="glyphicon glyphicon-search"></span>
+						</button>
+					</td>
+					<td *ngIf="!s.sala_moodle_id" title="Exportar Para Moodle (para realizar a exportação, uma super-macro deve estar configurada no lote de salas e também a sala selecionada não pode já estar associada à um ID de uma sala moodle)">
+						<button style="text-align: center; margin-left: 2px;" title="Exportar Para Moodle (para realizar a exportação, uma super-macro deve estar configurada no lote de salas e também a sala selecionada não pode já estar associada à um ID de uma sala moodle)" type="button" class="btn btn-primary botao-reduzido" 
+							data-toggle="modal" data-target="#dialogRestore" [disabled]="!loteSelecionado.super_macro || !editavel" (click)="preparaRestauracaoAutomatica(s)">
+							<span class="glyphicon glyphicon-export"></span>
+						</button>
+					</td>
+					<td *ngIf="s.sala_moodle_id" title="Inserir Estudantes">
+						<button style="text-align: center; margin-left: 2px;" title="Inserir Estudantes" type="button" 
+							class="btn btn-info botao-reduzido" (click)="exportarEstudantes(s)" [disabled]="!editavel">
+							<span class="glyphicon glyphicon-user"></span>
+						</button>
+					</td>
+					<td title="Editar">
+						<button style="text-align: center; margin-left: 2px;" title="Editar" type="button" data-toggle="modal" 
+							data-target="#dialogCreateSalaSimplificada" class="btn btn-info botao-reduzido" [disabled]="!editavel">
+							<span class="glyphicon glyphicon-edit"></span>
+						</button>
+					</td>
+					<td title="Excluir">
+						<button style="text-align: center; margin-left: 2px;" title="Excluir" type="button"
+							class="btn btn-danger botao-reduzido" (click)="deletar(s)" [disabled]="!editavel">
+							<span class="glyphicon glyphicon-remove"></span>
+						</button>
+					</td>
+				</ng-container>
+			</tr>
+			<tr *ngIf="loteSelecionado != null && loteSelecionado.id > 0 && salasSimplificadas.length > 0 && status == COMPLETE">
+				<td class="celula-trunca-texto" title="Nova" style="text-align: center;"
+					colspan="17">
+					<button style="text-align: center; margin-left: 2px;" title="Nova" type="button" [disabled]="!editavel"
+						class="btn btn-primary botao-reduzido" data-toggle="modal" data-target="#dialogCreateSalaSimplificada" (click)="novo()">
+						<span class="glyphicon glyphicon-plus"></span>
+					</button>
+				</td>
+			</tr>
+		</tbody>
+		<tfoot class="status-tabela">
+			<tr *ngIf="status == LOADING">
+				<td colspan="17"><i>Carregando Salas...</i></td>
+			</tr>
+			<tr *ngIf="salasSimplificadas != null && salasSimplificadas.length == 0 && status == COMPLETE">
+				<td colspan="17">
+					<i>Não Há Salas para serem listadas</i><br />
+					<button *ngIf="loteSelecionado.id > 0" style="text-align: center; margin-left: 2px; margin-top: 5px;" data-toggle="modal" data-target="#dialogCreateSalaSimplificada"
+						title="Nova" type="button" class="btn btn-primary botao-reduzido" (click)="novo()">
+						<span class="glyphicon glyphicon-plus"></span>
+					</button>
+				</td>
+			</tr>
+			<tr *ngIf="status == ERROR">
+				<td class="erro" colspan="17"><i>Falha na obtenção das Salas!</i></td>
+			</tr>
+
+		</tfoot>
+	</table>
+</div>
+
+<div class="modal fade" id="dialogCreateSalaSimplificada" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Novo Lote de Salas Simplificado</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<fieldset>
+					<form id="salaSimplificadaForm" class="form-group"
+						style="text-align: left; width: 400px; margin: 15px auto;"
+						(submit)="criarAlterarSalaSimplificada($event)">
+						<div class="alert alert-info" [ngClass]="{'alert-info': !erroAviso, 'alert-danger': erroAviso}"
+							*ngIf="aviso">
+							<strong *ngIf="!erroAviso">Informação!</strong><strong *ngIf="erroAviso">Falha!</strong>
+							{{aviso}}
+						</div>
+						<label class="style1">Disciplina: *</label><br>
+						<table style="width: 100%;">
+							<tr>
+								<td style="width: 100%;">
+									<input style="width: 310px; font-weight: normal;" class="form-control celula-trunca-texto" id="plda-disciplina" placeholder="-- Selecione uma Disciplina --"
+									 title="{{plDisciplinasAcademicosSelecionado.disciplina}}" [value]="plDisciplinasAcademicosSelecionado.disciplina" readonly required>
+								</td>
+								<td style="vertical-align: baseline;"><button type="button" style="margin-left: 5px;" class="btn btn-primary" data-toggle="modal" data-target="#dialogBuscaPLDA" [disabled]="!editavel"><span class="glyphicon glyphicon-search"></span></button></td>
+								<td style="vertical-align: baseline;"><button type="button" style="margin-left: 5px;" class="btn btn-warning" title="Buscar e Atualizar com Informações mais Recentes" (click)="refreshSala()" [disabled]="!editavel || !salaSimplificadaTemp.id"><span class="glyphicon glyphicon-repeat"></span></button></td>
+							</tr>
+						</table>
+						<p></p>
+						<label class="style1">Sala Moodle ID:</label><br>
+						<input class="form-control" type="number" name="sala-moodle-id" [(ngModel)]="salaMoodleId" [disabled]="!editavel" placeholder="-- ID da Sala no Moodle --">
+						<ng-container *ngIf="checkSalaMoodleId()">
+							<p></p>
+							<label class="style1">Link Moodle:</label><br>
+							<input class="form-control" name="link-moodle" [(ngModel)]="linkMoodle" [disabled]="!editavel" placeholder="-- Link da Sala no Moodle --">
+						</ng-container>
+					</form>
+				</fieldset>
+			</div>
+			<div class="modal-footer">
+				<button type="submit" form="salaSimplificadaForm" class="btn btn-primary botao-barra" [disabled]="!editavel">{{salaSimplificadaTemp.id ? 'Alterar' : 'Criar'}}</button>
+				<button type="button" class="btn btn-secondary botao-barra" data-dismiss="modal">Fechar</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="dialogViewSalaSimplificada" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+				<h5 class="modal-title">Dados da Sala Simplificada</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+            </div>
+            <div class="modal-body"  redimensionar="285" style="overflow-y: scroll;" style="width: 500px;">
+				<label>Professor:</label>
+                <div class="form-control">{{salaSimplificadaTemp.professor?.name}}</div>
+				<p></p>
+				<label>Sala Moodle ID:</label>
+                <div class="form-control">{{salaSimplificadaTemp.sala_moodle_id}}</div>
+				<p></p>
+				<label>Período Letivo:</label>
+                <div class="form-control">{{salaSimplificadaTemp.periodo_letivo?.nome}} ({{salaSimplificadaTemp.periodo_letivo?.descricao}})</div>
+				<p></p>
+				<label>Faculdade:</label>
+                <div class="form-control">{{salaSimplificadaTemp.curso?.faculdade?.sigla}} - {{salaSimplificadaTemp.curso?.faculdade?.nome}}</div>
+				<p></p>
+				<label>Curso:</label>
+                <div class="form-control">{{salaSimplificadaTemp.curso?.nome}}</div>
+				<p></p>
+				<label>Disciplina:</label>
+                <div class="form-control">{{salaSimplificadaTemp.nome_sala}}</div>
+				<p></p>
+				<label>Chave da Disciplina:</label>
+                <div class="form-control">{{salaSimplificadaTemp.disciplina_key}}</div>
+				<p></p>
+				<label>Turma ID:</label>
+                <div class="form-control">{{salaSimplificadaTemp.turma_id}}</div>
+				<p></p>
+				<label>Turma Nome:</label>
+                <div class="form-control">{{salaSimplificadaTemp.turma_nome}}</div>
+				<p></p>
+				<label>Carga Horária Disciplina:</label>
+                <div class="form-control">{{salaSimplificadaTemp.carga_horaria_total_disciplina}}</div>
+				<p></p>
+				<label>Tipo de Avaliação:</label>
+                <div class="form-control">{{salaSimplificadaTemp.avaliacao}}</div>
+				<p></p>
+				<label>Período Letivo Key:</label>
+                <div class="form-control">{{salaSimplificadaTemp.periodo_letivo_key}}</div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary botao-barra" data-dismiss="modal">Fechar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="dialogBuscaPLDA" tabindex="-1" role="dialog" aria-labelledby="dialogBuscaImportTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+				<h5 class="modal-title">Buscar Sala</h5>
+            </div>
+            <div class="modal-body" style="width: 800px;">
+                <app-obtem-plda [ancestral]="eu" [plus]="true">Carregando...</app-obtem-plda>
+            </div>
+            <div class="modal-footer">
+                <button type="button" *ngIf="plDisciplinasAcademicos.length && cursoSelecionadoId" class="btn btn-info" (click)="toggleModoLista()" 
+					[disabled]="!editavel" style="float: left;">
+					Modo de Seleção: {{modoLista ? 'Múltipla' : 'Simples'}}
+				</button>
+				<button *ngIf="!modoLista" type="button" class="btn btn-success botao-barra" (click)="selecionaPLDA()" [disabled]="!editavel || plDisciplinasAcademicosTemp.disciplina == ''" data-dismiss="modal">Selecionar</button>
+                <button *ngIf="modoLista" type="button" class="btn btn-success" (click)="criarListaDisciplinasCurso()" [disabled]="!editavel || plDisciplinasAcademicosTempList.length == 0" data-dismiss="modal">Criar Selecionadas</button>
+                <button type="button" class="btn btn-secondary botao-barra" data-dismiss="modal">Fechar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="dialogRestore" tabindex="-1" role="dialog"  aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Restauração de Backup Automática</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" style="width: 600px;">
+                <div class="alert alert-info" [ngClass]="{'alert-info': !erroAviso, 'alert-danger': erroAviso}" *ngIf="aviso">
+                    <strong *ngIf="!erroAviso">Informação!</strong><strong *ngIf="erroAviso">Falha!</strong> {{aviso}}
+                </div>
+                <label class="style1">Macro:</label>
+                <select class="form-control" name="macro-padrao" style="width: 200px; display: initial; margin-left: 10px;" [(ngModel)]="macroTempId" [disabled]="!editavel" required>   
+                    <option hidden disabled [value]="0" selected> -- Selecione -- </option>  
+                    <option *ngFor="let m of macros" [value]="m.id">{{m.nome}}</option>       
+                </select><br>
+                <hr style="border-color: #ccc;">
+                <div redimensionar="300" style="max-height: 250px;" id="saidaRestore"></div>
+            </div>
+            <div class="modal-footer">
+                <span *ngIf="!salaSimplificadaTemp.sala_moodle_id" style="float: left;">
+                    <label class="style1">Importar de:</label>
+                    <input class="form-control" style="width: 80px; display: initial; margin: 0px 3px;" type="number" name="course-import-id" placeholder="import id" [(ngModel)]="courseImportId" size="10">
+                    <button type="button" class="btn btn-primary" style="width: 170px;vertical-align: top;" (click)="executarRestauracaoAutomatica()" [disabled]="!editavel || blockAutoRestore">Executar Restauração</button>
+                </span>
+				<button type="button" class="btn btn-secondary botao-barra" data-dismiss="modal" [disabled]="!editavel">Fechar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="dialogCheckColunas" tabindex="-1" role="dialog" data-backdrop="static" aria-labelledby="dialogCheckColunasTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Mostrar/Ocultar Colunas</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" style="width: 350px;">
+                <table>
+                    <tr><td><label class="style1">ID</label></td>
+                    <td><input type="checkbox" [(ngModel)]="COLUNAS.id"></td></tr>
+                    <tr><td><label class="style1">Período Letivo</label></td>
+                    <td><input type="checkbox" [(ngModel)]="COLUNAS.periodo_letivo"></td></tr>
+                    <tr><td><label class="style1">Nome Professor</label></td>
+                    <td><input type="checkbox" [(ngModel)]="COLUNAS.nome_professor"></td></tr>
+                    <tr><td><label class="style1">Faculdade</label></td>
+                    <td><input type="checkbox" [(ngModel)]="COLUNAS.faculdade"></td></tr>
+                    <tr><td><label class="style1">Curso Key</label></td>
+                    <td><input type="checkbox" [(ngModel)]="COLUNAS.curso_key"></td></tr>
+                    <tr><td><label class="style1">Nome Curso</label></td>
+                    <td><input type="checkbox" [(ngModel)]="COLUNAS.curso"></td></tr>
+                    <tr><td><label class="style1">Nome Sala</label></td>
+                    <td><input type="checkbox" [(ngModel)]="COLUNAS.nome_sala"></td></tr>
+                    <tr><td><label class="style1">Disciplina Key</label></td>
+                    <td><input type="checkbox" [(ngModel)]="COLUNAS.disciplina_key"></td></tr>
+                    <tr><td><label class="style1">Carga Horária Disciplina</label></td>
+                    <td><input type="checkbox" [(ngModel)]="COLUNAS.carga_horaria_total_disciplina"></td></tr>
+                    <tr><td><label class="style1">Método de Avaliação da Disciplina</label></td>
+                    <td><input type="checkbox" [(ngModel)]="COLUNAS.avaliacao"></td></tr>
+                    <tr><td><label class="style1">Turma</label></td>
+                    <td><input type="checkbox" [(ngModel)]="COLUNAS.turma_nome"></td></tr>
+                    <tr><td><label class="style1">Turma ID</label></td>
+                    <td><input type="checkbox" [(ngModel)]="COLUNAS.turma_id"></td></tr>
+                    <tr><td><label class="style1">Sala Moodle ID</label></td>
+                    <td><input type="checkbox" [(ngModel)]="COLUNAS.sala_moodle_id"></td></tr>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary botao-barra" data-dismiss="modal">Fechar</button>
+            </div>
+        </div>
+    </div>
+</div>

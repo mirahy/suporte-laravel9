@@ -1,0 +1,46 @@
+<div>
+    <label>Novo Arquivo:</label>
+    <p-fileUpload name="arquivo" chooseLabel="Adicionar" customUpload="true" (uploadHandler)="onFileUpload($event)" [disabled]="!editavel"></p-fileUpload>
+    <!--input type="file" name="arquivo" /-->
+</div>
+<div>
+    <p></p>
+    <label>Arquivos em Disco:</label>
+    <table class="table" style="margin-bottom: 0px">
+        <colgroup>
+            <col width="70px" />
+            <col width="100%"/>
+            <col width="90px"/>
+            <col width="15px"/>
+        </colgroup>
+        <thead class="thead-light">
+            <tr>
+                <th style="text-align: center" title="SELECIONADO">SELEC.</th>
+                <th style="text-align: center">ARQUIVO</th>
+                <th class="celula-trunca-texto" title="DATA">DATA</th>
+                <th></th>
+            </tr>
+        </thead>
+    </table>
+</div>
+<div redimensionar="500" style="overflow-y: scroll;">
+    <table class="table">
+        <colgroup>
+            <col width="70px" />
+            <col width="100%"/>
+            <col width="90px"/>
+        </colgroup>
+        <tbody>
+            <tr *ngFor="let file of files" [ngClass]="{'linha-selecionada': file.name == arquivoSelecionadoRadio}">
+                <td style="text-align: center"><p-radioButton name="group1" value="{{file.name}}" (onClick)="changeArquivo(file)" [(ngModel)]="arquivoSelecionadoRadio" [disabled]="!editavelChild"></p-radioButton></td>
+                <td class="celula-trunca-texto" title="{{file.name}}"><a href="{{file.path}}">{{file.name}}</a></td>
+                <td class="celula-trunca-texto" >{{file.created | formatadorData}}</td>
+            </tr>
+        </tbody>
+        <tfoot class="status-tabela">
+            <tr *ngIf="status == LOADING"><td colspan="6"><i>Carregando Lista de Arquivos...</i></td></tr>
+            <tr *ngIf="files != null && files.length == 0 && status == COMPLETE"><td colspan="6"><i>Não Há Arquivos para serem listados</i></td></tr>
+            <tr *ngIf="status == ERROR"><td class="erro" colspan="6"><i>Falha na obtenção da Lista de Arquivos!</i></td></tr>
+        </tfoot>
+    </table>
+</div>

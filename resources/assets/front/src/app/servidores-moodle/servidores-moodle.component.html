@@ -1,0 +1,127 @@
+<div class="row">
+    <div class="col-md-8" style="margin: auto; float: initial;">
+        <div class="panel panel-default">
+            <div class="panel-heading">Servidores Moodle</div>
+            <div class="alert alert-warning" role="alert" style="margin: 20px;">
+                <b>Atenção! Para o funcionamento das integrações das funcionalidades do sistema para com os moodles, é necessário adicionar o arquivo 
+                <a title="Fazer download de arquivo do script para Servidores Moodle" href="/servidores-moodle/download-script">auto-restore.php</a>
+                no diretório raiz de cada moodle que se queira utilizar.</b>
+            </div>
+            <div>
+                <table class="table" style="margin-bottom: 0px">
+                    <colgroup>
+                        <col width="40px" />
+                        <col width="50%" />
+                        <col width="50%" />
+                        <col width="32px" />
+                        <col width="32px" />
+                        <col width="15px" />
+                    </colgroup>
+                    <thead class="thead-light">
+                        <tr>
+                            <th style="text-align: center">ID</th>
+                            <th class="celula-trunca-texto" title="NOME">NOME</th>
+                            <th class="celula-trunca-texto" title="URL do Servidor">URL</th>
+                            <th colspan="2" style="text-align: center">AÇÕES</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+            <div redimensionar="391" style="overflow-y: scroll;">
+                <table class="table">
+                    <colgroup>
+                        <col width="40px" />
+                        <col width="50%" />
+                        <col width="50%" />
+                        <col width="32px" />
+                        <col width="32px" />
+                    </colgroup>
+                    <tbody>
+                        <tr *ngFor="let sm of servidoresMoodle" [ngClass]="{'linha-desativada' : !sm.ativo}">
+                            <td>{{sm.id}}</td>
+                            <td class="celula-trunca-texto" title="{{sm.nome}}">{{sm.nome}}</td>
+                            <td class="celula-trunca-texto" title="{{sm.url}}">{{sm.url}}</td>
+                            <td>
+                                <button style="text-align: center; margin-left: -2px;" title="Editar" type="button"
+                                    class="btn btn-info botao-reduzido" data-toggle="modal"
+                                    data-target="#dialogCreateSM" (click)="selecionaServidorMoodle(sm)">
+                                    <span class="glyphicon glyphicon-edit"></span>
+                                </button>
+                            </td>
+                            <td>
+                                <button style="text-align: center; margin-left: -2px;" title="Remover" type="button"
+                                    class="btn btn-danger botao-reduzido" (click)="removeServidorMoodle(sm)">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot class="status-tabela">
+                        <tr *ngIf="status == LOADING">
+                            <td colspan="7"><i>Carregando Lista de Servidores Moodle...</i></td>
+                        </tr>
+                        <tr *ngIf="servidoresMoodle != null && servidoresMoodle.length == 0 && status == COMPLETE">
+                            <td colspan="6"><i>Não Há Servidores Moodle para serem listados</i></td>
+                        </tr>
+                        <tr *ngIf="status == ERROR">
+                            <td class="erro" colspan="7"><i>Falha na obtenção da Lista de Servidores Moodle!</i></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+            <div class="panel-footer">
+                <button type="button" class="btn btn-primary botao-barra" data-toggle="modal"
+                    data-target="#dialogCreateSM" (click)="novoServidorMoodle()" [disabled]="!editavel">Novo</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="dialogCreateSM" tabindex="-1" role="dialog" aria-labelledby="dialogCreateSMTitle"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Servidor Moodle</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <fieldset>
+                    <form id="servidoresMoodleForm" class="form-group"
+                        style="text-align: left; width: 300px; margin: 15px auto;"
+                        (submit)="criaAlteraServidorMoodle($event)">
+                        <div class="alert alert-info" [ngClass]="{'alert-info': !erroAviso, 'alert-danger': erroAviso}"
+                            *ngIf="aviso">
+                            <strong *ngIf="!erroAviso">Informação!</strong><strong *ngIf="erroAviso">Falha!</strong>
+                            {{aviso}}
+                        </div>
+                        <label class="style1">Nome: *</label><br>
+                        <input class="form-control" type="text" name="nome_professor" placeholder="Nome Servidor Moodle"
+                            [(ngModel)]="servidorMoodle.nome" size="60" [disabled]="!editavel" required>
+                        <p></p>
+
+                        <label class="style1" for="id-sigecad">URL do Servidor Moodle: *</label><br>
+                        <input class="form-control" type="text" name="id-sigecad" placeholder="https://servidor.edu.br"
+                            [(ngModel)]="servidorMoodle.url" [disabled]="!editavel" required>
+                        <p></p>
+
+                        <label class="style1" for="pl-ativo">Ativo: </label><br>
+                        <span class="big-check">
+                            <input type="checkbox" name="pl-ativo" [(ngModel)]="servidorMoodle.ativo"
+                                [disabled]="!editavel">
+                        </span>
+                        <p></p>
+                    </form>
+                </fieldset>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" form="servidoresMoodleForm" class="btn btn-primary botao-barra"
+                    [disabled]="!editavel">Enviar</button>
+                <button type="button" class="btn btn-secondary botao-barra" data-dismiss="modal">Fechar</button>
+            </div>
+        </div>
+    </div>
+</div>

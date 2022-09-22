@@ -1,0 +1,55 @@
+
+
+<table class="table">
+    <caption style="border: solid 1px #EEE;">
+        <table>
+            <tr>
+                <td class="col-md-1"><label for="filtro" class="col-md-1 control-label">Buscar:</label></td>
+                <td class="col-md-8"><input id="filtro" type="text" class="form-control" name="filtro" [(ngModel)]="criteria" autofocus></td>
+            </tr>
+        </table>
+    </caption>
+    <colgroup>
+        <col width="50px"/>
+        <col width="100%"/>
+        <col width="170px"/>
+        <col width="54px"/>
+    </colgroup>
+    <thead class="thead-light">
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Nome</th>
+            <th scope="col">Login</th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+</table>
+<div redimensionar="400" style="overflow-y:scroll">
+    <table class="table">
+        <colgroup>
+            <col width="50px"/>
+            <col width="100%"/>
+            <col width="170px"/>
+            <col width="39px"/>
+        </colgroup>
+        <tbody>
+            <tr *ngFor="let u of (usuarios | filtroUsuario:criteria)">
+                <td>{{u.id}}</td>
+                <td>{{u.name}}</td>
+                <td>{{u.email}}</td>
+                <td>
+                    <button type="button" class="btn btn-primary botao-reduzido" (click)="addGestor(u)">
+                        <span class="glyphicon glyphicon-plus"></span>
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+        <tfoot class="status-tabela">
+            <tr *ngIf="status == LOADING"><td colspan="6"><i>Carregando Usuários...</i></td></tr>
+            <tr *ngIf="salas != null && (usuarios).length == 0 && status == COMPLETE"><td colspan="6"><i>Não Há Usuários para serem listadas</i></td></tr>
+            <tr *ngIf="status == ERROR"><td class="erro" colspan="6"><i>Falha na obtenção de Usuários!</i></td></tr>
+        </tfoot>
+    </table>
+</div>
+    
+    

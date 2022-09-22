@@ -1,0 +1,54 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ .Values.applicationName }}-ingress
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    cert-manager.io/cluster-issuer: {{ .Values.ingress.annotations.certmanagerClusterissuer }}
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      more_set_headers "server: hide";
+      more_set_headers "X-Content-Type-Options: nosniff";
+      more_clear_headers "Server";
+      more_clear_headers "x-envoy-decorator-operation";
+    nginx.ingress.kubernetes.io/modsecurity-snippet: |
+      Include /etc/nginx/owasp-modsecurity-crs/nginx-modsecurity.conf
+      SecRuleEngine On
+      SecAuditLogType Concurrent
+      SecRequestBodyAccess On
+      SecAuditEngine RelevantOnly
+      SecAuditLogParts ABIJDEFHZ
+      SecAuditLog /var/log/modsec_audit.log
+      SecAuditLogStorageDir /var/log/audit
+      SecRequestBodyLimit 36700160
+      SecRequestBodyNoFilesLimit 131072
+      SecRequestBodyLimitAction Reject
+      SecPcreMatchLimit 1000
+      SecPcreMatchLimitRecursion 1000
+      SecResponseBodyLimit 524288
+      SecResponseBodyLimitAction ProcessPartial
+      SecArgumentSeparator &
+      SecCookieFormat 0
+      SecRule REQUEST_HEADERS:Content-Type ^text/xml$ "id:2000000,phase:1,t:lowercase,nolog,pass,ctl:requestBodyProcessor=XML"
+      SecRule REQUEST_HEADERS:Content-Type (?:application(?:/soap\+|/)|text/)xml \
+      "id:2000001,phase:1,t:none,t:lowercase,pass,nolog,ctl:requestBodyProcessor=XML"
+      SecRule REQUEST_HEADERS:Content-Type "application/json" \
+      "id:2000002,phase:1,t:none,t:lowercase,pass,nolog,ctl:requestBodyProcessor=JSON"
+      SecRule REQBODY_ERROR "!@eq 0" \
+      "id:2000003, phase:2,t:none,log,deny,status:400,msg:Failed to parse request body.,logdata:%{reqbody_error_msg},severity:2"
+spec:
+  ingressClassName: {{ .Values.ingress.ingressClassName }}
+  rules:
+  - host: "{{ .Values.ingress.url }}"
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: {{ .Values.applicationName }}
+            port:
+              number: {{ .Values.ingress.hosts.port }}
+  tls:
+  - hosts:
+    - "{{ .Values.ingress.url }}"
+    secretName: {{ .Values.applicationName }}-cert-secret

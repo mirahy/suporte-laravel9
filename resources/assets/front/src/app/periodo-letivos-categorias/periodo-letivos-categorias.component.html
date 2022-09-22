@@ -1,0 +1,148 @@
+<div class="panel panel-default">
+    <div class="panel-heading">
+        Periodo Letivos - Categorias
+    </div>
+    <div class="row">
+        <div class="col-md-3"  style="padding-right: 0px; border-right: 1px solid #ddd">
+            <div>
+                <table class="table" style="margin-bottom: 0px">
+                    <colgroup>
+                        <col width="40px"/>
+                        <col width="100%"/>
+                        <!--col width="130px"/-->
+                        <col width="15px"/>
+                    </colgroup>
+                    <thead class="thead-light">
+                        <tr>
+                            <th>#</th>
+                            <th class="celula-trunca-texto" title="PERÍODO LETIVO">PERÍODO LETIVO</th>
+                            <!--th class="celula-trunca-texto" title="Referência de Início de IDs de Categorias">Cat. IDs Início</th-->
+                            <th></th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+            <div redimensionar="204" style="overflow-y: scroll;">
+                <table class="table">
+                    <colgroup>
+                        <col width="40px"/>
+                        <col width="100%"/>
+                        <!--col width="130px"/-->
+                    </colgroup>
+                    <tbody>
+                        <tr *ngFor="let pl of periodoLetivos"  class="clickable-row" (click)="selecionarPeriodoLetivo(pl)" [ngClass]="{'linha-selecionada': pl.id == periodoLetivo.id}">
+                            <td>{{pl.id}}</td>
+                            <td class="celula-trunca-texto" title="{{pl.nome}}">{{pl.nome}}</td>
+                            <!--td class="celula-trunca-texto" title="{{pl.}}">{{pl.}}</td-->
+                        </tr>
+                    </tbody>
+                    <tfoot class="status-tabela">
+                        <tr *ngIf="status == LOADING"><td colspan="3"><i>Carregando Período Letivos...</i></td></tr>
+                        <tr *ngIf="periodoLetivos != null && periodoLetivos.length == 0 && status == COMPLETE"><td colspan="3"><i>Não Há Período Letivos para serem listados</i></td></tr>
+                        <tr *ngIf="status == ERROR"><td class="erro" colspan="3"><i>Falha na obtenção de Período Letivos!</i></td></tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+        <div class="col-md-9" style="padding-left: 0px; ">
+            <div class="barra-titulo">
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <td colspan="3" class="celula-trunca-texto" style="text-align: center;">
+                                <h4 *ngIf="periodoLetivo.id == 0" style="display: inline-block; color: gray;" title=""><i>Selecione um Período Letivo...</i></h4>
+                                <h4 *ngIf="periodoLetivo.id > 0" style="display: inline-block" title="">Período Letivo: {{periodoLetivo.nome}}</h4>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div>
+                <div>
+                    <table class="table" style="margin-bottom: 0px">
+                        <caption>
+                            <table>
+                                <tr>
+                                    <td class="col-md-1"><label for="filtro" class="col-md-1 control-label">Buscar:</label></td>
+                                    <td class="col-md-7"><input id="filtro" type="text" class="form-control" name="filtro" [(ngModel)]="criteria"></td>
+                                </tr>
+                            </table>
+                        </caption>
+                        <colgroup>
+                            <col width="40px"/>
+                            <col width="20%"/>
+                            <col width="60%"/>
+                            <col width="20%"/>
+                            <col width="39px"/>
+                            <col width="39px"/>
+                            <col width="15px"/>
+                        </colgroup>
+                        <thead class="thead-light">
+                            <tr>
+                                <th style="text-align: center">#</th>
+                                <th class="celula-trunca-texto" title="FACULDADE">FACULDADE</th>
+                                <th class="celula-trunca-texto" title="CURSO">CURSO</th>
+                                <th class="celula-trunca-texto" title="Categoria ID">Categoria ID</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+                <div redimensionar="310" style="overflow-y: scroll;">
+                    <table class="table">
+                        <colgroup>
+                            <col width="40px"/>
+                            <col width="20%"/>
+                            <col width="60%"/>
+                            <col width="20%"/>
+                            <col width="39px"/>
+                            <col width="39px"/>
+                        </colgroup>
+                        <tbody>
+                            <ng-container *ngFor="let faculdade of (faculdades | filtroCursos:criteria)">
+                                <tr *ngFor="let curso of faculdade.cursos" >
+                                    <td></td>
+                                    <td [ngClass]="{'celula-desativada' : !faculdade.ativo}" class="celula-trunca-texto" title="{{faculdade.nome}}">{{faculdade.sigla}}</td>
+                                    <td [ngClass]="{'celula-desativada' : !curso.ativo}" class="celula-trunca-texto" title="{{curso.nome}}">{{curso.nome}}</td>
+                                    <ng-container *ngIf="cursoSelecionado.id != curso.id">
+                                        <td>{{getCategoriaId(curso)}}</td>
+                                        <td class="celula-trunca-texto" title="Editar">
+                                            <button style="text-align: center; margin-left: 2px;" title="Editar" type="button" class="btn btn-info botao-reduzido" (click)="selecionarCurso(curso)" [disabled]="!editavel || periodoLetivo.id == 0">
+                                                <span class="glyphicon glyphicon-edit"></span>
+                                            </button>
+                                        </td>
+                                        <td class="celula-trunca-texto" title="Anular">
+                                            <button style="text-align: center; margin-left: 2px;" title="Anular" type="button" class="btn btn-danger botao-reduzido" (click)="anularCategoria(curso)" [disabled]="!editavel || periodoLetivo.id == 0">
+                                                <span class="glyphicon glyphicon-remove"></span>
+                                            </button>
+                                        </td>
+                                    </ng-container>
+                                    <ng-container *ngIf="cursoSelecionado.id == curso.id">
+                                        <td>
+                                            <input id="categoriaIdInput" class="form-control form-control-micro" [(ngModel)]="categoriaIdTemp">
+                                        </td>
+                                        <td class="celula-trunca-texto" title="Concluir Edição" style="text-align: center;">
+                                            <button style="text-align: center; margin-left: 2px;" title="Concluir Edição" type="button" class="btn btn-success botao-reduzido" (click)="concluirEdicaoCategoria(curso)" [disabled]="!editavel || periodoLetivo.id == 0">
+                                                <span class="glyphicon glyphicon-ok"></span>
+                                            </button>
+                                        </td>
+                                        <td class="celula-trunca-texto" title="Cancelar" style="text-align: center;">
+                                            <button style="text-align: center; margin-left: 2px;" title="Cancelar" type="button" class="btn btn-secondary botao-reduzido" (click)="resetCursoSelecionado()" [disabled]="!editavel || periodoLetivo.id == 0">
+                                                <span class="glyphicon glyphicon-retweet"></span>
+                                            </button>
+                                        </td>
+                                    </ng-container>
+                                </tr>
+                            </ng-container>
+                        </tbody>
+                        <tfoot class="status-tabela">
+                            <tr *ngIf="status == LOADING"><td colspan="6"><i>Carregando Cursos...</i></td></tr>
+                            <tr *ngIf="faculdades != null && (faculdades | filtroCursos:criteria).length == 0 && status == COMPLETE"><td colspan="6"><i>Não Há Cursos para serem listados</i></td></tr>
+                            <tr *ngIf="status == ERROR"><td class="erro" colspan="6"><i>Falha na obtenção de Cursos!</i></td></tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

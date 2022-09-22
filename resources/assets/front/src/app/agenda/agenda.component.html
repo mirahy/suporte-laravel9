@@ -1,0 +1,98 @@
+<div class="row">
+    <div class="col-md-14">
+        <div class="panel panel-default">
+            <div class="panel-heading">Agenda</div>
+            <div class="panel-body" redimensionar="222">
+                <p-fullCalendar #fc [events]="events" [options]="options" (onSelect)="aee($event)"></p-fullCalendar>
+            </div>
+            <div class="panel-footer">
+                <table>
+                    <tr>
+                        <!--td style="width: 180px; padding: 0px 2px;"><p-dropdown [options]="temas" [(ngModel)]="selectedTheme" (onChange)="onThemeSelect()"></p-dropdown></td-->
+                        <td style="width: 60px; padding: 0px 5px;"><p-button label="Novo" data-toggle="modal" data-target="#dialogEvento" (click)="janela()"></p-button></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="dialogEvento" tabindex="-1" role="dialog" aria-labelledby="dialogEventoTitle" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Evento</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="resetEvento()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" style="width: 362px; height: 300px;">
+                <table>
+                    <colgroup>
+                        <col width="278px"/>
+                        <col />
+                    </colgroup>
+                    <tr>
+                        <td>
+                            <label>Título</label><br>
+                            <input id="tituloInput" class="form-control" [(ngModel)]="evento.title" [readonly]="!editavel" autofocus/>
+                        </td>
+                        <td style="padding-left: 10px;">
+                            <label>Cor</label><br>
+                            <input type="color" style="height: 34px; border-radius: 3px;" id="head" name="head" [(ngModel)]="evento.backgroundColor"  [disabled]="!editavel">
+                        </td>
+                    </tr>
+                </table>
+                <p></p>
+                <table>
+                    <tr>
+                        <td>
+                            <label>Dia Inteiro</label>
+                            <input type="checkbox" class="form-control" style="box-shadow: none;" [(ngModel)]="evento.allDay" (change)="changeAllDay()" [disabled]="!editavel" /><p></p>
+                        </td>
+                        <td style="width: 50px;"></td>
+                        <td>
+                            <label>+ Dias</label>
+                            <input type="checkbox" class="form-control" style="box-shadow: none;" [(ngModel)]="evento.maisDay" (change)="changeMaisDay()" [disabled]="!editavel"/><p></p>
+                        </td>
+                    </tr>
+                </table>
+                <table>
+                    <tr>
+                        <td>
+                            <label>Data</label><br>
+                            <p-calendar [locale]="pt" [(ngModel)]="evento.start" [maxDate]="evento.maisDay ? evento.end : null" dateFormat="dd/mm/yy" [showIcon]="true"  [disabled]="!editavel"></p-calendar>
+                        </td>
+                        <td style="width: 10px;"></td>
+                        <td *ngIf="evento.maisDay">
+                            <label>Fim</label><br>
+                            <p-calendar [locale]="pt" [(ngModel)]="evento.end" [minDate]="evento.start" dateFormat="dd/mm/yy" [showIcon]="true"  [disabled]="!editavel"></p-calendar>
+                        </td>
+                    </tr>
+                </table>
+                <p></p>
+                <ng-container *ngIf="!evento.allDay">
+                    <table>
+                        <tr>
+                            <td>
+                                <label>Hora Início</label><br>
+                                <p-calendar [timeOnly]="true" [stepMinute]="30" [locale]="pt" [maxDate]="evento.horaEnd" [(ngModel)]="evento.horaStart"  [disabled]="!editavel"></p-calendar>
+                            </td>
+                            <td style="width: 10px;"></td>
+                            <td>
+                                <label>Hora Fim</label><br>
+                                <p-calendar [timeOnly]="true" [stepMinute]="30" [locale]="pt" [minDate]="evento.horaStart" [(ngModel)]="evento.horaEnd" [disabled]="!editavel"></p-calendar>
+                            </td>
+                        </tr>
+                    </table>
+                </ng-container>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary botao-barra" (click)="addEvent()" [disabled]="!editavel">{{evento.id == 0 ? "Criar" : "Editar"}}</button>
+                <button type="button" class="btn btn-danger botao-barra" (click)="delEvent()" [disabled]="!editavel || evento.id == 0">Excluir</button>
+                <button type="button" class="btn btn-secondary botao-barra" data-dismiss="modal" (click)="resetEvento()">Fechar</button>
+            </div>
+        </div>
+    </div>
+</div>

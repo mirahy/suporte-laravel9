@@ -1,0 +1,63 @@
+version: "3.8"
+
+services:
+    host-laravel:
+        build: .
+        ports:
+            - 8080:80
+        working_dir: /var/www
+        volumes:
+            - ./:/var/www
+        environment:
+            APP_ENV: local
+            APP_DEBUG: true
+            APP_URL: http://localhost:8080/
+            DB_TYPE: mysql
+            DB_HOST: host-mysql
+            DB_PORT: 3306
+            DB_USER: root
+            DB_PASSWORD: secret
+            DB_NAME: suporte
+            MAIL_HOST: 
+            MAIL_USERNAME: null
+            MAIL_PASSWORD: null
+            MAIL_FROM_ADDRESS: 
+            MAIL_FROM_NAME: 
+            ADLDAP_CONTROLLERS: 
+            ADLDAP_PORT: 
+            ADLDAP_USE_SSL: 
+            ADLDAP_USE_TLS: 
+            ADLDAP_BASEDN: 
+            ADLDAP_ADMIN_USERNAME: 
+            ADLDAP_ADMIN_PASSWORD: 
+            DB_ACAD_HOSTNAME: 
+            DB_ACAD_PORT: 
+            DB_ACAD_USERNAME: 
+            DB_ACAD_PASSWORD: 
+            DB_ACAD_DBNAME: 
+        networks:
+            - minha-rede
+    host-angular:
+        image: node:12.21
+        working_dir: /app
+        command: sh -c "npm install && npm install -g @angular/cli@7.2.4 && su -c 'ng build --output-path=/build/angular --watch' node"
+        volumes:
+            - ./resources/assets/front:/app
+            - ./public/js:/build
+    host-mysql:
+        image: mysql:5.7
+        ports:
+            - 3306:3306
+        volumes:
+            - volume-mysql:/var/lib/mysql
+        environment: 
+            MYSQL_ROOT_PASSWORD: secret
+            MYSQL_DATABASE: suporte
+        networks:
+            - minha-rede
+networks:
+    minha-rede:
+        name: minha-rede
+        external: true          
+volumes:
+    volume-mysql:

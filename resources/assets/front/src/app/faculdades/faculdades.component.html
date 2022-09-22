@@ -1,0 +1,127 @@
+<div class="panel panel-default">
+    <div class="panel-heading">
+        Faculdades e Cursos
+    </div>
+    <div class="row">
+        <div class="col-md-6"  style="padding-right: 0px; border-right: 1px solid #ddd">
+            <div>
+                <table class="table" style="margin-bottom: 0px">
+                    <colgroup>
+                        <col width="40px"/>
+                        <col width="130px"/>
+                        <col width="100%"/>
+                        <col width="130px"/>
+                        <col width="39px"/>
+                        <col width="39px"/>
+                        <col width="15px"/>
+                    </colgroup>
+                    <thead class="thead-light">
+                        <tr>
+                            <th>#</th>
+                            <th class="celula-trunca-texto" title="SIGLA">SIGLA</th>
+                            <th class="celula-trunca-texto" title="Nome da Faculdade">Nome da Faculdade</th>
+                            <th class="celula-trunca-texto" title="Referência IDs de Categorias a serem somadas">Cat. IDs Refs</th>
+                            <th colspan="3"></th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+            <div redimensionar="259" style="overflow-y: scroll;">
+                <table class="table">
+                    <colgroup>
+                        <col width="40px"/>
+                        <col width="130px"/>
+                        <col width="100%"/>
+                        <col width="130px"/>
+                        <col width="39px"/>
+                        <col width="39px"/>
+                    </colgroup>
+                    <tbody>
+                        <tr *ngFor="let f of faculdades"  class="clickable-row" (click)="selecionar(f)" [ngClass]="{'linha-selecionada': f.id == faculdadeSelecionada.id, 'linha-desativada' : !f.ativo}">
+                            <td>{{f.id}}</td>
+                            <td class="celula-trunca-texto" title="{{f.sigla}}">{{f.sigla}}</td>
+                            <td class="celula-trunca-texto" title="{{f.nome}}">{{f.nome}}</td>
+                            <td class="celula-trunca-texto" title="{{f.auto_increment_ref}}">{{f.auto_increment_ref}}</td>
+                            <td class="celula-trunca-texto" title="Editar">
+                                <button style="text-align: center; margin-left: 2px;" title="Editar" type="button" class="btn btn-info botao-reduzido"  data-toggle="modal" data-target="#dialogCreate" (click)="selecionar(f)" [disabled]="!editavel">
+                                    <span class="glyphicon glyphicon-edit"></span>
+                                </button>
+                            </td>
+                            <td class="celula-trunca-texto" title="Excluir">
+                                <button style="text-align: center; margin-left: 2px;" title="Excluir" type="button" class="btn btn-danger botao-reduzido" (click)="remove(f)" [disabled]="!editavel">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot class="status-tabela">
+                        <tr *ngIf="status == LOADING"><td colspan="5"><i>Carregando Faculdades...</i></td></tr>
+                        <tr *ngIf="periodoLetivos != null && periodoLetivos.length == 0 && status == COMPLETE"><td colspan="5"><i>Não Há Faculdades para serem listadas</i></td></tr>
+                        <tr *ngIf="status == ERROR"><td class="erro" colspan="5"><i>Falha na obtenção de Faculdades!</i></td></tr>
+                    </tfoot>
+                </table>
+            </div>
+            <div class="panel-footer">
+                <button type="button" class="btn btn-primary botao-barra" style="width: 130px;" data-toggle="modal" data-target="#dialogCreate" (click)="nova()" [disabled]="!editavel">Nova Faculdade</button>
+            </div>
+        </div>
+        <div class="col-md-6" style="padding-left: 0px; ">
+            <div class="barra-titulo">
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <td colspan="3" class="celula-trunca-texto" style="text-align: center;">
+                                <h4 *ngIf="faculdadeSelecionada.id == 0" style="display: inline-block; color: gray;" title=""><i>Selecione uma Faculdade...</i></h4>
+                                <h4 *ngIf="faculdadeSelecionada.id > 0" style="display: inline-block" title="">Faculdade: {{faculdadeSelecionada.sigla}}</h4>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div>
+                <app-cursos [ancestral]="eu">Carregando...</app-cursos>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="dialogCreate" tabindex="-1" role="dialog" aria-labelledby="dialogCreateTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Faculdades</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <fieldset>
+                    <form id="faculdadeForm" class="form-group" style="text-align: left; width: 400px; margin: 15px auto;" (submit)="criaAltera($event)">
+                        <div class="alert alert-info" [ngClass]="{'alert-info': !erroAviso, 'alert-danger': erroAviso}" *ngIf="aviso">
+                            <strong *ngIf="!erroAviso">Informação!</strong><strong *ngIf="erroAviso">Falha!</strong> {{aviso}}
+                        </div>
+                        <label class="style1">Sigla: *</label><br>
+                        <input class="form-control" type="text" name="sigla" placeholder="Ex. FACET" [(ngModel)]="faculdadeSelecionada.sigla" size="60" [disabled]="!editavel" required><p></p>
+
+                        <label class="style1">Nome: *</label><br>
+                        <input class="form-control" type="text" name="nome" placeholder="Ex. Faculdade de Ciências Exatas e Tecnologias" [(ngModel)]="faculdadeSelecionada.nome" size="60" [disabled]="!editavel" required><p></p>
+
+                        <label class="style1" for="auto-increment-ref">Referência IDs de Categorias a serem somadas: </label><br>
+                        <input class="form-control" type="number" name="iauto-increment-ref" placeholder="0" style="width: 100px;" [(ngModel)]="faculdadeSelecionada.auto_increment_ref" [disabled]="!editavel"><p></p>
+                        
+                        <label class="style1" for="faculdade-ativa">Faculdade Ativa: </label><br>
+                        <span class="big-check">
+                            <input  type="checkbox" name="faculdade-ativa" [(ngModel)]="faculdadeSelecionada.ativo" [disabled]="!editavel">
+                        </span><p></p>
+                        
+
+                    </form>
+                </fieldset>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" form="faculdadeForm" class="btn btn-primary botao-barra"  [disabled]="!editavel">Enviar</button>
+                <button type="button" class="btn btn-secondary botao-barra" data-dismiss="modal">Fechar</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,127 @@
+# Default values for helm app deploy.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+applicationName: 
+domain: ufgd.edu.br
+applicationPort: 80
+
+replicaCount: 2
+
+image:
+  repository: registry.ufgd.edu.br/ead/suporte:latest
+  pullPolicy: Always
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: ""
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: false
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext:
+  {}
+  # fsGroup: 2000
+
+securityContext:
+  {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+service:
+  type: ClusterIP
+  port: 80
+  name: http
+  protocol: TCP
+
+ingress:
+  name: 
+  url: 
+  annotations:
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+    certmanagerClusterissuer: "letsencrypt-prod-dns"
+  ingressClassName: nginx
+  hosts:
+    port: 80
+
+resources:
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  limits:
+    cpu: 1
+    memory: 384Mi
+  requests:
+    cpu: 250m
+    memory: 16Mi
+
+autoscaling:
+  enabled: true
+  minReplicas: 1
+  maxReplicas: 1
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+volume:
+  enabled: true
+  name: 
+  mountPath: /var/www/public/storage/app/public
+  capacity:
+    storage: 100Mi
+
+# Chave/Valor para variáveis de ambiente
+# normal: utilizados como kind ConfigMap
+# secret: utilizados como kind Secret. São convertidas para base64 para atender o padrão do kind Secret
+# os valores podem ser alterados no cli. Ex: helm install --set env.normal.MY_VAR=teste,env.secret.MY_SECRET=123456
+env:
+  normal:
+    DB_TYPE:
+    DB_HOST:
+    DB_PORT:
+    DB_USER:
+    DB_PASSWORD:
+    DB_NAME:
+    MAIL_HOST:
+    MAIL_USERNAME:
+    MAIL_PASSWORD:
+    MAIL_FROM_ADDRESS:
+    MAIL_FROM_NAME:
+    DOMAIN_NAME:
+    ADLDAP_CONTROLLERS:
+    ADLDAP_BASEDN:
+    ADLDAP_ADMIN_USERNAME:
+    ADLDAP_ADMIN_PASSWORD:
+    ADLDAP_PORT:
+    ADLDAP_USE_SSL:
+    ADLDAP_USE_TLS:
+    DB_ACAD_HOSTNAME:
+    DB_ACAD_PORT:
+    DB_ACAD_USERNAME:
+    DB_ACAD_PASSWORD:
+    DB_ACAD_DBNAME:
+    APP_ENV:
+    APP_DEBUG:
+    APP_URL:
+  secret:

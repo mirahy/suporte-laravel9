@@ -1,0 +1,201 @@
+<div class="row">
+    <div class="panel panel-default">
+        <div class="panel-heading">Nova Solicitação de Criação de Sala no Moodle</div>
+        <fieldset>
+            <div redimensionar="166">
+                <form id="salaForm" class="form-group" style="text-align: left; width: 500px; margin: 15px auto;" (submit)="criaSala($event)">
+                    <div class="alert alert-info" [ngClass]="{'alert-info': !erroAviso, 'alert-danger': erroAviso}" *ngIf="aviso">
+                        <strong *ngIf="!erroAviso">Informação!</strong><strong *ngIf="erroAviso">Falha!</strong> {{aviso}}
+                    </div>
+                    <label class="style1">Nome completo: *</label><br>
+                    <input *ngIf="usuarios.length == 0" class="form-control" type="text" name="nome_professor" placeholder="Nome completo" [(ngModel)]="sala.nome_professor" size="60" disabled>
+                    <ng-container *ngIf="usuarios.length > 0">
+                        <p-autoComplete class="prime-autocomplete" name="nome_professor" [suggestions]="filteredUsuarios" placeholder="Nome do Professor" (onSelect)="selecionaUsuario($event)"
+                        (completeMethod)="buscaUsuario($event)" (onClear)="limpaUsuario($event)" [readonly]="!editavel" [(ngModel)]="nome_professor_temp" [required]="true" [forceSelection]="true"></p-autoComplete>
+                        <br>
+                    </ng-container><p></p>
+
+                    <label class="style1">E-mail: *</label><br>
+                    <input class="form-control" type="email" name="email" placeholder="Preferência institucional" [(ngModel)]="sala.email" size="60" [readonly]="!editavel" required><p></p>
+                    
+                    <label class="style1">Confirmar E-mail: * </label> 
+                    <input type="checkbox" name="verificacao" value="" required><br><p></p>
+
+                    <label class="style1">Período Letivo: *</label><br>
+                    <select class="form-control" name="periodo_letivo"  [disabled]="!editavel" [(ngModel)]="sala.periodo_letivo_id" (change)="selecionaPeriodoLetivo()" required>   
+                        <option hidden disabled selected value> -- Selecione -- </option>
+                        <ng-container *ngFor="let pl of periodoLetivos">
+                            <option *ngIf="pl.ativo || sala.periodo_letivo_id == pl.id.toString()" [value]="pl.id">{{pl.nome + (pl.descricao ? " (" + pl.descricao + ")" : "")}}</option>
+                        </ng-container>  
+                    </select><p></p>
+
+                    <label class="style1">Faculdade: *</label><br>
+                    <!--p-dropdown name="faculdade" [options]="faculdadesOptions" [(ngModel)]="faculdadeTemp" [disabled]="!editavel" [required]="true"
+                        placeholder="-- Selecione --" styleClass="prime-combobox" (change)="selecionaFaculdade()"></p-dropdown-->
+                    <select class="form-control" name="faculdade"  [disabled]="!editavel" [(ngModel)]="faculdadeSelecionadaId" (change)="selecionaFaculdade()" required>   
+                        <option hidden disabled selected value> -- Selecione -- </option>
+                        <ng-container *ngFor="let f of faculdades">
+                            <option *ngIf="f.ativo || faculdadeSelecionadaId == f.id.toString()" [value]="f.id">{{f.sigla}}</option>
+                        </ng-container>  
+                    </select><p></p>
+
+                    <label class="style1">Curso: *</label><br>
+                    <ng-container *ngIf="!faculdadeSelecionadaId">
+                        <select class="form-control" name="curso"  disabled >   
+                            <option hidden disabled selected value> -- </option>
+                        </select>
+                    </ng-container>
+                    <ng-container *ngIf="faculdadeSelecionadaId">
+                        <select class="form-control" name="curso"  [disabled]="!editavel" [(ngModel)]="sala.curso" (change)="selecionaCurso()" required>   
+                            <option hidden disabled selected value> -- Selecione -- </option>
+                            <ng-container *ngFor="let c of faculdadeTemp.cursos">
+                                <option  *ngIf="c.ativo || sala.curso == c.id" [value]="c.id">{{c.curso_key ? c.curso_key + " - " + c.nome : c.nome}}</option>
+                            </ng-container>
+                        </select>
+                    </ng-container><p></p>
+
+                    <label class="style1">Nome da Disciplina: *</label><br>
+                    <!--input pInputText class="form-control prime-form-control" type="text" name="nome_sala" placeholder="Ex.: Algoritimos III" [(ngModel)]="sala.nome_sala" size="60" [readonly]="!editavel" required-->
+                    <p-autoComplete class="prime-autocomplete" name="nome_sala" [suggestions]="filteredDisciplina" placeholder="Ex.: Algoritmos" (onSelect)="selecionaDisciplina($event)"
+                    (completeMethod)="buscaDisciplina($event)" [readonly]="!editavel || sala.curso == ''" [(ngModel)]="sala.nome_sala" [required]="true"></p-autoComplete>
+                    <br><p></p>
+
+                    <label class="style1">Modalidade da Disciplina: *</label><br>
+                    <select class="form-control" name="modalidade" [(ngModel)]="sala.modalidade" [disabled]="!editavel" required>   
+                        <option hidden disabled selected value> -- Selecione -- </option>  
+                        <option *ngFor="let m of modalidades" [hidden]="!m.visivel" value="{{m.sigla}}">{{m.descricao}}</option>
+                    </select><p></p>
+                    
+                    <label class="style1">Objetivo da Disciplina: *</label><br>
+                    <select class="form-control" name="objetivo_sala" [(ngModel)]="sala.objetivo_sala" [disabled]="!editavel" required>   
+                        <option hidden disabled selected value> -- Selecione -- </option>                      
+                        <option *ngFor="let o of objetivosSalas" [hidden]="!o.visivel" value="{{o.sigla}}">{{o.descricao}}</option>
+                    </select><p></p>
+                    
+                    <label class="style1">Chave de Inscrição para Estudantes acessarem a sala:</label><br>
+                    <input class="form-control" type="text" name="senha_aluno" placeholder="" [(ngModel)]="sala.senha_aluno" size="60" [readonly]="!editavel"><p></p>
+
+                    <label class="style1">Observações:</label><br>
+                    <textarea class="form-control" name="observacao" placeholder="Ex:. Utilizem o conteúdo da sala do ano passado: Link da sala" [(ngModel)]="sala.observacao" [readonly]="!editavel"></textarea><p></p>
+                    
+                    <!--label class="style1">Estudantes:</label><br>
+                    <table class="table">
+                        <caption *ngIf="estudantes.length == 0">
+                            <div  class="custom-file" style="text-align: center;">
+                                <input type="file" class="custom-file-input" id="customFile" (change)="lerAlunosCSV($event)"  [disabled]="!editavel">
+                                <label class="custom-file-label btn btn-primary" [ngClass]="{'disabled': !editavel}" for="customFile">Selecione um Arquivo com os Estudantes (csv)</label>
+                            </div>
+                        </caption>
+                        <colgroup>
+                            <col width="33%"/>
+                            <col width="33%"/>
+                            <col width="34%"/>
+                            <col width="36px"/>
+                            <col width="17px"/>
+                        </colgroup>
+                        <thead class="thead-light">
+                            <tr>
+                                <th>USER</th>
+                                <th>EMAIL</th>
+                                <th>NOME</th>
+                                <th>
+                                    <button style="text-align: center;" title="Limpar Todos" type="button" class="btn btn-danger botao-reduzido" (click)="limparEstudantes()"  [disabled]="!editavel">
+                                        <span class="glyphicon glyphicon-trash"></span>
+                                    </button>
+                                </th>
+                            </tr>
+                        </thead>
+                    </table>
+                    <div style="overflow-y: scroll; max-height: 160px;">
+                        <table class="table">
+                            <colgroup>
+                                <col width="33%"/>
+                                <col width="33%"/>
+                                <col width="34%"/>
+                                <col width="36px"/>
+                            </colgroup>
+                            <tbody>
+                                <tr *ngFor="let e of estudantes">
+                                    <td class="celula-trunca-texto" title="{{e.username}}">{{e.username}}</td>
+                                    <td class="celula-trunca-texto" title="{{e.email}}">{{e.email}}</td>
+                                    <td class="celula-trunca-texto" title="{{e.fullname}}">{{e.fullname}}</td>
+                                    <td>
+                                        <button style="text-align: center;" title="Remover" type="button" class="btn btn-danger botao-reduzido" (click)="removerEstudante(e)"  [disabled]="!editavel">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" style="text-align: center;">
+                                        <button style="text-align: center;" title="Adicionar" type="button" data-toggle="modal" data-target="#dialogEstudante" class="btn btn-primary botao-reduzido" [disabled]="!editavel">
+                                            <span class="glyphicon glyphicon-plus"></span>
+                                        </button>
+                                    </td>
+                                </tr>
+                                
+                            </tbody>
+                        </table>
+                    </div-->
+                    <button type="submit" form="salaForm" class="btn btn-primary botao-barra"  [disabled]="!editavel">Enviar</button>
+                    <!--p><label>Se você necessita de uma Sala personalizada, clique <a href="/salas-old/create/">Aqui</a>.</label></p-->
+                </form>
+            </div>
+        </fieldset>
+    </div>
+</div>
+
+<div class="modal fade" id="dialogCreate" tabindex="-1" role="dialog" aria-labelledby="dialogCreateTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Criação de Sala Realizada!</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" style="width: 700px;">
+                <h2 style="font-weight: normal;">Solicitação de criação de sala: <b>{{ salaResp.nome_sala }}</b></h2>
+                <p></p>
+                <p>Nome: <b>{{ salaResp.nome_professor }}</b></p>
+                <p>Faculdade: <b>{{ salaResp.curso?.faculdade?.sigla }}</b></p>
+                <p>Curso: <b>{{ salaResp.curso?.nome }}</b></p>
+                <p>Senha para Estudantes acessarem a sala: <b *ngIf="salaResp.senha_aluno != null && salaResp.senha_aluno != ''">{{ salaResp.senha_aluno }}</b> <i *ngIf="salaResp.senha_aluno == null || salaResp.senha_aluno == ''" style="color: gray;">sem senha</i></p>
+                <p *ngIf="salaResp.observacao != null && salaResp.observacao != ''">Observação: <b>{{salaResp.observacao }}</b></p>
+                <p>Status: <b><span style=" padding: 3px">{{ salaResp.status.descricao }}</span></b>
+                <ng-container  *ngIf="salaResp.mensagem != null && salaResp.mensagem != ''">
+                    <br/>
+                    <ng-container  *ngIf="salaResp.status.chave == STATUS_CONCLUIDO_PADRAO">
+                        Link da Sala: <b><a href="{{ salaResp.mensagem }}">{{ salaResp.mensagem }}</a></b>
+                    </ng-container>
+                    <ng-container  *ngIf="salaResp.status.chave == STATUS_REJEITADO_PADRAO">
+                        Justificativa: <b><span style="color: red">{{  salaResp.mensagem }}</span></b>
+                    </ng-container>
+                </ng-container>
+                </p>
+                <p></p>
+                <br/>
+                <br/>
+                <p style="color: gray;"><i>Este é um email automático enviado pelo sistema, não responda este email!</i> </p>
+                <p></p>
+                © Equipe EAD <br/>
+                <p>Contato: <a href="mailto:{{emailResp}}">{{emailResp}}</a></p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary botao-barra" style="width: 200px;" type="button" onclick="window.location.href = '/salas'">Lista de Salas</button>
+                <button type="button" class="btn btn-secondary botao-barra" data-dismiss="modal">Fechar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="dialogMensagem" tabindex="-1" role="dialog"  data-backdrop="static" aria-labelledby="dialogMensagemTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-body" style="width: 400px;">
+                <div class="alert"  [ngClass]="{'alert-info': !erroAviso, 'alert-danger': erroAviso}">
+                    <strong>{{mensagemDialog}}</strong> 
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

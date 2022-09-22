@@ -1,0 +1,104 @@
+<div>
+    <table class="table" style="margin-bottom: 0px">
+        <colgroup>
+            <col width="50%"/>
+            <col width="50%"/>
+            <col width="39px"/>
+            <col width="39px"/>
+            <col width="15px"/>
+        </colgroup>
+        <thead class="thead-light">
+            <tr>
+                <th title="Item que será pesquisado para ser substituído pelas entradas desejadas">CHAVE</th>
+                <th title="Item que será substituído em cada ocorrencia da Chave">ENTRADA</th>
+                <th></th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+    </table>
+</div>
+<div redimensionar="262" style="overflow-y: scroll;">
+    <table class="table">
+        <colgroup>
+            <col width="50%"/>
+            <col width="50%"/>
+            <col width="39px"/>
+            <col width="39px"/>
+        </colgroup>
+        <tbody>
+            <tr *ngFor="let buscador of macro.buscadores">
+                <ng-container *ngIf="buscadorTemp.id != buscador.id">
+                    <td class="celula-trunca-texto" title="{{buscador.chave}}">{{buscador.chave}}</td>
+                    <td class="celula-trunca-texto" title="{{buscador.entrada}}">{{buscador.entrada}}</td>
+                    <td class="celula-trunca-texto" title="Editar">
+                        <button style="text-align: center; margin-left: 2px;" title="Editar" type="button" class="btn btn-info botao-reduzido" (click)="editar(buscador)">
+                            <span class="glyphicon glyphicon-edit"></span>
+                        </button>
+                    </td>
+                    <td class="celula-trunca-texto" title="Excluir">
+                        <button style="text-align: center; margin-left: 2px;" title="Excluir" type="button" class="btn btn-danger botao-reduzido" (click)="deletar(buscador)">
+                            <span class="glyphicon glyphicon-remove"></span>
+                        </button>
+                    </td>
+                </ng-container>
+                <ng-container *ngIf="buscadorTemp.id == buscador.id">
+                    <td class="celula-trunca-texto" title="{{buscadorTemp.chave}}"><input type="text" class="form-control form-control-micro" [(ngModel)]="buscadorTemp.chave" required/></td>
+                    <td class="celula-trunca-texto" title="{{buscadorTemp.entrada}}">
+                        <select  class="form-control form-control-micro" [(ngModel)]="buscadorTemp.entrada" required >
+                            <option *ngFor="let entrada of entradas" value="{{entrada}}">{{entrada}}</option>
+                        </select>
+                    </td>
+                    <td class="celula-trunca-texto" title="Concluir Edição" style="text-align: center;">
+                        <button style="text-align: center; margin-left: 2px;" title="Concluir Edição" type="button" class="btn btn-success botao-reduzido" (click)="concluirEdicao()" [disabled]="invalid">
+                            <span class="glyphicon glyphicon-ok"></span>
+                        </button>
+                    </td>
+                    <td class="celula-trunca-texto" title="Cancelar" style="text-align: center;">
+                        <button style="text-align: center; margin-left: 2px;" title="Cancelar" type="button" class="btn btn-secondary botao-reduzido" (click)="reset()">
+                            <span class="glyphicon glyphicon-retweet"></span>
+                        </button>
+                    </td>
+                </ng-container>
+            </tr>
+            <tr *ngIf="!emCriacao && macro.buscadores != null && macro.buscadores.length > 0 && status == COMPLETE">
+                <td *ngIf="buscadorTemp.id == 0" class="celula-trunca-texto" title="Novo" style="text-align: center;" colspan="4">
+                    <button style="text-align: center; margin-left: 2px;" title="Novo" type="button" class="btn btn-primary botao-reduzido" (click)="novo()">
+                        <span class="glyphicon glyphicon-plus"></span>
+                    </button>
+                </td>
+            </tr>
+            <tr *ngIf="emCriacao">
+                    <td class="celula-trunca-texto"><input type="text" class="form-control form-control-micro" [(ngModel)]="buscadorTemp.chave"/></td>
+                    <td class="celula-trunca-texto" title="{{buscadorTemp.entrada}}">
+                        <select  class="form-control form-control-micro" [(ngModel)]="buscadorTemp.entrada" >
+                            <option *ngFor="let entrada of entradas" value="{{entrada}}">{{entrada}}</option>
+                        </select>
+                    </td>
+                    <td *ngIf="buscadorTemp.id == 0" class="celula-trunca-texto" title="Concluir"  style="text-align: center;" >
+                        <button style="text-align: center; margin-left: 2px;" title="Concluir" type="button" class="btn btn-success botao-reduzido" (click)="concluirEdicao()"  [disabled]="invalid">
+                            <span class="glyphicon glyphicon-ok"></span>
+                        </button>
+                    </td>
+                    <td *ngIf="buscadorTemp.id == 0" class="celula-trunca-texto" title="Cancelar"  style="text-align: center;" >
+                        <button style="text-align: center; margin-left: 2px;" title="Calcelar" type="button" class="btn btn-secondary botao-reduzido" (click)="reset()">
+                            <span class="glyphicon glyphicon-retweet"></span>
+                        </button>
+                    </td>
+                </tr>
+        </tbody>
+        <tfoot class="status-tabela">
+            <tr *ngIf="status == LOADING"><td colspan="4"><i>Carregando Buscadores...</i></td></tr>
+            <tr *ngIf="macro.buscadores != null && macro.buscadores.length == 0 && status == COMPLETE && !emCriacao">
+                <td colspan="4">
+                    <i>Não Há Buscadores para serem listados</i><br />
+                    <button *ngIf="macro.id > 0" style="text-align: center; margin-left: 2px; margin-top: 5px;" title="Nova" type="button" class="btn btn-primary botao-reduzido" (click)="novo()">
+                        <span class="glyphicon glyphicon-plus"></span>
+                    </button>
+                </td>
+            </tr>
+            <tr *ngIf="status == ERROR"><td class="erro" colspan="4"><i>Falha na obtenção de Buscadores!</i></td></tr>
+            
+        </tfoot>
+    </table>
+</div>

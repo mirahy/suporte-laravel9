@@ -1,0 +1,102 @@
+# This file is a template, and might need editing before it works on your project.
+# To contribute improvements to CI/CD templates, please follow the Development guide at:
+# https://docs.gitlab.com/ee/development/cicd/templates.html
+# This specific template is located at:
+# https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Getting-Started.gitlab-ci.yml
+
+# This is a sample GitLab CI/CD configuration file that should run without any modifications.
+# It demonstrates a basic 3 stage CI/CD pipeline. Instead of real tests or scripts,
+# it uses echo commands to simulate the pipeline execution.
+#
+# A pipeline is composed of independent jobs that run scripts, grouped into stages.
+# Stages run in sequential order, but jobs within stages run in parallel.
+#
+# For more information, see: https://docs.gitlab.com/ee/ci/yaml/README.html#stages
+image: docker:20
+services:
+  - name: docker:20-dind
+    command: ["--tls=false"]
+
+stages: # List of stages for jobs, and their order of execution
+  - build
+  - test
+  - deploy
+  - uninstall
+
+variables:
+  HELM_RELEASE_NAME: $APPLICATION_NAME
+  HELM_CHART_FOLDER_NAME: helm
+  IMAGE_TAG_REPO_BRANCH: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
+  IMAGE_TAG_PIPELINE_NUMBER: $CI_REGISTRY_IMAGE:$CI_PIPELINE_IID
+  IMAGE_TAG_LATEST: $CI_REGISTRY_IMAGE:latest
+  DOCKER_HOST: tcp://docker:2375
+  DOCKER_TLS_CERTDIR: ""
+  #NAMESPACE_DEPLOY: ead-hm
+
+before_script:
+  - echo $CI_REGISTRY_IMAGE
+  - echo $CI_COMMIT_REF_SLUG
+
+build-job: # This job runs in the build stage, which runs first.
+  stage: build
+  when: manual
+  script:
+    - echo $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER $CI_REGISTRY --password-stdin
+    - echo "Building the code..."
+    - docker build --cache-from $IMAGE_TAG_LATEST --pull --tag $IMAGE_TAG_LATEST --tag $IMAGE_TAG_PIPELINE_NUMBER --network host .
+    - docker push "$CI_REGISTRY_IMAGE" --all-tags
+    - echo "Build complete."
+  only:
+    - master
+  tags:
+    - images
+    - docker
+
+unit-test-job: # This job runs in the test stage.
+  stage: test # It only starts when the job in the build stage completes successfully.
+  when: manual
+  script:
+    - echo "Running unit tests... This will take about 10 seconds."
+    - sleep 10
+    - echo "Code coverage is 90%"
+
+lint-test-job: # This job also runs in the test stage.
+  stage: test # It can run at the same time as unit-test-job (in parallel).
+  when: manual
+  script:
+    - echo "Linting code... This will take about 10 seconds."
+    - sleep 10
+    - echo "No lint issues found."
+
+deploy-job: # This job runs in the deploy stage.
+  stage: deploy # It only runs when *both* jobs in the test stage complete successfully.
+  image: registry.ufgd.edu.br/dssti/kube-tools:latest
+  when: manual
+  script:
+    - echo "Deploying application..."
+    - echo $KUBEPROD1_CONFIG | base64 -d >> ~/.kube/config # configura as credencias de acesso ao cluster
+    - chmod go-r ~/.kube/config # remove a permissao de leitura para grupos e outros, mas mantem para o dono(user) do arquivo
+    - helm upgrade --install --namespace $NAMESPACE_DEPLOY $HELM_RELEASE_NAME $HELM_CHART_FOLDER_NAME/ --values $HELM_CHART_FOLDER_NAME/values.yaml --set image.repository=$IMAGE_TAG_LATEST --set env.normal.DB_TYPE=$DB_TYPE --set env.normal.DB_HOST=$DB_HOST --set env.normal.DB_PORT=$DB_PORT --set env.normal.DB_USER=$DB_USER --set env.normal.DB_PASSWORD="$DB_PASSWORD" --set env.normal.DB_NAME=$DB_NAME --set env.normal.MAIL_HOST=$MAIL_HOST --set env.normal.MAIL_USERNAME=$MAIL_USERNAME --set env.normal.MAIL_PASSWORD="$MAIL_PASSWORD" --set env.normal.MAIL_FROM_ADDRESS=$MAIL_FROM_ADDRESS --set env.normal.MAIL_FROM_NAME=$MAIL_FROM_NAME --set env.normal.DOMAIN_NAME=$DOMAIN_NAME --set env.normal.ADLDAP_CONTROLLERS=$ADLDAP_CONTROLLERS --set env.normal.ADLDAP_BASEDN="$ADLDAP_BASEDN" --set env.normal.ADLDAP_ADMIN_USERNAME=$ADLDAP_ADMIN_USERNAME --set env.normal.ADLDAP_ADMIN_PASSWORD="$ADLDAP_ADMIN_PASSWORD" --set env.normal.ADLDAP_PORT=$ADLDAP_PORT --set env.normal.ADLDAP_USE_SSL=$ADLDAP_USE_SSL --set env.normal.ADLDAP_USE_TLS=$ADLDAP_USE_TLS --set env.normal.DB_ACAD_HOSTNAME=$DB_ACAD_HOSTNAME --set env.normal.DB_ACAD_PORT=$DB_ACAD_PORT --set env.normal.DB_ACAD_USERNAME=$DB_ACAD_USERNAME --set env.normal.DB_ACAD_PASSWORD="$DB_ACAD_PASSWORD" --set env.normal.DB_ACAD_DBNAME=$DB_ACAD_DBNAME --set ingress.url=$DOMAIN_NAME --set applicationName=$APPLICATION_NAME --set env.normal.APP_ENV=$APP_ENV --set env.normal.APP_DEBUG=$APP_DEBUG --set env.normal.APP_URL=$LINK_SUPORTE 
+    - sleep 5
+    - helm --namespace $NAMESPACE_DEPLOY list
+    - echo "Application successfully deployed."
+  only:
+    - master
+  tags:
+    - images
+    - docker # usar o runner do cluster kubernetes
+
+uninstall-job:
+  stage: uninstall
+  image: registry.ufgd.edu.br/dssti/kube-tools:latest
+  when: manual
+  script:
+    - echo $KUBEPROD1_CONFIG | base64 -d >> ~/.kube/config
+    - chmod go-r ~/.kube/config
+    - helm uninstall --namespace $NAMESPACE_DEPLOY $HELM_RELEASE_NAME
+    - helm list
+  only:
+    - master
+  tags:
+    - images
+    - docker

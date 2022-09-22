@@ -1,0 +1,183 @@
+<div class="row">
+    <div class="col-md-8" style="margin: auto; float: initial;">
+        <div class="panel panel-default">
+            <div class="panel-heading">Período Letivos</div>
+            <div>
+                <table class="table" style="margin-bottom: 0px">
+                    <colgroup>
+                        <col width="40px"/>
+                        <col width="25%"/>
+                        <col width="150px"/>
+                        <col width="50%"/>
+                        <col width="25%"/>
+                        <col width="180px"/>
+                        <col width="32px"/>
+                        <col width="32px"/>
+                        <col width="15px"/>
+                    </colgroup>
+                    <thead class="thead-light">
+                        <tr>
+                            <th style="text-align: center">ID</th>
+                            <th class="celula-trunca-texto" title="NOME">NOME</th>
+                            <th class="celula-trunca-texto" style="text-align: center;" title="ID do Período Letivo no SIGECAD">ID SIGECAD</th>
+                            <th class="celula-trunca-texto" title="NOME">DESCRIÇÃO</th>
+                            <th class="celula-trunca-texto" title="NOME">SUFIXO</th>
+                            <th class="celula-trunca-texto" style="text-align: center;" title="Referência de Início de IDs de Categorias">Categorias IDs Início</th>
+                            <th colspan="2" style="text-align: center">AÇÕES</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+            <div redimensionar="259" style="overflow-y: scroll;">
+                <table class="table">
+                    <colgroup>
+                        <col width="40px"/>
+                        <col width="25%"/>
+                        <col width="150px"/>
+                        <col width="50%"/>
+                        <col width="25%"/>
+                        <col width="180px"/>
+                        <col width="32px"/>
+                        <col width="32px"/>
+                    </colgroup>
+                    <tbody>
+                        <tr *ngFor="let pl of periodoLetivos" [ngClass]="{'linha-desativada' : !pl.ativo}">
+                            <td>{{pl.id}}</td>
+                            <td class="celula-trunca-texto" title="{{pl.nome}}">{{pl.nome}}</td>
+                            <td class="celula-trunca-texto" style="text-align: center;" title="{{pl.id_sigecad}}">{{pl.id_sigecad}}</td>
+                            <td class="celula-trunca-texto" title="{{pl.descricao}}">{{pl.descricao}}</td>
+                            <td class="celula-trunca-texto" title="{{pl.sufixo}}">{{pl.sufixo}}</td>
+                            <td class="celula-trunca-texto" style="text-align: center;" title="{{pl.inicio_auto_increment}}">{{pl.inicio_auto_increment}}</td>
+                            <td>
+                                <button style="text-align: center; margin-left: -2px;" title="Editar" type="button" class="btn btn-info botao-reduzido"  data-toggle="modal" data-target="#dialogCreate" (click)="selecionaPeriodoLetivo(pl)">
+                                    <span class="glyphicon glyphicon-edit"></span>
+                                </button>
+                            </td>
+                            <td>
+                                <button style="text-align: center; margin-left: -2px;" title="Remover" type="button" class="btn btn-danger botao-reduzido" (click)="removePeriodoLetivo(pl)">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot class="status-tabela">
+                        <tr *ngIf="status == LOADING"><td colspan="7"><i>Carregando Período Letivos...</i></td></tr>
+                        <tr *ngIf="periodoLetivos != null && periodoLetivos.length == 0 && status == COMPLETE"><td colspan="6"><i>Não Há Período Letivos para serem listados</i></td></tr>
+                        <tr *ngIf="status == ERROR"><td class="erro" colspan="7"><i>Falha na obtenção de Período Letivos!</i></td></tr>
+                    </tfoot>
+                </table>
+            </div>
+            <div class="panel-footer">
+                <button type="button" class="btn btn-primary botao-barra" data-toggle="modal" data-target="#dialogLoadSigecad" (click)="novoPeriodoLetivo()" [disabled]="!editavel">Novo</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="dialogCreate" tabindex="-1" role="dialog" aria-labelledby="dialogCreateTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Período Letivo</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <fieldset>
+                    <form id="periodoLetivoForm" class="form-group" style="text-align: left; width: 300px; margin: 15px auto;" (submit)="criaAlteraPeriodoLetivo($event)">
+                        <div class="alert alert-info" [ngClass]="{'alert-info': !erroAviso, 'alert-danger': erroAviso}" *ngIf="aviso">
+                            <strong *ngIf="!erroAviso">Informação!</strong><strong *ngIf="erroAviso">Falha!</strong> {{aviso}}
+                        </div>
+                        <label class="style1">Nome: *</label><br>
+                        <input class="form-control" type="text" name="nome" placeholder="Ano - Semestre" [(ngModel)]="periodoLetivo.nome" size="60" [disabled]="!editavel" required><p></p>
+
+                        <label class="style1" for="id-sigecad">ID do Período Letivo no SIGECAD: </label><br>
+                        <input class="form-control" type="number" name="id-sigecad" placeholder="0" [(ngModel)]="periodoLetivo.id_sigecad" [disabled]="!editavel" required><p></p>
+                        
+                        <label class="style1">Descrição: </label><br>
+                        <input class="form-control" type="text" name="descricao" placeholder="Ex. Regular, Especial, Inverno" [(ngModel)]="periodoLetivo.descricao" size="60" [disabled]="!editavel"><p></p>
+
+                        <label class="style1">Sufixo: </label><br>
+                        <input class="form-control" type="text" name="sufixo" placeholder="(Ano.Semestre)" [(ngModel)]="periodoLetivo.sufixo" size="60" [disabled]="!editavel"><p></p>
+
+                        <label class="style1" for="inicio-auto-increment">Referência de Início de IDs de Categorias: </label><br>
+                        <input class="form-control" type="number" name="inicio-auto-increment" placeholder="0" [(ngModel)]="periodoLetivo.inicio_auto_increment" [disabled]="!editavel"><p></p>
+
+                        <label class="style1" for="pl-ativo">Ativo: </label><br>
+                        <span class="big-check">
+                            <input  type="checkbox" name="pl-ativo" [(ngModel)]="periodoLetivo.ativo" [disabled]="!editavel">
+                        </span><p></p>
+                    </form>
+                </fieldset>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" form="periodoLetivoForm" class="btn btn-primary botao-barra"  [disabled]="!editavel">Enviar</button>
+                <button type="button" class="btn btn-secondary botao-barra" data-dismiss="modal">Fechar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="dialogLoadSigecad" tabindex="-1" role="dialog" aria-labelledby="dialogLoadSigecadTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Período Letivos Atuais no SIGECAD</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div>
+                    <table class="table" style="margin-bottom: 0px">
+                        <colgroup>
+                            <col width="100%"/>
+                            <col width="200px"/>
+                            <col width="100px"/>
+                            <col width="15px"/>
+                        </colgroup>
+                        <thead class="thead-light">
+                            <tr>
+                                <th class="celula-trunca-texto" title="NOME">NOME</th>
+                                <th style="text-align: center">ID SIGECAD</th>
+                                <th colspan="2" style="text-align: center">SELECIONAR</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+                <div redimensionar="306" style="overflow-y: scroll;">
+                    <table class="table">
+                        <colgroup>
+                            <col width="100%"/>
+                            <col width="200px"/>
+                            <col width="100px"/>
+                        </colgroup>
+                        <tbody>
+                            <tr *ngFor="let pl of periodoLetivosSigecad">
+                                <td class="celula-trunca-texto" title="{{pl.nome}}">{{pl.nome}}</td>
+                                <td class="celula-trunca-texto" style="text-align: center;" title="{{pl.id_sigecad}}">{{pl.id_sigecad}}</td>
+                                <td style="text-align: center;">
+                                    <button style="text-align: center; margin-left: -2px;" title="Selecionar" type="button" class="btn btn-success botao-reduzido"  data-dismiss="modal" data-toggle="modal" data-target="#dialogCreate" (click)="selecionaPeriodoLetivo(pl)">
+                                        <span class="glyphicon glyphicon-check"></span>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tfoot class="status-tabela">
+                            <tr *ngIf="statusPLS == LOADING"><td colspan="3"><i>Carregando Período Letivos...</i></td></tr>
+                            <tr *ngIf="periodoLetivosSigecad != null && periodoLetivosSigecad.length == 0 && statusPLS == COMPLETE"><td colspan="3"><i>Não Há Carregando Período Letivos para serem listados</i></td></tr>
+                            <tr *ngIf="statusPLS == ERROR"><td class="erro" colspan="3"><i>Falha na obtenção de Período Letivos!</i></td></tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary botao-barra" data-dismiss="modal">Fechar</button>
+            </div>
+        </div>
+    </div>
+</div>

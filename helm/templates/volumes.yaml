@@ -1,0 +1,33 @@
+{{- if .Values.volume.enabled }}
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name:  {{ .Values.applicationName }}-vol-nfs
+spec:
+  capacity:
+    storage: {{ .Values.volume.capacity.storage }}
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Recycle
+  mountOptions:
+    - hard
+    - nfsvers=4.1
+  nfs:
+    path: /nfs/exports/{{ .Values.applicationName }}-vol
+    server: nfs.ead.ufgd.edu.br
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name:  {{ .Values.applicationName }}-vol-nfs
+  namespace: {{ .Release.Namespace }}
+spec:
+  storageClassName: "ead-nfs-client"
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 500Mi
+{{- end }}

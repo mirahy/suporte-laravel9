@@ -1,0 +1,160 @@
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        Macros
+    </div>
+        <div class="row">
+            <div class="col-md-8"  style="padding-right: 0px; border-right: 1px solid #ddd">
+                <div>
+                    <table class="table"style="margin-bottom: 0px">
+                        <colgroup>
+                            <col width="50px"/>
+                            <col width="100%"/>
+                            <col width="82px"/>
+                            <col width="100%"/>
+                            <col width="100%"/>
+                            <col width="90px"/>
+                            <col width="39px"/>
+                            <col width="39px"/>
+                            <col width="15px"/>
+                        </colgroup>
+                        <thead class="thead-light">
+                            <tr>
+                                <th style="text-align: center">ID</th>
+                                <th class="celula-trunca-texto" title="NOME">NOME</th>
+                                <th class="celula-trunca-texto" title="PERÍODO LETIVO">P. LETIVO</th>
+                                <th class="celula-trunca-texto" title="LINK PARA SERVIDOR MOODLE">LINK MOODLE</th>
+                                <th class="celula-trunca-texto" title=" ARQUIVO">ARQUIVO</th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+                <div redimensionar="261" style="overflow-y: scroll;">
+                    <table class="table" data-toggle="table" >
+                        <colgroup>
+                            <col width="50px"/>
+                            <col width="100%"/>
+                            <col width="82px"/>
+                            <col width="100%"/>
+                            <col width="100%"/>
+                            <col width="90px"/>
+                            <col width="39px"/>
+                            <col width="39px"/>
+                        </colgroup>
+                        <tbody>
+                            <tr *ngFor="let macro of macros" class="clickable-row" (click)="selecionarMacro(macro)" [ngClass]="{'linha-selecionada': macro.id == macroSelecionada.id}">
+                                <td style="text-align: center">{{macro.id}}</td>
+                                <td class="celula-trunca-texto" title="">
+                                    {{macro.nome}}
+                                </td>
+                                <td>
+                                    {{macro.periodo_letivo.nome}}
+                                </td>
+                                <td class="celula-trunca-texto" title="{{macro.link_servidor_moodle}}">
+                                    {{macro.link_servidor_moodle}}
+                                </td>
+                                <td class="celula-trunca-texto" title="Alterar">
+                                    <button *ngIf="!macro.arquivo" style="text-align: center; margin-right: 2px;" title="Alterar Arquivo" type="button" class="btn btn-primary botao-reduzido" data-toggle="modal" data-target="#dialogArquivos" (click)="selecionarMacro(macro)">
+                                        <span class="glyphicon glyphicon-plus"></span>
+                                    </button>
+                                    <a style="cursor: pointer"  data-toggle="modal" data-target="#dialogArquivos">{{macro.arquivo?.name}}</a>
+                                </td>
+                                <td class="celula-trunca-texto">{{macro.arquivo? (macro.arquivo.created | formatadorData) : ''}}</td>
+                                <td>
+                                    <button style="text-align: center; margin-left: 2px;" title="Editar Nome" type="button" class="btn btn-info botao-reduzido" data-toggle="modal" data-target="#dialogCriar" (click)="selecionarMacro(macro)">
+                                        <span class="glyphicon glyphicon-edit"></span>
+                                    </button>
+                                </td>
+                                <td>
+                                    <button style="text-align: center; margin-left: -2px;" title="Remover Macro" type="button" class="btn btn-danger botao-reduzido" (click)="delMacro(macro)">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tfoot class="status-tabela">
+                            <tr *ngIf="status == LOADING"><td colspan="6"><i>Carregando Macros...</i></td></tr>
+                            <tr *ngIf="macros != null && macros.length == 0 && status == COMPLETE"><td colspan="6"><i>Não Há Macros para serem listadas</i></td></tr>
+                            <tr *ngIf="status == ERROR"><td class="erro" colspan="6"><i>Falha na obtenção das Macros!</i></td></tr>
+                        </tfoot>
+                    </table>
+                </div>
+                <div class="panel-footer">
+                    <button type="button" class="btn btn-primary botao-barra" data-toggle="modal" data-target="#dialogCriar" (click)="selecionarMacro(null)" [disabled]="!editavel">Nova</button>
+                </div>
+            </div>
+            <div class="col-md-4" style="padding-left: 0px; ">
+                <div class="barra-titulo">
+                    <table class="table">
+                        <tbody>
+                            <tr>
+                                <td colspan="3" class="celula-trunca-texto" style="text-align: center;">
+                                    <h4 *ngIf="macroSelecionada.id == 0" style="display: inline-block; color: gray;" title=""><i>Selecione uma macro...</i></h4>
+                                    <h4 *ngIf="macroSelecionada.id > 0" style="display: inline-block" title="">{{macroSelecionada.nome}}</h4>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div>
+                    <app-buscadores [ancestral]="eu">Carregando...</app-buscadores>
+                </div>
+            </div>
+        </div>
+</div>
+
+    
+
+<div class="modal fade" id="dialogArquivos" tabindex="-1" role="dialog" aria-labelledby="dialogArquivosTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Selecionar Arquivo</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" style="width: 500px;">
+                    <app-arquivo [ancestral]="eu">Carregando...</app-arquivo>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary botao-barra" data-dismiss="modal">Fechar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="dialogCriar" tabindex="-1" role="dialog" aria-labelledby="dialogCriarTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">{{macroSelecionada.id > 0 ? 'Alterar Macro' : 'Criar Macro'}}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" style="width: 350px;">
+                    <label class="style1">{{macroSelecionada.id > 0 ? 'Alterar Nome:' : 'Nome para a Macro:'}}</label><br>
+                    <input class="form-control" [(ngModel)]="macroSelecionada.nome" [readonly]="!editavel" maxlength="31"/><p></p>
+                    <label class="style1">Período Letivo</label><br>
+                    <select class="form-control" name="periodo-letivo" [(ngModel)]="periodoLetivoTempIndex" (change)="aplicarPeriodoLetivo()" [disabled]="!editavel" required>   
+                        <option hidden disabled [value]="0" selected> -- Selecione -- </option>  
+                        <option *ngFor="let p of periodoLetivos" [value]="p.id">{{p.nome + (p.descricao ? " (" + p.descricao + ")" : "")}}</option>       
+                    </select><br>
+                    <label class="style1">Link para Servidor Moodle</label><br>
+                    <select class="form-control" name="links-moodle" [(ngModel)]="macroSelecionada.link_servidor_moodle" [disabled]="!editavel" required>   
+                        <option hidden disabled [value]="null" selected> -- Selecione -- </option>  
+                        <option *ngFor="let l of linksMoodles" [value]="l">{{l}}</option>       
+                    </select><br>
+                    <!--input class="form-control" [(ngModel)]="macroSelecionada.link_servidor_moodle" [readonly]="!editavel" maxlength="63"/><p></p-->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary botao-barra" (click)="criarAlterarMacro()" [disabled]="!editavel">Ok</button>
+                    <button type="button" class="btn btn-secondary botao-barra" data-dismiss="modal">Fechar</button>
+                </div>
+            </div>
+        </div>
+    </div>

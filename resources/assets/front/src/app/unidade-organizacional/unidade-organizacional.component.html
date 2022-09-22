@@ -1,0 +1,137 @@
+<div class="row">
+    <div class="col-md-8" style="margin: auto; float: initial;">
+        <div class="panel panel-default">
+            <div class="panel-heading">Unidades Organizacionais</div>
+            <div class="panel-body" style="padding-bottom: 0px;">
+                <label class="style1">Diretório de Cadastro Raiz (Unidade Organizacional):</label><br>
+                <table style="width: 100%;">
+                    <tr>
+                        <td style="width: 100%;">
+                            <input type="text" name="ou-cadastro" class="form-control" [(ngModel)]="ouDirRoot" readonly />
+                        </td>
+                        <td style="vertical-align: baseline;">
+                            <button type="button" style="margin-left: 5px;" class="btn btn-info" title="Editar Dir Root" (click)="preparaAlterarOuDir()"
+                            [disabled]="!editavel"><span class="glyphicon glyphicon-edit"></span></button>
+                        </td>
+                    </tr>
+                </table>
+                <br>
+                <label class="style1">Grupos OUs (Membro de):</label>
+            </div>
+            <div>
+                <table class="table" style="margin-bottom: 0px">
+                    <colgroup>
+                        <col width="40px"/>
+                        <col width="25%"/>
+                        <col width="75%"/>
+                        <col width="32px"/>
+                        <col width="32px"/>
+                        <col width="15px"/>
+                    </colgroup>
+                    <thead class="thead-light">
+                        <tr>
+                            <th style="text-align: center">ID</th>
+                            <th class="celula-trunca-texto" title="NOME">NOME</th>
+                            <th class="celula-trunca-texto" title="NOME">VALOR</th>
+                            <th colspan="2" style="text-align: center">AÇÕES</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+            <div redimensionar="378" style="overflow-y: scroll;">
+                <table class="table">
+                    <colgroup>
+                        <col width="40px"/>
+                        <col width="25%"/>
+                        <col width="75%"/>
+                        <col width="32px"/>
+                        <col width="32px"/>
+                    </colgroup>
+                    <tbody>
+                        <tr *ngFor="let ou of unidadesOrganizacionais">
+                            <td>{{ou.id}}</td>
+                            <td class="celula-trunca-texto" title="{{ou.nome}}">{{ou.nome}}</td>
+                            <td class="celula-trunca-texto" title="{{ou.valor}}">{{ou.valor}}</td>
+                            <td>
+                                <button style="text-align: center; margin-left: -2px;" title="Editar" type="button" class="btn btn-info botao-reduzido"  data-toggle="modal" data-target="#dialogCreate" (click)="selecionaOU(ou)">
+                                    <span class="glyphicon glyphicon-edit"></span>
+                                </button>
+                            </td>
+                            <td>
+                                <button style="text-align: center; margin-left: -2px;" title="Remover" type="button" class="btn btn-danger botao-reduzido" (click)="removeOU(ou)">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot class="status-tabela">
+                        <tr *ngIf="status == LOADING"><td colspan="7"><i>Carregando Unidades Organizacionais...</i></td></tr>
+                        <tr *ngIf="unidadesOrganizacionais != null && unidadesOrganizacionais.length == 0 && status == COMPLETE"><td colspan="6"><i>Não Há Unidades Organizacionais para serem listadas</i></td></tr>
+                        <tr *ngIf="status == ERROR"><td class="erro" colspan="7"><i>Falha na obtenção de Unidades Organizacionais!</i></td></tr>
+                    </tfoot>
+                </table>
+            </div>
+            <div class="panel-footer">
+                <button type="button" class="btn btn-primary botao-barra" data-toggle="modal" data-target="#dialogCreate" (click)="novaOU()" [disabled]="!editavel">Novo</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="dialogCreate" tabindex="-1" role="dialog" aria-labelledby="dialogCreateTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Unidade Organizacional</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <fieldset>
+                    <form id="ouForm" class="form-group" style="text-align: left; width: 500px; margin: 15px auto;" (submit)="criaAlteraOU($event)">
+                        <div class="alert alert-info" [ngClass]="{'alert-info': !erroAviso, 'alert-danger': erroAviso}" *ngIf="aviso">
+                            <strong *ngIf="!erroAviso">Informação!</strong><strong *ngIf="erroAviso">Falha!</strong> {{aviso}}
+                        </div>
+                        <label class="style1">Nome: *</label><br>
+                        <input class="form-control" type="text" name="nome" placeholder="Nome da Unidade" [(ngModel)]="ouTemp.nome" size="63" [disabled]="!editavel" required><p></p>
+
+                        <label class="style1">Valor: </label><br>
+                        <input class="form-control" type="text" name="descricao" placeholder="CN=Nome_Comum,OU=GRUPO1,DC=example,DC=com,DC=br" [(ngModel)]="ouTemp.valor" size="255" [disabled]="!editavel"><p></p>
+                    </form>
+                </fieldset>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" form="ouForm" class="btn btn-primary botao-barra"  [disabled]="!editavel">Enviar</button>
+                <button type="button" class="btn btn-secondary botao-barra" data-dismiss="modal">Fechar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="dialogUpdateOuDir" tabindex="-1" role="dialog"
+	aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLongTitle">Alterar Diretório Raiz de Cadastro AD</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body" style="width: 500px;">
+				<div class="alert alert-info" [ngClass]="{'alert-info': !erroAviso, 'alert-danger': erroAviso}"
+					*ngIf="aviso">
+					<strong *ngIf="!erroAviso">Informação!</strong><strong *ngIf="erroAviso">Falha!</strong> {{aviso}}
+				</div>
+				<input type="text" class="form-control" [(ngModel)]="ouCadastroTemp" /><br>
+			</div>
+			<div class="modal-footer">
+                <button type="button" class="btn btn-success botao-barra" (click)="alterarOuDir()" [disabled]="!editavel">Alterar</button>
+				<button type="button" class="btn btn-secondary botao-barra" data-dismiss="modal"
+					[disabled]="!editavel">Fechar</button>
+			</div>
+		</div>
+	</div>
+</div>
