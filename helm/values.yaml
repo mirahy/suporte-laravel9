@@ -87,7 +87,7 @@ affinity: {}
 volume:
   enabled: true
   name: 
-  mountPath: /var/www/public/storage/app/public
+  mountPath: /var/www/storage/app/public
   capacity:
     storage: 100Mi
 
