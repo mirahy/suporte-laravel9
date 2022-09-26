@@ -87,7 +87,7 @@ affinity: {}
 volume:
   enabled: true
   name: 
-  mountPath: /var/www/public/storage/app/public
+  mountPath: /var/www/storage/app/public
   capacity:
     storage: 100Mi
 
@@ -104,8 +104,8 @@ env:
     DB_PASSWORD:
     DB_NAME:
     MAIL_HOST:
-    MAIL_USERNAME:
-    MAIL_PASSWORD:
+    MAIL_USERNAME: null
+    MAIL_PASSWORD: null
     MAIL_FROM_ADDRESS:
     MAIL_FROM_NAME:
     DOMAIN_NAME:
