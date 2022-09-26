@@ -10,21 +10,21 @@
 
     <title>{{ config('app.name', 'Suporte EaD') }}</title>
 
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="css/app.css" rel="stylesheet">
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <!--script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script-->
 
-    <script type="text/javascript" src="{{ asset('js/browser-detect.js') }}"></script>
+    <script type="text/javascript" src="js/browser-detect.js"></script>
 
-    <link href="{{ asset('css/inv-print.css') }}" rel="stylesheet"/>
+    <link href="css/inv-print.css" rel="stylesheet"/>
 </head>
 <body>
 
     <?php echo $content; ?>
     <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}"></script>
+    <script src="js/app.js"></script>
 
 </body>
 </html>

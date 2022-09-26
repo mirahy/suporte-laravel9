@@ -13,6 +13,6 @@
 </div>
 @endsection
 @section('mainscripts')
-    <!--script type="text/javascript" src="{{ asset('js/angular/main.js') }}"></script-->
-    <script type="text/javascript" src="{{ asset('js/mains/main-usuarios.js') }}"></script>
+    <!--script type="text/javascript" src="js/angular/main.js"></script-->
+    <script type="text/javascript" src="js/mains/main-usuarios.js"></script>
 @endsection

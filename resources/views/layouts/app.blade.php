@@ -13,18 +13,18 @@
     <link rel="shortcut icon" href="/favicon.png" />
 
     <!-- Styles -->
-    <link href="{{ asset('css/codigo-barras.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="css/codigo-barras.css" rel="stylesheet">
+    <link href="css/app.css" rel="stylesheet">
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <!--script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script-->
 
-    <script type="text/javascript" src="{{ asset('js/browser-detect.js') }}"></script>
+    <script type="text/javascript" src="js/browser-detect.js"></script>
 
     @yield('innerhead')
 
-    <link href="{{ asset('css/style.css') }}" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
 
     @inject('resources', 'App\Services\ResourcesService')
 </head>
@@ -43,7 +43,7 @@
 
                 <!-- Branding Image -->
                 <a class="navbar-brand" href="{{ url('/') }}" style="padding: 0px 15px;">
-                    <img src="{{ asset('img/logo.png') }}" alt="Salas Moodle" style="width: 75px;">
+                    <img src="img/logo.png" alt="Salas Moodle" style="width: 75px;">
                 </a>
                 <a class="navbar-brand" href="{{ url('/') }}">
                     {{ config('app.name') }}
@@ -247,8 +247,8 @@
     </footer>
 
     <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}"></script>
+    <script src="js/app.js"></script>
     @yield('postscripts')
-    <script src="{{ asset('js/post-scrips.js') }}"></script>
+    <script src="js/post-scrips.js"></script>
 </body>
 </html>

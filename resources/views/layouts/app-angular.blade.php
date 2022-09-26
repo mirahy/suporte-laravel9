@@ -12,11 +12,11 @@
 @endsection
 
 @section('postscripts')
-    <script type="text/javascript" src="{{ asset('js/angular/runtime.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('js/angular/polyfills.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('js/angular/styles.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('js/angular/vendor.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('js/angular/main.js') }}"></script>
-    <link href="{{ asset('css/callendar.css') }}" rel="stylesheet">
+    <script type="text/javascript" src="js/angular/runtime.js"></script>
+    <script type="text/javascript" src="js/angular/polyfills.js"></script>
+    <script type="text/javascript" src="js/angular/styles.js"></script>
+    <script type="text/javascript" src="js/angular/vendor.js"></script>
+    <script type="text/javascript" src="js/angular/main.js"></script>
+    <link href="css/callendar.css" rel="stylesheet">
 @endsection
 
