@@ -180,7 +180,7 @@ Route::resource('usuarios', 'UsuarioController');
 Route::get('/logs/exportacao-estudantes/{arquivo?}', 'LogsController@exportacaoEstudantes');
 Route::get('/logs', 'LogsController@index');
 
-Route::get('/usuario-cartao/{documento}', 'WebServicesController@consultaDadosCartao');
+Route::post('/usuario-cartao', 'WebServicesController@consultaDadosCartao');
 Route::get('/estudantes-grupo-lotes', 'WebServicesController@exportaEstudantesGrupoLotes');
 
 //Route::get('/sigecad/{codigoDisciplina}/{periodoLetivoKey}/{turmaKey}', 'TesteController@sigecad');

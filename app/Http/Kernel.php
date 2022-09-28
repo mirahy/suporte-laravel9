@@ -61,5 +61,6 @@ class Kernel extends HttpKernel
         'gestor' => \App\Http\Middleware\VerificaGestorRecurso::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'authhost' => \App\Http\Middleware\AuthHostMiddleware::class,
+        'authservicekey' => \App\Http\Middleware\AuthServiceKey::class,
     ];
 }

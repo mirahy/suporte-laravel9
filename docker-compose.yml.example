@@ -36,6 +36,7 @@ services:
             DB_ACAD_PASSWORD: 
             DB_ACAD_DBNAME: 
             CHAVE_WEBSERVICE_MOODLE: 
+            CONTRACHAVE_WEBSERVICE_SUPORTE: 
         networks:
             - minha-rede
     host-angular:

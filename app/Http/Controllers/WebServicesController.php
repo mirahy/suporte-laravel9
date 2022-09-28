@@ -11,10 +11,14 @@ class WebServicesController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('authhost');
+        $this->middleware('authservicekey')->only(['consultaDadosCartao']);
+        $this->middleware('authhost')->only(['exportaEstudantesGrupoLotes']);
     }
 
-    public function consultaDadosCartao (Request $request, $documento) {
+    public function consultaDadosCartao (Request $request) {
+        $documento = $request->has('documento') ? $request->input('documento') : null;
+        if (!$documento)
+            abort(400, "Parâmetros inválidos");
         return App::make('SigecadService')->consultaDadosCartao($documento);
     }
 
