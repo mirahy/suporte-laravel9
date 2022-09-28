@@ -106,7 +106,8 @@ class SalaSimplificadaController extends Controller
                 'categoryid' => $categoriaId,
                 'senhapadrao' => null,
                 'desativaEstudantes' => $desativaEstudantes,
-                'usuarios' => $estudantes
+                'usuarios' => $estudantes,
+                'chaveWebservice' => base64_encode( env('CHAVE_WEBSERVICE_MOODLE', '') )
             ));
         curl_setopt($cURLConnection, CURLOPT_RETURNTRANSFER, true);
         
@@ -165,7 +166,8 @@ class SalaSimplificadaController extends Controller
                 'categoryid' => $categoriaId,
                 'desativaEstudantes' => true,
                 'courseImportId' => $courseImportId,
-                'usuarios' => $sala->getEstudantesComProfessor()
+                'usuarios' => $sala->getEstudantesComProfessor(),
+                'chaveWebservice' => base64_encode( env('CHAVE_WEBSERVICE_MOODLE', '') )
             ));
         curl_setopt($cURLConnection, CURLOPT_RETURNTRANSFER, true);
         

@@ -300,7 +300,8 @@ class SalaController extends Controller
                 'courseid' => $sala->sala_moodle_id,
                 'categoryid' => $categoriaId,
                 'courseImportId' => ($request->has('courseImportId') ? $request->get('courseImportId') : null),
-                'usuarios' => $sala->getEstudantesComProfessor()
+                'usuarios' => $sala->getEstudantesComProfessor(),
+                'chaveWebservice' => base64_encode( env('CHAVE_WEBSERVICE_MOODLE', '') )
             ));
         curl_setopt($cURLConnection, CURLOPT_RETURNTRANSFER, true);
         

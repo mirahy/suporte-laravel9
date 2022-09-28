@@ -99,7 +99,8 @@ class ServidoresMoodleController extends Controller
                 'courseid' => $courseId,
                 'categoryid' => $categoriaId,
                 'senhapadrao' => $senhaPadrao,
-                'usuarios' => $estudantes
+                'usuarios' => $estudantes,
+                'chaveWebservice' => base64_encode( env('CHAVE_WEBSERVICE_MOODLE', '') )
             ));
         curl_setopt($cURLConnection, CURLOPT_RETURNTRANSFER, true);
         
