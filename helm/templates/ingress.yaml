@@ -10,6 +10,7 @@ metadata:
       more_set_headers "X-Content-Type-Options: nosniff";
       more_clear_headers "Server";
       more_clear_headers "x-envoy-decorator-operation";
+    nginx.ingress.kubernetes.io/proxy-body-size: 32m
     nginx.ingress.kubernetes.io/modsecurity-snippet: |
       Include /etc/nginx/owasp-modsecurity-crs/nginx-modsecurity.conf
       SecRuleEngine On
