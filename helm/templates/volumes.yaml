@@ -29,5 +29,5 @@ spec:
     - ReadWriteMany
   resources:
     requests:
-      storage: 500Mi
+      storage: {{ .Values.volume.capacity.storage }}
 {{- end }}
