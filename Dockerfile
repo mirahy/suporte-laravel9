@@ -27,20 +27,8 @@ COPY --from=builder /usr/bin/composer /usr/bin/composer
 RUN chown www-data:www-data storage -R
 RUN chmod +x storage/app/script/*
 
-ADD cron-file /etc/cron.d/my-cron-file
-RUN chmod 0644 /etc/cron.d/my-cron-file
-RUN crontab /etc/cron.d/my-cron-file
-
-ADD entrypoints/00_cron /opt/run/
-ADD entrypoints/01_apache /opt/run/
-RUN chmod +x /opt/run/*
-
-ADD entrypoints/run_all /opt/bin/
-RUN chmod +x /opt/bin/run_all
-
 RUN useradd -u 1000 user \
     && addgroup user www-data
 
 RUN composer update
 
-ENTRYPOINT ["/opt/bin/run_all"]
