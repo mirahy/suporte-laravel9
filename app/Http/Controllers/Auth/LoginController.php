@@ -41,6 +41,20 @@ class LoginController extends Controller
      */
     protected $redirectTo = '/';
 
+    protected function redirectPath() {
+        return env('APP_URL', $this->redirectTo);
+    }
+ 
+    protected function sendLoginResponse(\Illuminate\Http\Request $request)
+    {
+        $request->session()->regenerate();
+
+        $this->clearLoginAttempts($request);
+
+        return $this->authenticated($request, $this->guard()->user())
+                ?: redirect($this->redirectPath());
+    }
+
     /**
      * Create a new controller instance.
      *
