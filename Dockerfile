@@ -31,5 +31,5 @@ RUN chmod +x storage/app/script/*
 RUN useradd -u 1000 user \
     && addgroup user www-data
 
-RUN composer update
+# RUN composer update
 
