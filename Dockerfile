@@ -25,6 +25,7 @@ COPY . .
 COPY --from=builder /usr/bin/composer /usr/bin/composer
 
 RUN chown www-data:www-data storage -R
+RUN chmod -R 777 storage/.
 RUN chmod +x storage/app/script/*
 
 RUN useradd -u 1000 user \
