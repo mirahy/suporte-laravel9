@@ -23,13 +23,13 @@ services:
             MAIL_PASSWORD: null
             MAIL_FROM_ADDRESS: 
             MAIL_FROM_NAME: 
-            ADLDAP_CONTROLLERS: 
-            ADLDAP_PORT: 
-            ADLDAP_USE_SSL: 
-            ADLDAP_USE_TLS: 
-            ADLDAP_BASEDN: 
-            ADLDAP_ADMIN_USERNAME: 
-            ADLDAP_ADMIN_PASSWORD: 
+            LDAP_HOSTS: 
+            LDAP_PORT: 
+            LDAP_USE_SSL: 
+            LDAP_USE_TLS: 
+            LDAP_BASE_DN: 
+            LDAP_USERNAME: 
+            LDAP_PASSWORD: 
             DB_ACAD_HOSTNAME: 
             DB_ACAD_PORT: 
             DB_ACAD_USERNAME: 
