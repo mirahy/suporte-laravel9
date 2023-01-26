@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\File;
 use Phar;
 use PharData;
 use App\SalaGenerica;
+use Exception;
 
 class MacroController extends Controller
 {
@@ -53,24 +54,24 @@ class MacroController extends Controller
         ]);
     }
 
-    public function updateConfig() {
+    public function updateConfig(Request $request) {
         $arquivoSaida = Configuracoes::where('nome', Configuracoes::CONFIGURACAO_ARQUIVO_SAIDA)->first();
         $sufixoNomeSala = Configuracoes::where('nome', Configuracoes::CONFIGURACAO_SUFIXO_NOME_SALA)->first();
         $idPeriodoLetivoPadrao = Configuracoes::where('nome', Configuracoes::CONFIGURACAO_PERIODO_LETIVO_PADRAO)->first();
         $emailSuporte = Configuracoes::where('nome', Configuracoes::CONFIGURACAO_EMAIL_SUPORTE)->first();
         $idSuperMacroPadrao = Configuracoes::where('nome', Configuracoes::CONFIGURACAO_SUPER_MACRO_PADRAO)->first();
         $regexLiberados = Configuracoes::where('nome', Configuracoes::CONFIGURACAO_REGEX_EMAILS_LIBERADOS)->first();
-        $arquivoSaida->valor = Input::get('arquivo-saida');
+        $arquivoSaida->valor = $request->input('arquivo-saida');
         $arquivoSaida->save();
-        $sufixoNomeSala->valor = Input::get('sufixo-nome-sala') ? Input::get('sufixo-nome-sala') : "";
+        $sufixoNomeSala->valor = $request->input('sufixo-nome-sala') ? $request->input('sufixo-nome-sala') : "";
         $sufixoNomeSala->save();
-        $emailSuporte->valor = Input::get('email-suporte');
+        $emailSuporte->valor = $request->input('email-suporte');
         $emailSuporte->save();
-        $idPeriodoLetivoPadrao->valor = Input::get('periodo-letivo-padrao') ? Input::get('periodo-letivo-padrao') : "";
+        $idPeriodoLetivoPadrao->valor = $request->input('periodo-letivo-padrao') ? $request->input('periodo-letivo-padrao') : "";
         $idPeriodoLetivoPadrao->save();
-        $idSuperMacroPadrao->valor = Input::get('super-macro-padrao');
+        $idSuperMacroPadrao->valor = $request->input('super-macro-padrao');
         $idSuperMacroPadrao->save();
-        $regexLiberados->valor = Input::get('regex-liberados');
+        $regexLiberados->valor = $request->input('regex-liberados');
         $regexLiberados->save();
         return view('config.geral', [
             'emailSuporte'=> $emailSuporte->valor, 

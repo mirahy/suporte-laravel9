@@ -2,9 +2,12 @@
 /public/hot
 /storage/*.key
 /vendor
+resources/views/vendor
 .phpunit.result.cache
 Homestead.json
 Homestead.yaml
 npm-debug.log
 yarn-error.log
 docker-compose.yml
+
+

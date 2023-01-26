@@ -162,8 +162,8 @@ class UsuarioController extends Controller
         }
 
         $usuario = new User();
-        $usuario->name = Input::get('name');
-        $usuario->email = Input::get('email');
+        $usuario->name = $request->input('name');
+        $usuario->email = $request->input('email');
         $usuario->password = 'not set';
         $usuario->permissao = User::PERMISSAO_USUARIO;
         $usuario->save();
@@ -207,9 +207,9 @@ class UsuarioController extends Controller
      */
     public function update(Request $request, User $usuario)
     {
-        //$usuario->nome = Input::get('nome');
-        //$usuario->email = Input::get('email');
-        $usuario->permissao = Input::get('permissao');
+        //$usuario->nome = $request->input('nome');
+        //$usuario->email = $request->input('email');
+        $usuario->permissao = $request->input('permissao');
         $usuario->save();
 
         return $usuario;
