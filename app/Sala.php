@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use DateTimeInterface;
 
 class Sala extends Model
 {
@@ -136,4 +137,14 @@ class Sala extends Model
             return 0;
         return Macro::find($this->macro_id)->first()->periodo_letivo_id;
     }*/
+
+    /**
+     * Prepare a date for array / JSON serialization.
+     * Conversão data UTC (2019-12-02T20:01:00.283041Z) para (2019-12-02 20:01:00)
+     * @param  \DateTimeInterface  $date
+     * @return string
+     */
+    protected function serializeDate(DateTimeInterface $date){
+        return $date->format('Y-m-d H:i:s');
+    }
 }
