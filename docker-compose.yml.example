@@ -3,8 +3,6 @@ version: "3.8"
 services:
     host-laravel:
         build: .
-        ports:
-            - 8080:80
         working_dir: /var/www
         volumes:
             - ./:/var/www
@@ -15,12 +13,12 @@ services:
             DB_TYPE: mysql
             DB_HOST: host-mysql
             DB_PORT: 3306
-            DB_USER: root
-            DB_PASSWORD: secret
-            DB_NAME: suporte
+            DB_USER: 
+            DB_PASSWORD: 
+            DB_NAME: 
             MAIL_HOST: 
-            MAIL_USERNAME: null
-            MAIL_PASSWORD: null
+            MAIL_USERNAME: 
+            MAIL_PASSWORD: 
             MAIL_FROM_ADDRESS: 
             MAIL_FROM_NAME: 
             LDAP_HOSTS: 
@@ -29,7 +27,7 @@ services:
             LDAP_USE_TLS: 
             LDAP_BASE_DN: 
             LDAP_USERNAME: 
-            LDAP_PASSWORD: 
+            LDAP_PASSWORD:
             DB_ACAD_HOSTNAME: 
             DB_ACAD_PORT: 
             DB_ACAD_USERNAME: 
@@ -38,7 +36,9 @@ services:
             CHAVE_WEBSERVICE_MOODLE: 
             CONTRACHAVE_WEBSERVICE_SUPORTE: 
         networks:
-            - minha-rede
+            minha-rede:
+                ipv4_address: 172.18.0.6
+
     host-angular:
         image: node:12.21
         working_dir: /app
@@ -46,20 +46,40 @@ services:
         volumes:
             - ./resources/assets/front:/app
             - ./public/js:/build
+
+    web-service:
+        depends_on:
+            - host-laravel
+        ports:
+            - "8080:80"
+        image: nginx:latest
+        volumes:
+            - ".:/var/www"
+            - "./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf"
+        links:
+            - host-laravel
+        restart: always
+        networks:
+            minha-rede:
+                ipv4_address: 172.18.0.7
+
     host-mysql:
         image: mysql:5.7
         ports:
             - 3306:3306
         volumes:
             - volume-mysql:/var/lib/mysql
+            - ../volume-mysql:/var/lib/mysql
         environment: 
-            MYSQL_ROOT_PASSWORD: secret
-            MYSQL_DATABASE: suporte
+            MYSQL_ROOT_PASSWORD: 
+            MYSQL_DATABASE:
         networks:
-            - minha-rede
+            minha-rede:
+                ipv4_address: 172.18.0.8
+
 networks:
     minha-rede:
-        name: minha-rede
-        external: true          
+        external: true  
+
 volumes:
     volume-mysql:
