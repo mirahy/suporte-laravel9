@@ -15,7 +15,7 @@ Para a instalação, é necessário:
 
 1. Clonar repositório 
 
-	`git clone https://github.com/rubensm1/suporte-ead.git`
+	`git clone https://github.com/mirahy/suporte-up-version-laravel.git`
 
 2. Entrar no diretório via terminal para executar comandos e abrir também no Visual Studio Code
 
@@ -28,9 +28,9 @@ Para a instalação, é necessário:
 
 3. Clonar repositório:
 
-	`git clone https://github.com/rubensm1/suporte-ead.git`
+	`git clone https://github.com/mirahy/suporte-up-version-laravel.git`
 
-4. Entrar no diretório via terminal (`cd suporte-ead`).
+4. Entrar no diretório via terminal (`cd suporte-up-version-laravel`).
     4.1. pode utilizar o comando `code .` para abrir o Visual Studio Code no diretório em que está.
 
 ### Instalação - Infraestrutura
@@ -41,9 +41,9 @@ Para a instalação, é necessário:
 
 3. Crie uma network e os volumes que os containers utilizarão:
 
-    `docker network create minha-rede`
+    `docker network create minha-rede --subnet 172.18.0.0/16 --gateway=172.18.0.1`
 
-    `docker volume create volume-mysql`
+    `docker volume create volume-mysql volume-host-laravel`
 
 4. Executar o comando para subir a infraestrutura:
 
