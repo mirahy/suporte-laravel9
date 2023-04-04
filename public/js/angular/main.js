@@ -5772,13 +5772,25 @@ var PessoasEstatusLotacaoService = /** @class */ (function () {
             var lotacoes = response.json();
             if (lotacoes) {
                 lotacoes = lotacoes.map(function (e) {
-                    var l = e.lotacao.split(" - ");
-                    return { caminho: l[0].trim().replace(" ", "/").split("/"), nome: l[1], caminhoFull: l[0].trim() };
+                    if (e.estatus) {
+                        var l = e.lotacao.split(" - ");
+                        return { caminho: l[0].trim().replace(" ", "/").split("/"), nome: l[1], caminhoFull: l[0].trim() };
+                    }
+                    return null;
                 });
             }
+            var cont = 0;
             for (var i in lotacoes) {
-                lotacoes[i].sigla = lotacoes[i].caminho[0];
-                lotacaoIndex[lotacoes[i].caminhoFull] = lotacoes[i];
+                if (!lotacoes[i]) {
+                    lotacoes.splice(i, 1);
+                    cont--;
+                }
+            }
+            for (var i in lotacoes) {
+                if (lotacoes[i] != null) {
+                    lotacoes[i].sigla = lotacoes[i].caminho[0];
+                    lotacaoIndex[lotacoes[i].caminhoFull] = lotacoes[i];
+                }
             }
             _this_1.arvoreLotacoes = _this_1.geraArvoreLotacao(lotacaoIndex);
             return _this_1.arvoreLotacoes;
@@ -5852,14 +5864,24 @@ var PessoasEstatusLotacaoService = /** @class */ (function () {
             var lotacoes = response.json();
             if (lotacoes) {
                 lotacoes = lotacoes.map(function (e) {
-                    var l = e.lotacao.split(" - ");
-                    //l = l.split(" - ");
-                    return { caminho: l[0].trim().replace(" ", "/").split("/"), nome: l[1], caminhoFull: l[0].trim() };
+                    if (e.lotacao) {
+                        var l = e.lotacao.split(" - ");
+                        return { caminho: l[0].trim().replace(" ", "/").split("/"), nome: l[1], caminhoFull: l[0].trim() };
+                    }
+                    return null;
                 });
             }
+            for (var cont = 0; cont < lotacoes.length; cont++) {
+                if (!lotacoes[cont]) {
+                    lotacoes.splice(i, 1);
+                    cont--;
+                }
+            }
             for (var i in lotacoes) {
-                lotacoes[i].sigla = lotacoes[i].caminho[0];
-                _this_1.lotacaoIndexFull[lotacoes[i].caminhoFull] = lotacoes[i];
+                if (lotacoes[i] != null) {
+                    lotacoes[i].sigla = lotacoes[i].caminho[0];
+                    _this_1.lotacaoIndexFull[lotacoes[i].caminhoFull] = lotacoes[i];
+                }
             }
             //this.arvoreLotacoes = this.geraArvoreLotacao(this.lotacaoIndexFull);
             return _this_1.lotacaoIndexFull;
