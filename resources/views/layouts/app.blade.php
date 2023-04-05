@@ -13,14 +13,14 @@
     <link rel="shortcut icon" href="/favicon.png" />
 
     <!-- Styles -->
-    <link href="css/codigo-barras.css" rel="stylesheet">
-    <link href="css/app.css" rel="stylesheet">
+    <link href="{{ asset('css/codigo-barras.css')}}" rel="stylesheet">
+    <link href="{{ asset('css/app.css')}}" rel="stylesheet">
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <!--script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script-->
 
-    <script type="text/javascript" src="js/browser-detect.js"></script>
+    <script type="text/javascript" src="{{ asset('js/browser-detect.js')}}"></script>
 
     @yield('innerhead')
 
@@ -247,8 +247,8 @@
     </footer>
 
     <!-- Scripts -->
-    <script src="js/app.js"></script>
+    <script src="{{ asset('js/app.js')}}"></script>
     @yield('postscripts')
-    <script src="js/post-scrips.js"></script>
+    <script src="{{ asset('js/post-scrips.js')}}"></script>
 </body>
 </html>
