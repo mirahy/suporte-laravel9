@@ -37,20 +37,28 @@
             <div class="navbar-header">
 
                 <!-- Collapsed Hamburger -->
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#app-navbar-collapse" aria-expanded="false">
-                    <span class="sr-only">Toggle Navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
+                <div class="nav-toogle">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#app-navbar-collapse" aria-expanded="false">
+                        <span class="sr-only">Toggle Navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                </div>
 
                 <!-- Branding Image -->
-                <a class="navbar-brand" href="{{ url('/') }}" style="padding: 0px 15px;">
-                    <img src="img/EAD-logo-Branco.png" alt="Salas Moodle" style="width: 150px;">
-                </a>
-                <a class="navbar-brand" href="{{ url('/') }}">
-                    {{ config('app.name') }}
-                </a>
+                <div class="container-flex">
+                    <div class="nav-logo">
+                        <a class="nav " href="{{ url('/') }}">
+                            <img src="img/EAD-logo-Branco.png" alt="Salas Moodle">
+                        </a>
+                    </div>
+                    <div class="nav-app-name">
+                        <a class="nav " href="{{ url('/') }}">
+                            {{ config('app.name') }}
+                        </a>
+                    </div>
+                </div>
             </div>
 
             <div class="collapse navbar-collapse" id="app-navbar-collapse">
@@ -212,9 +220,10 @@
                     <li><a href="/login">Login</a></li>
                     <!--li><a href="{{ route('register') }}">Cadastrar</a></li-->
                     @else
-                    <li class="dropdown">
+                    <li class="dropdown drop-user">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" v-pre>
-                            {{ Auth::user()->name }} <span class="caret"></span>
+                        <i class="bi bi-person-circle"></i>
+                            <span class="name-person">{{ Auth::user()->name }}</span>
                         </a>
 
                         <ul class="dropdown-menu">

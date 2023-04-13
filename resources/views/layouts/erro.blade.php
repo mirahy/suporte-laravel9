@@ -42,7 +42,7 @@
 
                         <!-- Branding Image -->
                         <a class="navbar-brand" href="{{ url('/') }}" style="padding: 0px 15px;">
-                            <img src="img/logo.png" alt="Salas Moodle" style="width: 75px;">
+                            <img src="img/EAD-logo-Branco.png.png" alt="Salas Moodle" style="width: 75px;">
                         </a>
                         <a class="navbar-brand" href="{{ url('/') }}">
                             {{ config('app.name') }}

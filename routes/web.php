@@ -36,10 +36,10 @@ Route::delete('/macro/buscador/{buscadorId}', 'MacroController@delBuscador');
 Route::post('/macro/mudararquivo', 'MacroController@mudarArquivo');
 Route::get('/config', 'MacroController@config');
 Route::post('/config', 'MacroController@updateConfig');
-Route::get('/exec/{id}','MacroController@executar');
-Route::get('/exec-old/{id}','MacroController@executarOld');
-Route::get('/dd','MacroController@download');
-Route::get('/files','MacroController@listFiles');
+Route::get('/exec/{id}', 'MacroController@executar');
+Route::get('/exec-old/{id}', 'MacroController@executarOld');
+Route::get('/dd', 'MacroController@download');
+Route::get('/files', 'MacroController@listFiles');
 
 Route::get('/super-macro/all', 'SuperMacroController@all');
 Route::get('/super-macro/msm/order/{msmId1}/{msmId2}', 'SuperMacroController@ordenaMSM');
@@ -136,7 +136,9 @@ Route::post('/formulario-insere-usuarios', 'ServidoresMoodleController@exportarE
 Route::get('/formulario-recuperacao-arquivos', 'ServidoresMoodleController@formulariosIndex');
 
 //Route::get('/agenda', function () {return view("layouts.app-angular");});
-Route::get('/calendario', function () {return view("layouts.app-angular-limpo");});
+Route::get('/calendario', function () {
+    return view("layouts.app-angular-limpo");
+});
 Route::get('/agenda/listar', 'AgendaController@listar');
 Route::resource('agenda', 'AgendaController');
 
@@ -188,10 +190,10 @@ Route::get('/teste', 'TesteController@down');
 
 Route::get('/css/{param1}', function ($param1) {
     $str = preg_replace('/\.[a-z0-9]*\./', '.', $param1);
-    return Response::download("js/angular/".$str);
+    return Response::download("js/angular/" . $str);
 })->where('param1', '(primeicons.+|color.+|hue.+)');
 Route::get('/{param2}', function ($param2) {
-    return Response::download("js/angular/".$param2);
+    return Response::download("js/angular/" . $param2);
 })->where('param2', '(open-sans-v15-latin.+|primeicons.+)');
 
 Auth::routes();
