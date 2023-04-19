@@ -26,7 +26,7 @@
 
     @yield('innerhead')
 
-    <link href="css/style.css" rel="stylesheet">
+    <link href="{{ asset('css/style.css')}}" rel="stylesheet">
 
     @inject('resources', 'App\Services\ResourcesService')
 </head>
@@ -50,7 +50,7 @@
                 <div class="container-flex">
                     <div class="nav-logo">
                         <a class="nav " href="{{ url('/') }}">
-                            <img src="img/EAD-logo-Branco.png" alt="Salas Moodle">
+                            <img src="{{ asset('img/EAD-logo-Branco.png')}}" alt="Salas Moodle">
                         </a>
                     </div>
                     <div class="nav-app-name">
