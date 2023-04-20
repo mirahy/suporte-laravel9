@@ -93,7 +93,7 @@ return [
 
         // Only allows users with a user principal name to authenticate.
         // Suitable when using ActiveDirectory.
-        // Adldap\Laravel\Scopes\UpnScope::class,
+         Adldap\Laravel\Scopes\UpnScope::class,
 
         // Only allows users with a uid to authenticate.
         // Suitable when using OpenLDAP.
@@ -133,7 +133,7 @@ return [
 
         'ldap' => [
 
-            'locate_users_by' => 'userprincipalname',
+            'locate_users_by' => 'samaccountname',
 
             'bind_users_by' => 'distinguishedname',
 
@@ -154,7 +154,7 @@ return [
             |
             */
 
-            'guid_column' => 'objectguid',
+            'guid_column' => 'email',
 
             /*
             |--------------------------------------------------------------------------
@@ -289,9 +289,9 @@ return [
 
     'sync_attributes' => [
 
-        'email' => 'userprincipalname',
+        'email' => 'samaccountname',
 
-        'name' => 'cn',
+        'name' => 'displayname',
 
     ],
 
