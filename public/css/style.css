@@ -338,6 +338,7 @@ select.opcao-invalida {
 }
 .botao-barra {
     width: 90px;
+    margin: 2px;
 }
 button.botao-tooltip {
     width: 25px;
