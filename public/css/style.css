@@ -121,7 +121,7 @@ html, body {
     height: calc(100% - 103px);
     overflow: auto;
     padding-top: 10px;
-    padding-bottom: 40px;
+    padding-bottom: 50px;
     position: relative;
 }
 .form-control:focus {
@@ -184,6 +184,7 @@ table.table>tbody>tr>td {
     left: 0;
     bottom: 0;
     width: 100%;
+    height: 40px;
 }
 .footer p {
     color: white;
@@ -338,7 +339,7 @@ select.opcao-invalida {
 }
 .botao-barra {
     width: 90px;
-    margin: 2px;
+    margin: 0px 3px;
 }
 button.botao-tooltip {
     width: 25px;
@@ -427,6 +428,11 @@ td.celula-status.CONCLUIDO, td.celula-status.DEFERIDO {
 td.celula-status.REJEITADO, td.celula-status.INDEFERIDO, td.celula-status.CANCELADO {
     background-color: #ff5050
 }
+.panel-footer{
+    display: flex;
+    justify-content: flex-end;
+}
+
 .panel-footer .btn+.btn {
     margin-bottom: 0;
     margin-left: 5px;
@@ -615,10 +621,21 @@ body .ui-progressbar .ui-progressbar-value {
     color: #fafafa !important;
 }
 
+.nav-master{
+    display: flex;
+    align-items: center;
+    padding-bottom: 2px;
+}
+
+.logo-name{
+    display: flex;
+    align-items: center;
+}
+
 .nav-logo {
     text-align: center;
-    max-height: 80px;
-    display: block;
+    max-height: 90px;
+    padding-bottom: 3px;
 }
 
 .nav-app-name {
@@ -626,10 +643,10 @@ body .ui-progressbar .ui-progressbar-value {
     text-align: center;
     max-height: 50px;
     display: block;
+    margin-right: 10px;
 }
 
 .nav-toogle{
-    height: 130px;
     position: relative;
     float: right;
 }

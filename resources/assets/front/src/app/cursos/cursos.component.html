@@ -53,6 +53,7 @@
 </div>
 <div class="panel-footer">
     <button type="button"  style="width: 130px;" class="btn btn-primary botao-barra" data-toggle="modal" data-target="#dialogCreateCurso" (click)="novo()" [disabled]="!editavel || faculdadeSelecionada.id == 0">Novo Curso</button>
+    <button type="button" name="retrun" class="btn btn-secondary botao-barra" onclick="history.back()">Voltar</button>
 </div>
 
 <div class="modal fade" id="dialogCreateCurso" tabindex="-1" role="dialog" aria-labelledby="dialogCreateCursoTitle" aria-hidden="true">

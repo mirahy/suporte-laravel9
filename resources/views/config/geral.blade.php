@@ -42,6 +42,7 @@ Digite 'NULL' para forçar deixar em branco." type="text" name="sufixo-nome-sala
 
                     <br />
                     <input class="btn btn-primary" type="submit" name="Enviar">
+                    <button type="button" name="retrun" class="btn btn-secondary botao-barra" onclick="history.back()">Voltar</button>
                 </form>
             </div>
         </div>

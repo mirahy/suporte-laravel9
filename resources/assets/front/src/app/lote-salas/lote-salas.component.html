@@ -12,6 +12,7 @@
                                 <td colspan="6" style="text-align: center;">
                                     <button class="btn btn-success" (click)="novoLoteSalas()" [disabled]="!periodoLetivoSelecionadoId || !faculdadeSelecionadaId || !editavel" style="width: 120px; margin-right: 5px;">Novo Lote</button>
                                     <button class="btn btn-primary" (click)="getLoteSalasList()" [disabled]="!editavel" data-toggle="modal" data-target="#dialogListaLotes" style="width: 120px;">Lista de Lotes</button>
+                                    <button type="button" name="retrun" class="btn btn-secondary botao-barra" onclick="history.back()">Voltar</button>
                                 </td>
                             </tr>
                             <tr *ngIf="loteSalas">

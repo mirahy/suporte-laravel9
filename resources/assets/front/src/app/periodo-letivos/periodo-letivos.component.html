@@ -70,6 +70,7 @@
             </div>
             <div class="panel-footer">
                 <button type="button" class="btn btn-primary botao-barra" data-toggle="modal" data-target="#dialogLoadSigecad" (click)="novoPeriodoLetivo()" [disabled]="!editavel">Novo</button>
+                <button type="button" name="retrun" class="btn btn-secondary botao-barra" onclick="history.back()">Voltar</button>
             </div>
         </div>
     </div>
@@ -162,7 +163,7 @@
                         <tbody>
                             <tr *ngFor="let pl of periodoLetivosSigecad">
                                 <td class="celula-trunca-texto" title="{{pl.nome}}">{{pl.nome}}</td>
-                                <td class="celula-trunca-texto" title="{{pl.nome}}">{{pl.descricao}}</td>
+                                <td class="celula-trunca-texto" title="{{pl.descricao}}">{{pl.descricao}}</td>
                                 <td class="celula-trunca-texto" style="text-align: center;" title="{{pl.id_sigecad}}">{{pl.id_sigecad}}</td>
                                 <td style="text-align: center;">
                                     <button style="text-align: center; margin-left: -2px;" title="Selecionar" type="button" class="btn btn-success botao-reduzido"  data-dismiss="modal" data-toggle="modal" data-target="#dialogCreate" (click)="selecionaPeriodoLetivo(pl)">

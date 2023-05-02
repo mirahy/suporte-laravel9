@@ -91,6 +91,7 @@
 				<button type="button" class="btn btn-warning" (click)="substituirEmailsPorPadrao()" [disabled]="!editavel || estudantes.length == 0">Substituir Emails</button>
 				<button type="button" class="btn btn-warning botao-barra" data-toggle="modal" style="float: right;"
 					data-target="#dialogExportarEstudante" [disabled]="!editavel || estudantes.length == 0">Exportar</button>
+				<button type="button" name="retrun" class="btn btn-secondary botao-barra" onclick="history.back()">Voltar</button>
 			</div>
 		</div>
 	</div>

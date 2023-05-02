@@ -33,7 +33,7 @@
 
 <body>
     <nav class="navbar navbar-default navbar-static-top">
-        <div class="container">
+        <div class="container ">
             <div class="navbar-header">
 
                 <!-- Collapsed Hamburger -->
@@ -45,203 +45,205 @@
                         <span class="icon-bar"></span>
                     </button>
                 </div>
+            
 
                 <!-- Branding Image -->
-                <div class="container-flex">
-                    <div class="nav-logo">
-                        <a class="nav " href="{{ url('/') }}">
-                            <img src="{{ asset('img/EAD-logo-Branco.png')}}" alt="Salas Moodle">
-                        </a>
-                    </div>
-                    <div class="nav-app-name">
-                        <a class="nav " href="{{ url('/') }}">
-                            {{ config('app.name') }}
-                        </a>
+                    <div class="container-flex logo-name">
+                        <div class="nav-logo">
+                            <a class="nav " href="{{ url('/') }}">
+                                <img src="{{ asset('img/EAD-logo-Branco.png')}}" alt="Salas Moodle">
+                            </a>
+                        </div>
+                        <div class="nav-app-name">
+                            <a class="nav " href="{{ url('/') }}">
+                                {{ config('app.name') }}
+                            </a>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="collapse navbar-collapse" id="app-navbar-collapse">
-                <!-- Left Side Of Navbar -->
-                <ul class="nav navbar-nav">
-                    @if(isset($resources->permissao) && ($resources->permissao != 'INATIVO'))
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" v-pre>
-                            Solicitações <span class="caret"></span>
-                        </a>
-                        <ul class="dropdown-menu">
-                            @if($resources->permissao == 'USUARIO' || $resources->permissao == 'ADMINISTRADOR')
-                            <li>
-                                <a href="/salas/create/">
-                                    Nova Solicitação de Sala
-                                </a>
-                            </li>
-                            @endif
-                            @if($resources->permissao == 'ADMINISTRADOR')
-                            <li>
-                                <a href="/lote-salas">
-                                    Lote de Solicitações de Sala
-                                </a>
-                            </li>
-                            @endif
-                            @if($resources->permissao == 'ADMINISTRADOR')
-                            <li>
-                                <a href="/lote-salas-simplificados">
-                                    Lote de Solicitações de Salas Simplificadas
-                                </a>
-                            </li>
-                            @endif
-                            @if($resources->permissao == 'ADMINISTRADOR')
-                            <li>
-                                <a href="/salas/">
-                                    Lista de Solicitações
-                                </a>
-                            </li>
-                            @endif
-                            @if($resources->permissao == 'ADMINISTRADOR')
-                            <li>
-                                <a href="/salas-old/">
-                                    Lista de Solicitações (Antiga)
-                                </a>
-                            </li>
-                            @endif
-                        </ul>
-                    </li>
-                    @endif
-                    @if(isset($resources->permissao) && ($resources->permissao == 'ADMINISTRADOR'))
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" v-pre>
-                            Universidade <span class="caret"></span>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li>
-                                <a href="/faculdades">
-                                    Faculdades e Cursos
-                                </a>
-                            </li>
-                            <li>
-                                <a href="/periodo-letivos">
-                                    Período Letivos
-                                </a>
-                            </li>
-                            <li>
-                                <a href="/periodo-letivos-categorias">
-                                    Período Letivos - Categorias
-                                </a>
-                            </li>
-                            <li>
-                                <a href="/pl-disciplinas-academicos">
-                                    Diciplinas e Estudantes
-                                </a>
-                            </li>
-                            <li>
-                                <a href="/unidade-organizacional">
-                                    Unidades Organizacionais
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                    @endif
-                    @if(isset($resources->permissao) && ($resources->permissao == 'ADMINISTRADOR'))
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" v-pre>
-                            Administração <span class="caret"></span>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li>
-                                <a href="/usuarios">
-                                    Usuários
-                                </a>
-                            </li>
-                            <li>
-                                <a href="/config">
-                                    Configurações
-                                </a>
-                            </li>
-                            <li>
-                                <a href="/macro">
-                                    Macros
-                                </a>
-                            </li>
-                            <li>
-                                <a href="/super-macro">
-                                    Super Macros
-                                </a>
-                            </li>
-                            <li>
-                                <a href="/servidores-moodle">
-                                    Servidores Moodle
-                                </a>
-                            </li>
-                            <li>
-                                <a href="/logs">
-                                    Logs
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                    @endif
-                    @if(isset($resources->permissao) && ($resources->permissao == 'ADMINISTRADOR'))
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" v-pre>
-                            Formulários Úteis <span class="caret"></span>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li>
-                                <a href="/formulario-insere-usuarios">
-                                    Inserir Usuários Moodle
-                                </a>
-                            </li>
-                            <li>
-                                <a href="/formulario-insere-ad">
-                                    Inserir Usuários AD
-                                </a>
-                            </li>
-                            <li>
-                                <a href="/formulario-altera-usuario">
-                                    Alterar Senha Usuários AD
-                                </a>
-                            </li>
-                            <li>
-                                <a href="/formulario-pessoas-estatus-lotacao">
-                                    Lista de Pessoas Por Lotação
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                    @endif
-                    &nbsp;
-                </ul>
 
-                <!-- Right Side Of Navbar -->
-                <ul class="nav navbar-nav navbar-right">
-                    <!-- Authentication Links -->
-                    @guest
-                    <li><a href="/login">Login</a></li>
-                    <!--li><a href="{{ route('register') }}">Cadastrar</a></li-->
-                    @else
-                    <li class="dropdown drop-user">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" v-pre>
-                        <i class="bi bi-person-circle"></i>
-                            <span class="name-person">{{ Auth::user()->name }}</span>
-                        </a>
+                <div class="collapse navbar-collapse" id="app-navbar-collapse">
+                    <!-- Left Side Of Navbar -->
+                    <ul class="nav navbar-nav">
+                        @if(isset($resources->permissao) && ($resources->permissao != 'INATIVO'))
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" v-pre>
+                                Solicitações <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                @if($resources->permissao == 'USUARIO' || $resources->permissao == 'ADMINISTRADOR')
+                                <li>
+                                    <a href="/salas/create/">
+                                        Nova Solicitação de Sala
+                                    </a>
+                                </li>
+                                @endif
+                                @if($resources->permissao == 'ADMINISTRADOR')
+                                <li>
+                                    <a href="/lote-salas">
+                                        Lote de Solicitações de Sala
+                                    </a>
+                                </li>
+                                @endif
+                                @if($resources->permissao == 'ADMINISTRADOR')
+                                <li>
+                                    <a href="/lote-salas-simplificados">
+                                        Lote de Solicitações de Salas Simplificadas
+                                    </a>
+                                </li>
+                                @endif
+                                @if($resources->permissao == 'ADMINISTRADOR')
+                                <li>
+                                    <a href="/salas/">
+                                        Lista de Solicitações
+                                    </a>
+                                </li>
+                                @endif
+                                @if($resources->permissao == 'ADMINISTRADOR')
+                                <li>
+                                    <a href="/salas-old/">
+                                        Lista de Solicitações (Antiga)
+                                    </a>
+                                </li>
+                                @endif
+                            </ul>
+                        </li>
+                        @endif
+                        @if(isset($resources->permissao) && ($resources->permissao == 'ADMINISTRADOR'))
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" v-pre>
+                                Universidade <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a href="/faculdades">
+                                        Faculdades e Cursos
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/periodo-letivos">
+                                        Período Letivos
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/periodo-letivos-categorias">
+                                        Período Letivos - Categorias
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/pl-disciplinas-academicos">
+                                        Diciplinas e Estudantes
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/unidade-organizacional">
+                                        Unidades Organizacionais
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        @endif
+                        @if(isset($resources->permissao) && ($resources->permissao == 'ADMINISTRADOR'))
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" v-pre>
+                                Administração <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a href="/usuarios">
+                                        Usuários
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/config">
+                                        Configurações
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/macro">
+                                        Macros
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/super-macro">
+                                        Super Macros
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/servidores-moodle">
+                                        Servidores Moodle
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/logs">
+                                        Logs
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        @endif
+                        @if(isset($resources->permissao) && ($resources->permissao == 'ADMINISTRADOR'))
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" v-pre>
+                                Formulários Úteis <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a href="/formulario-insere-usuarios">
+                                        Inserir Usuários Moodle
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/formulario-insere-ad">
+                                        Inserir Usuários AD
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/formulario-altera-usuario">
+                                        Alterar Senha Usuários AD
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/formulario-pessoas-estatus-lotacao">
+                                        Lista de Pessoas Por Lotação
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        @endif
+                        &nbsp;
+                    </ul>
 
-                        <ul class="dropdown-menu">
-                            <li>
-                                <a href="/logout" onclick="event.preventDefault();
-                                                    document.getElementById('logout-form').submit();">
-                                    Logout
-                                </a>
+                    <!-- Right Side Of Navbar -->
+                    <ul class="nav navbar-nav navbar-right">
+                        <!-- Authentication Links -->
+                        @guest
+                        <li><a href="/login">Login</a></li>
+                        <!--li><a href="{{ route('register') }}">Cadastrar</a></li-->
+                        @else
+                        <li class="dropdown drop-user">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" v-pre>
+                            <i class="bi bi-person-circle"></i>
+                                <span class="name-person">{{ Auth::user()->name }}</span>
+                            </a>
 
-                                <form id="logout-form" action="/logout" method="POST" style="display: none;">
-                                    {{ csrf_field() }}
-                                </form>
-                            </li>
-                        </ul>
-                    </li>
-                    @endguest
-                </ul>
-            </div>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a href="/logout" onclick="event.preventDefault();
+                                                        document.getElementById('logout-form').submit();">
+                                        Logout
+                                    </a>
+
+                                    <form id="logout-form" action="/logout" method="POST" style="display: none;">
+                                        {{ csrf_field() }}
+                                    </form>
+                                </li>
+                            </ul>
+                        </li>
+                        @endguest
+                    </ul>
+                </div>
         </div>
     </nav>
 

@@ -11,6 +11,10 @@
                             <tr>
                                 <td class="col-md-1"><label for="filtro" class="col-md-1 control-label">Buscar:</label></td>
                                 <td class="col-md-8"><input id="filtro" type="text" class="form-control" name="filtro" [(ngModel)]="criteria" required autofocus></td>
+                                <div class="float-right col-md-12">
+                                    <button type="button" name="retrun" class="btn btn-secondary botao-barra" onclick="history.back()">Voltar</button>
+                                </div>
+                                
                             </tr>
                         </table>
                     </caption>
