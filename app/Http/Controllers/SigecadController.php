@@ -10,7 +10,7 @@ class SigecadController extends Controller
     const DBCONN_DISCIPLINAS_VIEW = "secretaria.disciplinas_para_moodle";
     const DBCONN_ACADEMICOS_VIEW = "secretaria.disciplinas_academicos_para_moodle";
     const DBCONN_CARTOES_VIEW = "secretaria.cartoes_para_moodle";
-    const DBCONN_PLETIVOS_VIEW = "secretaria.periodos_letivos";
+    const DBCONN_PLETIVOS_VIEW = "secretaria.view_periodos_letivos";
     const DBCONN_PESSOAS_VIEW = "public.pessoas_view";
 
     const DBCONN_KEYFIELD = "username";
@@ -53,10 +53,14 @@ class SigecadController extends Controller
     const COLUNA_LOTACAO_PESSOA = "lotacao";
     const COLUNA_FACULDADE_PESSOA = "faculdade";
 
+    const COLUNA_PERIODO_LETIVO_NOME = "nome";
     const COLUNA_PERIODO_LETIVO_DESC = "descricao";
+    const COLUNA_PERIODO_LETIVO_SEM = "semestre";
+    const COLUNA_PERIODO_LETIVO_ANO = "ano";
+    const COLUNA_PERIODO_LETIVO_TP = "tipo";
 
     private function executarGeneric($view, $parametros, $colunas = [], $nativeQuery = null) {
-        $dbconn = pg_connect("host=".env('DB_ACAD_HOSTNAME').
+        $dbconn = \pg_connect("host=".env('DB_ACAD_HOSTNAME').
         " port=".env('DB_ACAD_PORT').
         " dbname=".env('DB_ACAD_DBNAME').
         " user=".env('DB_ACAD_USERNAME').
@@ -159,9 +163,13 @@ class SigecadController extends Controller
     // Obtêm todos os período letivos correntes
     public function getPeriodoLetivoList(Request $request){
         return $this->executarDisciplinas([], [], "SELECT dpl.".self::COLUNA_PERIODO_LETIVO_ID." id_sigecad, "."dpl.".self::COLUNA_PERIODO_LETIVO." nome, "
-                                                           ."acad.".self::COLUNA_PERIODO_LETIVO_ID." descricao FROM ".self::DBCONN_DISCIPLINAS_VIEW." dpl ".
-                                                  " JOIN ".self::DBCONN_ACADEMICOS_VIEW." acad ON acad.".self::COLUNA_PERIODO_LETIVO_ID." = dpl.".self::COLUNA_PERIODO_LETIVO_ID.
-                                                  " GROUP BY acad.".self::COLUNA_PERIODO_LETIVO_ID.", dpl.".self::COLUNA_PERIODO_LETIVO_ID.", dpl.".self::COLUNA_PERIODO_LETIVO);
+                                                           ."pl.".self::COLUNA_PERIODO_LETIVO_NOME ." || ' / ' ||  pl.".self::COLUNA_PERIODO_LETIVO_DESC." descricao,"
+                                                            ."'(' || pl.".self::COLUNA_PERIODO_LETIVO_ANO ." || '.' ||  pl.".self::COLUNA_PERIODO_LETIVO_SEM.
+                                                            " || ' - ' ||  pl.".self::COLUNA_PERIODO_LETIVO_TP." || ')' sufixo FROM ".self::DBCONN_DISCIPLINAS_VIEW." dpl ".
+                                                  " JOIN ".self::DBCONN_PLETIVOS_VIEW." pl ON pl.".self::COLUNA_PERIODO_LETIVO_ID." = dpl.".self::COLUNA_PERIODO_LETIVO_ID.
+                                                  " GROUP BY dpl.".self::COLUNA_PERIODO_LETIVO_ID.", dpl.".self::COLUNA_PERIODO_LETIVO.", pl.".self::COLUNA_PERIODO_LETIVO_NOME.
+                                                             ", pl.".self::COLUNA_PERIODO_LETIVO_DESC.", pl.".self::COLUNA_PERIODO_LETIVO_SEM .", pl.".self::COLUNA_PERIODO_LETIVO_ANO.
+                                                            ", pl.".self::COLUNA_PERIODO_LETIVO_TP);
         return '[{"id_sigecad":1,"nome":"2020-1","descricao": "1º trimestre"},{"id_sigecad":2,"nome":"2020-2","descricao": "2º trimestre"},{"id_sigecad":3,"nome":"2020-3","descricao": "3º trimestre"}]';
     }
 
