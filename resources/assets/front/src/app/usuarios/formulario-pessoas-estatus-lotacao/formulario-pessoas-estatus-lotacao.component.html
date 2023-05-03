@@ -93,7 +93,6 @@
                     
 					<div class="panel-footer">
 						<button *ngIf="estatusSelecionadoTipoPessoa == null" class="btn btn-primary" disabled>Obter Dados</button>
-						<button type="button" name="retrun" class="btn btn-secondary botao-barra" onclick="history.back()">Voltar</button>
 						<form *ngIf="estatusSelecionadoTipoPessoa == TIPO_PESSOA_ACADEMICO_GRADUACAO || estatusSelecionadoTipoPessoa == TIPO_PESSOA_ACADEMICO_POS" 
 								id="formDadosAcademicos" action="/formulario-pessoas-estatus-lotacao/academico" method="POST" (submit)="obterDadosAcademicos($event)">
 							<input type="hidden" name="estatus" [value]="estatusSelecionadoEstatus" />
@@ -109,6 +108,7 @@
 							<input type="hidden" name="tipo_pessoa" [value]="estatusSelecionadoTipoPessoa" />
 							<button type="submit" class="btn btn-primary" [disabled]="!editavel || !estatusSelecionadoEstatus">Obter Dados</button>
 						</form>
+						<button type="button" name="retrun" class="btn btn-secondary botao-barra" onclick="history.back()">Voltar</button>
 					</div>
                 </form>
             </fieldset>
