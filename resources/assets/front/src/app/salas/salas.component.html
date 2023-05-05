@@ -12,10 +12,10 @@
                                 <td class="col-md-1"><label for="filtro" class="col-md-1 control-label">Buscar:</label></td>
                                 <td class="col-md-8"><input id="filtro" type="text" class="form-control" name="filtro" [(ngModel)]="criteria" required autofocus></td>
                                 <div class="float-right col-md-12">
-                                    <button type="button" name="retrun" class="btn btn-secondary botao-barra" onclick="history.back()" title="Voltar">
+                                    <a type="button" name="retrun" class="btn btn-secondary botao-barra" href="/" title="Voltar">
                                         <span class="span-icon-button"><i class="bi bi-box-arrow-left"></i></span>
                                         Voltar
-                                    </button>
+                                    </a>
                                 </div>
                             </tr>
                         </table>
@@ -302,7 +302,7 @@
                                     <th>NOME</th>
                                     <th>
                                         <button style="text-align: center;" title="Limpar Todos" type="button" class="btn btn-danger botao-reduzido" (click)="limparEstudantes()"  [disabled]="!editavel">
-                                            <span class="span-icon-button"><i class="bi bi-trash"></i></span>
+                                            <span class="span-icon-button"><i class="bi bi-trash" style="-webkit-text-stroke-width: 0.0001rem;"></i></span>
                                         </button>
                                     </th>
                                     <th></th>

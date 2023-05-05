@@ -51,12 +51,12 @@
                             <td class="celula-trunca-texto" style="text-align: center;" title="{{pl.inicio_auto_increment}}">{{pl.inicio_auto_increment}}</td>
                             <td>
                                 <button style="text-align: center; margin-left: -2px;" title="Editar" type="button" class="btn btn-info botao-reduzido"  data-toggle="modal" data-target="#dialogCreate" (click)="selecionaPeriodoLetivo(pl)">
-                                    <span class="glyphicon glyphicon-edit"></span>
+                                    <span class="span-icon-button"><i class="bi bi-pencil"></i></span>
                                 </button>
                             </td>
                             <td>
                                 <button style="text-align: center; margin-left: -2px;" title="Remover" type="button" class="btn btn-danger botao-reduzido" (click)="removePeriodoLetivo(pl)">
-                                    <span class="glyphicon glyphicon-remove"></span>
+                                    <span class="span-icon-button"><i class="bi bi-x-lg"></i></span>
                                 </button>
                             </td>
                         </tr>
@@ -69,8 +69,14 @@
                 </table>
             </div>
             <div class="panel-footer">
-                <button type="button" class="btn btn-primary botao-barra" data-toggle="modal" data-target="#dialogLoadSigecad" (click)="novoPeriodoLetivo()" [disabled]="!editavel">Novo</button>
-                <button type="button" name="retrun" class="btn btn-secondary botao-barra" onclick="history.back()">Voltar</button>
+                <button type="button" class="btn btn-primary botao-barra" data-toggle="modal" data-target="#dialogLoadSigecad" (click)="novoPeriodoLetivo()" [disabled]="!editavel">
+                    <span class="span-icon-button"><i class="bi bi-plus-lg" style="-webkit-text-stroke-width: 0.3rem;"></i></span>
+                    Novo
+                </button>
+                <a type="button" name="retrun" class="btn btn-secondary botao-barra" href="/">
+                    <span class="span-icon-button"><i class="bi bi-box-arrow-left"></i></span>
+                    Voltar
+                </a>
             </div>
         </div>
     </div>
@@ -114,8 +120,14 @@
                 </fieldset>
             </div>
             <div class="modal-footer">
-                <button type="submit" form="periodoLetivoForm" class="btn btn-primary botao-barra"  [disabled]="!editavel">Enviar</button>
-                <button type="button" class="btn btn-secondary botao-barra" data-dismiss="modal">Fechar</button>
+                <button type="submit" form="periodoLetivoForm" class="btn btn-primary botao-barra"  [disabled]="!editavel">
+                    <span class="span-icon-button"><i class="bi bi-send"></i></span>
+                    Enviar
+                </button>
+                <button type="button" class="btn btn-secondary botao-barra" data-dismiss="modal">
+                    <span class="span-icon-button"><i class="bi bi-box-arrow-left"></i></span>
+                    Fechar
+                </button>
             </div>
         </div>
     </div>
@@ -167,7 +179,7 @@
                                 <td class="celula-trunca-texto" style="text-align: center;" title="{{pl.id_sigecad}}">{{pl.id_sigecad}}</td>
                                 <td style="text-align: center;">
                                     <button style="text-align: center; margin-left: -2px;" title="Selecionar" type="button" class="btn btn-success botao-reduzido"  data-dismiss="modal" data-toggle="modal" data-target="#dialogCreate" (click)="selecionaPeriodoLetivo(pl)">
-                                        <span class="glyphicon glyphicon-check"></span>
+                                        <span class="span-icon-button"><i class="bi bi-check2-square"></i></span>
                                     </button>
                                 </td>
                             </tr>
@@ -181,7 +193,10 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary botao-barra" data-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-secondary botao-barra" data-dismiss="modal">
+                    <span class="span-icon-button"><i class="bi bi-box-arrow-left"></i></span>
+                    Fechar
+                </button>
             </div>
         </div>
     </div>

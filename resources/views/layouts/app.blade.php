@@ -151,16 +151,6 @@
                             </a>
                             <ul class="dropdown-menu">
                                 <li>
-                                    <a href="/usuarios">
-                                        Usuários
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="/config">
-                                        Configurações
-                                    </a>
-                                </li>
-                                <li>
                                     <a href="/macro">
                                         Macros
                                     </a>
@@ -173,6 +163,11 @@
                                 <li>
                                     <a href="/servidores-moodle">
                                         Servidores Moodle
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/config">
+                                        Configurações
                                     </a>
                                 </li>
                                 <li>
@@ -202,6 +197,11 @@
                                 <li>
                                     <a href="/formulario-altera-usuario">
                                         Alterar Senha Usuários AD
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/usuarios">
+                                        Lista de Usuários
                                     </a>
                                 </li>
                                 <li>

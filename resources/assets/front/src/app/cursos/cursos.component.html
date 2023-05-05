@@ -36,12 +36,12 @@
                 <td title="Referência IDs de Categorias a serem somadas">{{curso.auto_increment_ref}}</td>
                 <td class="celula-trunca-texto" title="Editar">
                     <button style="text-align: center; margin-left: 2px;" title="Editar" type="button" class="btn btn-info botao-reduzido"  data-toggle="modal" data-target="#dialogCreateCurso" (click)="seleciona(curso)" [disabled]="!editavel">
-                        <span class="glyphicon glyphicon-edit"></span>
+                        <span class="span-icon-button"><i class="bi bi-pencil"></i></span>
                     </button>
                 </td>
                 <td class="celula-trunca-texto" title="Excluir">
                     <button style="text-align: center; margin-left: 2px;" title="Excluir" type="button" class="btn btn-danger botao-reduzido" (click)="remove(curso)" [disabled]="!editavel">
-                        <span class="glyphicon glyphicon-remove"></span>
+                        <span class="span-icon-button"><i class="bi bi-x-lg"></i></span>
                     </button>
                 </td>
             </tr>
@@ -52,8 +52,14 @@
     </table>
 </div>
 <div class="panel-footer">
-    <button type="button"  style="width: 130px;" class="btn btn-primary botao-barra" data-toggle="modal" data-target="#dialogCreateCurso" (click)="novo()" [disabled]="!editavel || faculdadeSelecionada.id == 0">Novo Curso</button>
-    <button type="button" name="retrun" class="btn btn-secondary botao-barra" onclick="history.back()">Voltar</button>
+    <button type="button"  style="width: 130px;" class="btn btn-primary botao-barra" data-toggle="modal" data-target="#dialogCreateCurso" (click)="novo()" [disabled]="!editavel || faculdadeSelecionada.id == 0">
+        <span class="span-icon-button"><i class="bi bi-plus-lg" style="-webkit-text-stroke-width: 0.3rem;"></i></span>
+        Novo Curso
+    </button>
+    <a type="button" name="retrun" class="btn btn-secondary botao-barra" href="/">
+        <span class="span-icon-button"><i class="bi bi-box-arrow-left"></i></span>
+        Voltar
+    </a>
 </div>
 
 <div class="modal fade" id="dialogCreateCurso" tabindex="-1" role="dialog" aria-labelledby="dialogCreateCursoTitle" aria-hidden="true">
@@ -89,8 +95,14 @@
                 </fieldset>
             </div>
             <div class="modal-footer">
-                <button type="submit" form="cursoForm" class="btn btn-primary botao-barra"  [disabled]="!editavel">Enviar</button>
-                <button type="button" class="btn btn-secondary botao-barra" data-dismiss="modal">Fechar</button>
+                <button type="submit" form="cursoForm" class="btn btn-primary botao-barra"  [disabled]="!editavel">
+                    <span class="span-icon-button"><i class="bi bi-send"></i></span>
+                    Enviar
+                </button>
+                <button type="button" class="btn btn-secondary botao-barra" data-dismiss="modal">
+                    <span class="span-icon-button"><i class="bi bi-box-arrow-left"></i></span>
+                    Fechar
+                </button>
             </div>
         </div>
     </div>

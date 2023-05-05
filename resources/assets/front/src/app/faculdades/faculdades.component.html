@@ -44,12 +44,12 @@
                             <td class="celula-trunca-texto" title="{{f.auto_increment_ref}}">{{f.auto_increment_ref}}</td>
                             <td class="celula-trunca-texto" title="Editar">
                                 <button style="text-align: center; margin-left: 2px;" title="Editar" type="button" class="btn btn-info botao-reduzido"  data-toggle="modal" data-target="#dialogCreate" (click)="selecionar(f)" [disabled]="!editavel">
-                                    <span class="glyphicon glyphicon-edit"></span>
+                                    <span class="span-icon-button"><i class="bi bi-pencil"></i></span>
                                 </button>
                             </td>
                             <td class="celula-trunca-texto" title="Excluir">
                                 <button style="text-align: center; margin-left: 2px;" title="Excluir" type="button" class="btn btn-danger botao-reduzido" (click)="remove(f)" [disabled]="!editavel">
-                                    <span class="glyphicon glyphicon-remove"></span>
+                                    <span class="span-icon-button"><i class="bi bi-x-lg"></i></span>
                                 </button>
                             </td>
                         </tr>
@@ -62,7 +62,10 @@
                 </table>
             </div>
             <div class="panel-footer">
-                <button type="button" class="btn btn-primary botao-barra" style="width: 130px;" data-toggle="modal" data-target="#dialogCreate" (click)="nova()" [disabled]="!editavel">Nova Faculdade</button>
+                <button type="button" class="btn btn-primary botao-barra" style="width: 150px;" data-toggle="modal" data-target="#dialogCreate" (click)="nova()" [disabled]="!editavel">
+                    <span class="span-icon-button"><i class="bi bi-plus-lg" style="-webkit-text-stroke-width: 0.3rem;"></i></span>
+                    Nova Faculdade
+                </button>
             </div>
         </div>
         <div class="col-md-6" style="padding-left: 0px; ">
@@ -119,8 +122,14 @@
                 </fieldset>
             </div>
             <div class="modal-footer">
-                <button type="submit" form="faculdadeForm" class="btn btn-primary botao-barra"  [disabled]="!editavel">Enviar</button>
-                <button type="button" class="btn btn-secondary botao-barra" data-dismiss="modal">Fechar</button>
+                <button type="submit" form="faculdadeForm" class="btn btn-primary botao-barra"  [disabled]="!editavel">
+                    <span class="span-icon-button"><i class="bi bi-send"></i></span>
+                    Enviar
+                </button>
+                <button type="button" class="btn btn-secondary botao-barra" data-dismiss="modal">
+                    <span class="span-icon-button"><i class="bi bi-box-arrow-left"></i></span>
+                    Fechar
+                </button>
             </div>
         </div>
     </div>
