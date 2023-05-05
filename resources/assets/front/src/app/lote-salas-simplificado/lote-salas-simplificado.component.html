@@ -24,30 +24,28 @@
 						<button style="text-align: center; margin-left: 10px;" title="Novo" type="button"
 							class="btn btn-primary botao-reduzido" data-toggle="modal"
 							data-target="#dialogCreateGrupoLSS" (click)="resetGrupo()" [disabled]="!editavel">
-							<span class="glyphicon glyphicon-plus"></span>
+							<span class="span-icon-button"><i class="bi bi-plus-lg" style="-webkit-text-stroke-width: 0.3rem;"></i></span>
 						</button>
 					</td>
 					<td title="Editar">
 						<button style="text-align: center; margin-left: 10px;" title="Editar" type="button"
 							class="btn btn-info botao-reduzido" data-toggle="modal"
 							data-target="#dialogCreateGrupoLSS" [disabled]="!editavel || !grupoLotesSimplificadosSelecionado.id">
-							<span class="glyphicon glyphicon-edit"></span>
+							<span class="span-icon-button"><i class="bi bi-pencil"></i></span>
 						</button>
 					</td>
 					<td title="Excluir">
 						<button style="text-align: center; margin-left: 10px;" title="Excluir" type="button"
 							class="btn btn-danger botao-reduzido" (click)="removeGrupo()" [disabled]="!editavel || !grupoLotesSimplificadosSelecionado.id">
-							<span class="glyphicon glyphicon-remove"></span>
+							<span class="span-icon-button"><i class="bi bi-x-lg"></i></span>
 						</button>
 					</td>
 					<td title="Voltar">
 						<button style="text-align: center; margin-left: 10px;" title="Voltar" type="button"
 							class="btn btn-secondary botao-reduzido" onclick="history.back()" [disabled]="!editavel">
-							<span class="glyphicon glyphicon-home"></span>
+							<span class="span-icon-button"><i class="bi bi-box-arrow-left"></i></span>
 						</button>
 					</td>
-
-
 				</tr>
 			</tbody>
 		</table>
@@ -91,13 +89,13 @@
 								<button style="text-align: center; margin-left: 2px;" title="Editar" type="button"
 									class="btn btn-info botao-reduzido" data-toggle="modal"
 									data-target="#dialogCreateLSS" (click)="selecionar(lote)" [disabled]="!editavel">
-									<span class="glyphicon glyphicon-edit"></span>
+									<span class="span-icon-button"><i class="bi bi-pencil"></i></span>
 								</button>
 							</td>
 							<td title="Excluir">
 								<button style="text-align: center; margin-left: 2px;" title="Excluir" type="button"
 									class="btn btn-danger botao-reduzido" (click)="removeLote(lote)" [disabled]="!editavel">
-									<span class="glyphicon glyphicon-remove"></span>
+									<span class="span-icon-button"><i class="bi bi-x-lg"></i></span>
 								</button>
 							</td>
 						</tr>
@@ -118,11 +116,11 @@
 			<div class="panel-footer">
 				<button style="text-align: center;" title="Novo Lote" type="button" data-toggle="modal" data-target="#dialogCreateLSS"
 					class="btn btn-primary" (click)="novoLote()" [disabled]="!editavel">
-					<span class="glyphicon glyphicon-plus"></span>
+					<span class="span-icon-button"><i class="bi bi-plus-lg" style="-webkit-text-stroke-width: 0.3rem;"></i></span>
 				</button>
 				<button style="text-align: center; margin-left: 10px;" title="Inserir Usuários" type="button"
 					class="btn btn-info" (click)="inserirEstudantesGrupo()" [disabled]="!editavel">
-					<span class="glyphicon glyphicon-user"></span>
+					<span class="span-icon-button"><i class="bi bi-people-fill"></i></span>
 				</button>
 			</div>
 		</div>
@@ -149,8 +147,14 @@
 				<app-sala-simplificada [ancestral]="eu">Carregando...</app-sala-simplificada>
 			</div>
 			<div class="panel-footer">
-				<button type="button" class="btn btn-warning" (click)="exportarSalasMoodle()" [disabled]="!editavel || loteSelecionado.id == 0">Exportar Salas para Moodle</button>
-				<button type="button" class="btn btn-info" style="width: 160px;" (click)="exportarEstudantes()" [disabled]="!editavel || loteSelecionado.id == 0">Exportar Estudantes</button>
+				<button type="button" class="btn btn-warning" (click)="exportarSalasMoodle()" [disabled]="!editavel || loteSelecionado.id == 0" title="Exportar Salas para Moodle">
+					<span class="span-icon-button"><i class="bi bi-box-arrow-up"></i></span>
+					Exportar Salas para Moodle
+				</button>
+				<button type="button" class="btn btn-info" style="width: 180px;" (click)="exportarEstudantes()" [disabled]="!editavel || loteSelecionado.id == 0" title="Exportar Estudantes">
+					<span class="span-icon-button"><i class="bi bi-people-fill"></i></span>
+					Exportar Estudantes
+				</button>
 			</div>
 		</div>
 	</div>
@@ -188,9 +192,20 @@
 				</fieldset>
 			</div>
 			<div class="modal-footer">
-				<button type="submit" form="grupoLoteForm" class="btn btn-primary botao-barra"
-					[disabled]="!editavel">Enviar</button>
-				<button type="button" class="btn btn-secondary botao-barra" data-dismiss="modal">Fechar</button>
+				<button type="submit" form="grupoLoteForm" class="btn btn-primary botao-barra" title="Enviar"
+					[disabled]="!editavel" *ngIf="!grupoLoteSimplificadoTemp.id">
+					<span class="span-icon-button"><i class="bi bi-send"></i></span>
+					Enviar
+				</button>
+				<button type="submit" form="grupoLoteForm" class="btn btn-primary botao-barra" title="Enviar"
+					[disabled]="!editavel" *ngIf="grupoLoteSimplificadoTemp.id">
+					<span class="span-icon-button"><i class="bi bi-pencil"></i></span>
+					Editar
+				</button>
+				<button type="button" class="btn btn-secondary botao-barra" data-dismiss="modal" title="Fechar">
+					<span class="span-icon-button"><i class="bi bi-box-arrow-left"></i></span>
+					Fechar
+				</button>
 			</div>
 		</div>
 	</div>
@@ -238,9 +253,15 @@
 				</fieldset>
 			</div>
 			<div class="modal-footer">
-				<button type="submit" form="loteSalasSimplificadoForm" class="btn btn-primary botao-barra"
-					[disabled]="!editavel">Enviar</button>
-				<button type="button" class="btn btn-secondary botao-barra" data-dismiss="modal">Fechar</button>
+				<button type="submit" form="loteSalasSimplificadoForm" class="btn btn-primary botao-barra" title="Enviar"
+					[disabled]="!editavel">
+					<span class="span-icon-button"><i class="bi bi-send"></i></span>
+					Enviar
+				</button>
+				<button type="button" class="btn btn-secondary botao-barra" data-dismiss="modal" title="Fechar">
+					<span class="span-icon-button"><i class="bi bi-box-arrow-left"></i></span>
+					Fechar
+				</button>
 			</div>
 		</div>
 	</div>
@@ -262,7 +283,10 @@
                 <div redimensionar="300" style="max-height: 250px;" id="saidaExport"></div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary botao-barra" data-dismiss="modal" [disabled]="!editavel">Fechar</button>
+                <button type="button" class="btn btn-secondary botao-barra" data-dismiss="modal" [disabled]="!editavel" title="Fechar">
+					<span class="span-icon-button"><i class="bi bi-box-arrow-left"></i></span>
+					Fechar
+				</button>
             </div>
         </div>
     </div>

@@ -2,7 +2,7 @@
     <div class="panel panel-default">
         <div class="panel-heading">Nova Solicitação de Criação de Sala no Moodle</div>
         <fieldset>
-            <div redimensionar="166">
+            <div redimensionar="">
                 <form id="salaForm" class="form-group" style="text-align: left; width: 500px; margin: 15px auto;" (submit)="criaSala($event)">
                     <div class="alert alert-info" [ngClass]="{'alert-info': !erroAviso, 'alert-danger': erroAviso}" *ngIf="aviso">
                         <strong *ngIf="!erroAviso">Informação!</strong><strong *ngIf="erroAviso">Falha!</strong> {{aviso}}
@@ -136,8 +136,14 @@
                             </tbody>
                         </table>
                     </div-->
-                    <button type="submit" form="salaForm" class="btn btn-primary botao-barra"  [disabled]="!editavel">Enviar</button>
-                    <button type="button" name="retrun" class="btn btn-secondary botao-barra" onclick="history.back()">Voltar</button>
+                    <button type="submit" form="salaForm" class="btn btn-primary botao-barra"  [disabled]="!editavel" title="Enviar">
+                        <span class="span-icon-button"><i class="bi bi-send"></i></span>
+                        Enviar
+                    </button>
+                    <button type="button" name="retrun" class="btn btn-secondary botao-barra" onclick="history.back()" title="Voltar">
+                        <span class="span-icon-button"><i class="bi bi-box-arrow-left"></i></span>
+                        Voltar
+                    </button>
                     <!--p><label>Se você necessita de uma Sala personalizada, clique <a href="/salas-old/create/">Aqui</a>.</label></p-->
                 </form>
             </div>
@@ -182,8 +188,14 @@
                 <p>Contato: <a href="mailto:{{emailResp}}">{{emailResp}}</a></p>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-primary botao-barra" style="width: 200px;" type="button" onclick="window.location.href = '/salas'">Lista de Salas</button>
-                <button type="button" class="btn btn-secondary botao-barra" data-dismiss="modal">Fechar</button>
+                <button class="btn btn-primary botao-barra" style="width: 200px;" type="button" onclick="window.location.href = '/salas'" title="Lista de Salas">
+                    <span class="glyphicon glyphicon-th-list"></span>
+                    Lista de Salas
+                </button>
+                <button type="button" class="btn btn-secondary botao-barra" data-dismiss="modal" title="Fechar">
+                    <span class="glyphicon glyphicon-log-out"></span>
+                    Fechar
+                </button>
             </div>
         </div>
     </div>

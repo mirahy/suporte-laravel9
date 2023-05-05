@@ -10,9 +10,18 @@
                         <table>
                             <tr *ngIf="!loteSalas">
                                 <td colspan="6" style="text-align: center;">
-                                    <button class="btn btn-success" (click)="novoLoteSalas()" [disabled]="!periodoLetivoSelecionadoId || !faculdadeSelecionadaId || !editavel" style="width: 120px; margin-right: 5px;">Novo Lote</button>
-                                    <button class="btn btn-primary" (click)="getLoteSalasList()" [disabled]="!editavel" data-toggle="modal" data-target="#dialogListaLotes" style="width: 120px;">Lista de Lotes</button>
-                                    <button type="button" name="retrun" class="btn btn-secondary botao-barra" onclick="history.back()">Voltar</button>
+                                    <button class="btn btn-success" (click)="novoLoteSalas()" [disabled]="!periodoLetivoSelecionadoId || !faculdadeSelecionadaId || !editavel" style="width: 120px; margin-right: 5px;" title="Novo Lote">
+                                        <span class="span-icon-button"><i class="bi bi-plus-lg" style="-webkit-text-stroke-width: 0.3rem;"></i></span>
+                                        Novo Lote
+                                    </button>
+                                    <button class="btn btn-primary" (click)="getLoteSalasList()" [disabled]="!editavel" data-toggle="modal" data-target="#dialogListaLotes" style="width: 140px;" title="Lista de Lotes">
+                                        <span class="span-icon-button"><i class="bi bi-list-task"></i></span>
+                                        Lista de Lotes
+                                    </button>
+                                    <button type="button" name="retrun" class="btn btn-secondary botao-barra" onclick="history.back()" title="Voltar">
+                                        <span class="span-icon-button"><i class="bi bi-box-arrow-left"></i></span>
+                                        Voltar
+                                    </button>
                                 </td>
                             </tr>
                             <tr *ngIf="loteSalas">
@@ -24,18 +33,33 @@
                                     <label *ngIf="loteSalas.id">{{loteSalas.descricao}}</label>
                                 </td>
                                 <td>
-                                    <button *ngIf="!loteSalas.id" class="btn btn-primary" style="margin-left: 10px; width: 150px;" data-toggle="modal" data-target="#dialogSalas" (click)="visualizarSala(salaPadraoDados)">Dados Salas</button>
+                                    <button *ngIf="!loteSalas.id" class="btn btn-primary" style="margin-left: 10px; width: 150px;" data-toggle="modal" data-target="#dialogSalas" (click)="visualizarSala(salaPadraoDados)" title="Dados Salas">
+                                        <span class="span-icon-button"><i class="bi bi-info-circle"></i></span>
+                                        Dados Salas
+                                    </button>
                                 </td>
                                 <td>
                                     
                                 </td>
                                 <td>
-                                    <button class="btn btn-success" (click)="criaLoteSalas()" [disabled]="!editavel" style="width: 150px;" *ngIf="statusTemp == STATUS_INICIAL_PADRAO && !loteSalas.is_salas_criadas">Criar Solicitações</button>
-                                    <button class="btn btn-success" (click)="criaSalas()" [disabled]="!editavel" style="width: 150px;" *ngIf="statusTemp != STATUS_INICIAL_PADRAO && !loteSalas.is_salas_criadas">Exportar Salas</button>
-                                    <button class="btn" (click)="inserirEstudantes()" [disabled]="!editavel" [ngClass]="{'btn-success': !loteSalas.is_estudantes_inseridos, 'btn-warning': loteSalas.is_estudantes_inseridos}" style="width: 150px;" *ngIf="loteSalas.is_salas_criadas">Inserir Estudantes</button>
+                                    <button class="btn btn-success" (click)="criaLoteSalas()" [disabled]="!editavel" style="width: 150px;" *ngIf="statusTemp == STATUS_INICIAL_PADRAO && !loteSalas.is_salas_criadas" title="Criar Solicitações">
+                                        <span class="span-icon-button"><i class="bi bi-plus-lg" style="-webkit-text-stroke-width: 0.3rem;"></i></span>
+                                        Criar Solicitações
+                                    </button>
+                                    <button class="btn btn-success" (click)="criaSalas()" [disabled]="!editavel" style="width: 150px;" *ngIf="statusTemp != STATUS_INICIAL_PADRAO && !loteSalas.is_salas_criadas" title="Exportar Salas">
+                                        <span class="span-icon-button"><i class="bi bi-box-arrow-up"></i></span>
+                                        Exportar Salas
+                                    </button>
+                                    <button class="btn" (click)="inserirEstudantes()" [disabled]="!editavel" [ngClass]="{'btn-success': !loteSalas.is_estudantes_inseridos, 'btn-warning': loteSalas.is_estudantes_inseridos}" style="width: 165px;" *ngIf="loteSalas.is_salas_criadas" title="Inserir Estudantes">
+                                        <span class="span-icon-button"><i class="bi bi-people-fill"></i></span>
+                                        Inserir Estudantes
+                                    </button>
                                 </td>
                                 <td>
-                                    <button class="btn btn-secondary" (click)="cancelar()" [disabled]="!editavel">Cancelar</button>
+                                    <button class="btn btn-secondary" (click)="cancelar()" [disabled]="!editavel" title="Cancelar">
+                                        <span class="span-icon-button"><i class="bi bi-box-arrow-left"></i></span>
+                                        Cancelar
+                                    </button>
                                 </td>
                             </tr>
                             <tr><td colspan="6"><hr style="margin: 8px 0px; border-color: #ddd;"></td></tr>
@@ -187,12 +211,12 @@
                             <td class="celula-status {{sala.status.chave}}">{{sala.status.descricao}}</td>
                             <td [attr.colspan]="statusTemp == STATUS_INICIAL_PADRAO ? 1 : 2" style="text-align: center;">
                                 <button style="text-align: center; margin-left: -2px;" title="Vizualizar" type="button" class="btn btn-info botao-reduzido"  data-toggle="modal" data-target="#dialogSalas" (click)="visualizarSala(sala)">
-                                    <span class="glyphicon glyphicon-search"></span>
+                                    <span class="span-icon-button"><i class="bi bi-search"></i></span>
                                 </button>
                             </td>
                             <td *ngIf="statusTemp == STATUS_INICIAL_PADRAO">
                                 <button style="text-align: center; margin-left: -2px;" title="Remove Sala" type="button" class="btn btn-danger botao-reduzido"  (click)="excluiSala(sala)">
-                                    <span class="glyphicon glyphicon-remove"></span>
+                                    <span class="span-icon-button"><i class="bi bi-x-lg"></i></span>
                                 </button>
                             </td>
                         </tr>
@@ -265,7 +289,7 @@
                                 <td class="celula-trunca-texto" title="{{ls.curso?.nome}}">{{ls.curso?.nome}}</td>
                                 <td style="text-align: center;">
                                     <button style="text-align: center; margin-left: -2px;" title="Vizualizar" type="button" class="btn btn-info botao-reduzido" (click)="selecionaLoteSalas(ls)">
-                                        <span class="glyphicon glyphicon-check"></span>
+                                        <span class="span-icon-button"><i class="bi bi-check2-square"></i></span>
                                     </button>
                                 </td>
                             </tr>
@@ -274,7 +298,10 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary botao-barra" data-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-secondary botao-barra" data-dismiss="modal" title="Fechar">
+                    <span class="span-icon-button"><i class="bi bi-box-arrow-left"></i></span>
+                    Fechar
+                </button>
             </div>
         </div>
     </div>
@@ -352,7 +379,9 @@
                         <label class="style1">Observações:</label><br>
                         <textarea class="form-control" name="observacao" placeholder="Ex:. Utilizem o conteúdo da sala do ano passado: Link da sala" [(ngModel)]="sala.observacao" [readonly]="!editavel"></textarea><p></p>
                         
-                        <button *ngIf="!mostraMais && !isSalaPadraoVisualizada" style="width: 100%;" type="button" (click)="mostraMais = true">˅ ˅ Mais ˅ ˅ </button>
+                        <button *ngIf="!mostraMais && !isSalaPadraoVisualizada" style="width: 100%;" type="button" (click)="mostraMais = true">
+                            <i class="bi bi-arrow-down-short"></i> Mais <i class="bi bi-arrow-down-short"></i> 
+                        </button>
                         <ng-container *ngIf="mostraMais">
                             <hr style="border-color: #ccc;">
                             <label>Turma: </label><br>
@@ -363,13 +392,18 @@
                             <label class="form-control form-control-read">{{sala.avaliacao}}</label><p></p>
                             <label>Chave da Disciplina: </label><br>
                             <label class="form-control form-control-read">{{sala.disciplina_key}}</label><p></p>
-                            <button type="button"(click)="mostraMais = false" style="width: 100%;">˄ ˄ Menos ˄ ˄ </button>
+                            <button type="button"(click)="mostraMais = false" style="width: 100%;">
+                                <i class="bi bi-arrow-up-short"></i> Menos <i class="bi bi-arrow-up-short"></i>
+                            </button>
                         </ng-container>
                     </form>
                 </fieldset>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary botao-barra" (click)="fechaDialogVizualizarSalas()">Fechar</button>
+                <button type="button" class="btn btn-secondary botao-barra" data-dismiss="modal" title="Fechar">
+                    <span class="span-icon-button"><i class="bi bi-box-arrow-left"></i></span>
+                    Fechar
+                </button>
             </div>
         </div>
     </div>
@@ -420,7 +454,10 @@
                 </table>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary botao-barra" data-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-secondary botao-barra" data-dismiss="modal" title="Fechar">
+                    <span class="span-icon-button"><i class="bi bi-box-arrow-left"></i></span>
+                    Fechar
+                </button>
             </div>
         </div>
     </div>
@@ -442,7 +479,10 @@
                 <div redimensionar="300" style="max-height: 250px;" id="saidaRestore"></div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary botao-barra" data-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-secondary botao-barra" data-dismiss="modal" title="Fechar">
+                    <span class="span-icon-button"><i class="bi bi-box-arrow-left"></i></span>
+                    Fechar
+                </button>
             </div>
         </div>
     </div>

@@ -89,31 +89,31 @@
 					<td title="Visualizar Dados">
 						<button style="text-align: center; margin-left: 2px;" title="Visualizar Dados" type="button" data-toggle="modal" 
 							data-target="#dialogViewSalaSimplificada" class="btn btn-info botao-reduzido" [disabled]="!editavel">
-							<span class="glyphicon glyphicon-search"></span>
+							<span class="span-icon-button"><i class="bi bi-search"></i></span>
 						</button>
 					</td>
 					<td *ngIf="!s.sala_moodle_id" title="Exportar Para Moodle (para realizar a exportação, uma super-macro deve estar configurada no lote de salas e também a sala selecionada não pode já estar associada à um ID de uma sala moodle)">
 						<button style="text-align: center; margin-left: 2px;" title="Exportar Para Moodle (para realizar a exportação, uma super-macro deve estar configurada no lote de salas e também a sala selecionada não pode já estar associada à um ID de uma sala moodle)" type="button" class="btn btn-primary botao-reduzido" 
 							data-toggle="modal" data-target="#dialogRestore" [disabled]="!loteSelecionado.super_macro || !editavel" (click)="preparaRestauracaoAutomatica(s)">
-							<span class="glyphicon glyphicon-export"></span>
+							<span class="span-icon-button"><i class="bi bi-box-arrow-up"></i></span>
 						</button>
 					</td>
 					<td *ngIf="s.sala_moodle_id" title="Inserir Estudantes">
 						<button style="text-align: center; margin-left: 2px;" title="Inserir Estudantes" type="button" 
 							class="btn btn-info botao-reduzido" (click)="exportarEstudantes(s)" [disabled]="!editavel">
-							<span class="glyphicon glyphicon-user"></span>
+							<span class="span-icon-button"><i class="bi bi-people-fill"></i></span>
 						</button>
 					</td>
 					<td title="Editar">
 						<button style="text-align: center; margin-left: 2px;" title="Editar" type="button" data-toggle="modal" 
 							data-target="#dialogCreateSalaSimplificada" class="btn btn-info botao-reduzido" [disabled]="!editavel">
-							<span class="glyphicon glyphicon-edit"></span>
+							<span class="span-icon-button"><i class="bi bi-plus-lg" style="-webkit-text-stroke-width: 0.3rem;"></i></span>
 						</button>
 					</td>
 					<td title="Excluir">
 						<button style="text-align: center; margin-left: 2px;" title="Excluir" type="button"
 							class="btn btn-danger botao-reduzido" (click)="deletar(s)" [disabled]="!editavel">
-							<span class="glyphicon glyphicon-remove"></span>
+							<span class="span-icon-button"><i class="bi bi-x-lg"></i></span>
 						</button>
 					</td>
 				</ng-container>
@@ -123,7 +123,7 @@
 					colspan="17">
 					<button style="text-align: center; margin-left: 2px;" title="Nova" type="button" [disabled]="!editavel"
 						class="btn btn-primary botao-reduzido" data-toggle="modal" data-target="#dialogCreateSalaSimplificada" (click)="novo()">
-						<span class="glyphicon glyphicon-plus"></span>
+						<span class="span-icon-button"><i class="bi bi-plus-lg" style="-webkit-text-stroke-width: 0.3rem;"></i></span>
 					</button>
 				</td>
 			</tr>
@@ -137,7 +137,7 @@
 					<i>Não Há Salas para serem listadas</i><br />
 					<button *ngIf="loteSelecionado.id > 0" style="text-align: center; margin-left: 2px; margin-top: 5px;" data-toggle="modal" data-target="#dialogCreateSalaSimplificada"
 						title="Nova" type="button" class="btn btn-primary botao-reduzido" (click)="novo()">
-						<span class="glyphicon glyphicon-plus"></span>
+						<span class="span-icon-button"><i class="bi bi-plus-lg" style="-webkit-text-stroke-width: 0.3rem;"></i></span>
 					</button>
 				</td>
 			</tr>
@@ -175,8 +175,16 @@
 									<input style="width: 310px; font-weight: normal;" class="form-control celula-trunca-texto" id="plda-disciplina" placeholder="-- Selecione uma Disciplina --"
 									 title="{{plDisciplinasAcademicosSelecionado.disciplina}}" [value]="plDisciplinasAcademicosSelecionado.disciplina" readonly required>
 								</td>
-								<td style="vertical-align: baseline;"><button type="button" style="margin-left: 5px;" class="btn btn-primary" data-toggle="modal" data-target="#dialogBuscaPLDA" [disabled]="!editavel"><span class="glyphicon glyphicon-search"></span></button></td>
-								<td style="vertical-align: baseline;"><button type="button" style="margin-left: 5px;" class="btn btn-warning" title="Buscar e Atualizar com Informações mais Recentes" (click)="refreshSala()" [disabled]="!editavel || !salaSimplificadaTemp.id"><span class="glyphicon glyphicon-repeat"></span></button></td>
+								<td style="vertical-align: baseline;">
+									<button type="button" style="margin-left: 5px;" class="btn btn-primary" data-toggle="modal" data-target="#dialogBuscaPLDA" [disabled]="!editavel">
+										<span class="span-icon-button"><i class="bi bi-search"></i></span>
+									</button>
+								</td>
+								<td style="vertical-align: baseline;">
+									<button type="button" style="margin-left: 5px;" class="btn btn-warning" title="Buscar e Atualizar com Informações mais Recentes" (click)="refreshSala()" [disabled]="!editavel || !salaSimplificadaTemp.id">
+										<span class="span-icon-button"><i class="bi bi-arrow-clockwise" style="font-size: 1.6rem;"></i></span>
+									</button>
+								</td>
 							</tr>
 						</table>
 						<p></p>
@@ -191,8 +199,15 @@
 				</fieldset>
 			</div>
 			<div class="modal-footer">
-				<button type="submit" form="salaSimplificadaForm" class="btn btn-primary botao-barra" [disabled]="!editavel">{{salaSimplificadaTemp.id ? 'Alterar' : 'Criar'}}</button>
-				<button type="button" class="btn btn-secondary botao-barra" data-dismiss="modal">Fechar</button>
+				<button type="submit" form="salaSimplificadaForm" class="btn btn-primary botao-barra" [disabled]="!editavel">
+					<span class="span-icon-button" *ngIf="salaSimplificadaTemp.id"><i class="bi bi-pencil"></i></span>
+					<span class="span-icon-button" *ngIf="!salaSimplificadaTemp.id"><i class="bi bi-plus-lg" style="-webkit-text-stroke-width: 0.3rem;"></i></span> 
+					{{salaSimplificadaTemp.id ? 'Alterar' : 'Criar'}}
+				</button>
+				<button type="button" class="btn btn-secondary botao-barra" data-dismiss="modal" title="Fechar">
+					<span class="span-icon-button"><i class="bi bi-box-arrow-left"></i></span>
+					Fechar
+				</button>
 			</div>
 		</div>
 	</div>
@@ -245,7 +260,10 @@
                 <div class="form-control">{{salaSimplificadaTemp.periodo_letivo_key}}</div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary botao-barra" data-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-secondary botao-barra" data-dismiss="modal">
+					<span class="span-icon-button"><i class="bi bi-box-arrow-left"></i></span>
+					Fechar
+				</button>
             </div>
         </div>
     </div>
@@ -263,11 +281,22 @@
             <div class="modal-footer">
                 <button type="button" *ngIf="plDisciplinasAcademicos.length && cursoSelecionadoId" class="btn btn-info" (click)="toggleModoLista()" 
 					[disabled]="!editavel" style="float: left;">
+					<span class="span-icon-button" *ngIf="modoLista"><i class="bi bi-check2-all" style="-webkit-text-stroke-width: 0.2rem;"></i></span>
+					<span class="span-icon-button" *ngIf="!modoLista"><i class="bi bi-check2" style="-webkit-text-stroke-width: 0.2rem;"></i></span>
 					Modo de Seleção: {{modoLista ? 'Múltipla' : 'Simples'}}
 				</button>
-				<button *ngIf="!modoLista" type="button" class="btn btn-success botao-barra" (click)="selecionaPLDA()" [disabled]="!editavel || plDisciplinasAcademicosTemp.disciplina == ''" data-dismiss="modal">Selecionar</button>
-                <button *ngIf="modoLista" type="button" class="btn btn-success" (click)="criarListaDisciplinasCurso()" [disabled]="!editavel || plDisciplinasAcademicosTempList.length == 0" data-dismiss="modal">Criar Selecionadas</button>
-                <button type="button" class="btn btn-secondary botao-barra" data-dismiss="modal">Fechar</button>
+				<button *ngIf="!modoLista" type="button" style="width: 120px;" class="btn btn-success botao-barra" (click)="selecionaPLDA()" [disabled]="!editavel || plDisciplinasAcademicosTemp.disciplina == ''" data-dismiss="modal">
+					<span class="span-icon-button"><i class="bi bi-check2-square"></i></span>
+					Selecionar
+				</button>
+                <button *ngIf="modoLista" type="button" class="btn btn-success" (click)="criarListaDisciplinasCurso()" [disabled]="!editavel || plDisciplinasAcademicosTempList.length == 0" data-dismiss="modal">
+					<span class="span-icon-button"><i class="bi bi-plus-lg" style="-webkit-text-stroke-width: 0.3rem;"></i></span>
+					Criar Selecionadas
+				</button>
+                <button type="button" class="btn btn-secondary botao-barra" data-dismiss="modal">
+					<span class="span-icon-button"><i class="bi bi-box-arrow-left"></i></span>
+					Fechar
+				</button>
             </div>
         </div>
     </div>
@@ -300,7 +329,10 @@
                     <input class="form-control" style="width: 80px; display: initial; margin: 0px 3px;" type="number" name="course-import-id" placeholder="import id" [(ngModel)]="courseImportId" size="10">
                     <button type="button" class="btn btn-primary" style="width: 170px;vertical-align: top;" (click)="executarRestauracaoAutomatica()" [disabled]="!editavel || blockAutoRestore">Executar Restauração</button>
                 </span>
-				<button type="button" class="btn btn-secondary botao-barra" data-dismiss="modal" [disabled]="!editavel">Fechar</button>
+				<button type="button" class="btn btn-secondary botao-barra" data-dismiss="modal" [disabled]="!editavel">
+					<span class="span-icon-button"><i class="bi bi-box-arrow-left"></i></span>
+					Fechar
+				</button>
             </div>
         </div>
     </div>
@@ -346,7 +378,10 @@
                 </table>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary botao-barra" data-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-secondary botao-barra" data-dismiss="modal">
+					<span class="span-icon-button"><i class="bi bi-box-arrow-left"></i></span>
+					Fechar
+				</button>
             </div>
         </div>
     </div>

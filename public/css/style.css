@@ -118,7 +118,7 @@ html, body {
     min-height: 90px;
 }
 #app{
-    height: calc(100% - 103px);
+    /* height: calc(100% - 103px); */
     overflow: auto;
     padding-top: 10px;
     padding-bottom: 50px;
