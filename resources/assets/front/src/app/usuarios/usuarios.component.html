@@ -46,7 +46,7 @@
                             <td *ngIf="usuarioTemp.id != u.id">{{u.permissao}}</td>
                             <td *ngIf="usuarioTemp.id != u.id">
                                 <button type="button" class="btn btn-primary botao-reduzido" (click)="habilitarEdicao(u.clone())">
-                                    <span class="glyphicon glyphicon-edit"></span>
+                                    <span class="span-icon-button"><i class="bi bi-pencil"></i></span>
                                 </button>
                             </td>
                             <td colspan="2" *ngIf="usuarioTemp.id == u.id">
@@ -66,8 +66,14 @@
                 </table>
             </div>
             <div class="panel-footer">
-                <button type="button" class="btn btn-primary botao-barra"  data-toggle="modal" data-target="#dialogNovoUsuario" (click)="resetEdit()" [disabled]="!editavel">Novo</button>
-                <button type="button" name="retrun" class="btn btn-secondary botao-barra" onclick="history.back()">Voltar</button>
+                <button type="button" class="btn btn-primary botao-barra"  data-toggle="modal" data-target="#dialogNovoUsuario" (click)="resetEdit()" [disabled]="!editavel">
+                    <span class="span-icon-button" ><i class="bi bi-plus-lg" style="-webkit-text-stroke-width: 0.3rem;"></i></span>
+                    Novo
+                </button>
+                <a type="button" name="retrun" class="btn btn-secondary botao-barra" href="/">
+                    <span class="span-icon-button"><i class="bi bi-box-arrow-left"></i></span>
+                    Voltar
+                </a>
             </div>
         </div>
     </div>
@@ -90,8 +96,14 @@
                 <input class="form-control" type="email" name="email" placeholder="11122233344" [(ngModel)]="usuarioTemp.email" size="60"><p></p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary botao-barra" (click)="novoUsuario()" [disabled]="!editavel">Criar</button>
-                <button type="button" class="btn btn-secondary botao-barra" data-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-primary botao-barra" (click)="novoUsuario()" [disabled]="!editavel">
+                    <span class="span-icon-button" ><i class="bi bi-plus-lg" style="-webkit-text-stroke-width: 0.3rem;"></i></span>
+                    Criar
+                </button>
+                <button type="button" class="btn btn-secondary botao-barra" data-dismiss="modal">
+                    <span class="span-icon-button"><i class="bi bi-box-arrow-left"></i></span>
+                    Fechar
+                </button>
             </div>
         </div>
     </div>

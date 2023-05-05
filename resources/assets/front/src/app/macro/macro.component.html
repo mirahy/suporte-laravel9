@@ -59,19 +59,19 @@
                                 </td>
                                 <td class="celula-trunca-texto" title="Alterar">
                                     <button *ngIf="!macro.arquivo" style="text-align: center; margin-right: 2px;" title="Alterar Arquivo" type="button" class="btn btn-primary botao-reduzido" data-toggle="modal" data-target="#dialogArquivos" (click)="selecionarMacro(macro)">
-                                        <span class="glyphicon glyphicon-plus"></span>
+                                        <span class="span-icon-button" ><i class="bi bi-plus-lg" style="-webkit-text-stroke-width: 0.3rem;"></i></span>
                                     </button>
                                     <a style="cursor: pointer"  data-toggle="modal" data-target="#dialogArquivos">{{macro.arquivo?.name}}</a>
                                 </td>
                                 <td class="celula-trunca-texto">{{macro.arquivo? (macro.arquivo.created | formatadorData) : ''}}</td>
                                 <td>
                                     <button style="text-align: center; margin-left: 2px;" title="Editar Nome" type="button" class="btn btn-info botao-reduzido" data-toggle="modal" data-target="#dialogCriar" (click)="selecionarMacro(macro)">
-                                        <span class="glyphicon glyphicon-edit"></span>
+                                        <span class="span-icon-button"><i class="bi bi-pencil"></i></span>
                                     </button>
                                 </td>
                                 <td>
                                     <button style="text-align: center; margin-left: -2px;" title="Remover Macro" type="button" class="btn btn-danger botao-reduzido" (click)="delMacro(macro)">
-                                        <span class="glyphicon glyphicon-remove"></span>
+                                        <span class="span-icon-button"><i class="bi bi-x-lg"></i></span>
                                     </button>
                                 </td>
                             </tr>
@@ -84,8 +84,14 @@
                     </table>
                 </div>
                 <div class="panel-footer">
-                    <button type="button" class="btn btn-primary botao-barra" data-toggle="modal" data-target="#dialogCriar" (click)="selecionarMacro(null)" [disabled]="!editavel">Nova</button>
-                    <button type="button" name="retrun" class="btn btn-secondary botao-barra" onclick="history.back()">Voltar</button>
+                    <button type="button" class="btn btn-primary botao-barra" data-toggle="modal" data-target="#dialogCriar" (click)="selecionarMacro(null)" [disabled]="!editavel">
+                        <span class="span-icon-button" ><i class="bi bi-plus-lg" style="-webkit-text-stroke-width: 0.3rem;"></i></span>
+                        Nova
+                    </button>
+                    <a type="button" name="retrun" class="btn btn-secondary botao-barra" href="/">
+                        <span class="span-icon-button"><i class="bi bi-box-arrow-left"></i></span>
+                        Voltar
+                    </a>
                 </div>
             </div>
             <div class="col-md-4" style="padding-left: 0px; ">
@@ -123,7 +129,10 @@
                     <app-arquivo [ancestral]="eu">Carregando...</app-arquivo>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary botao-barra" data-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-secondary botao-barra" data-dismiss="modal">
+                    <span class="span-icon-button"><i class="bi bi-box-arrow-left"></i></span>
+                    Fechar
+                </button>
             </div>
         </div>
     </div>
@@ -153,8 +162,14 @@
                     <!--input class="form-control" [(ngModel)]="macroSelecionada.link_servidor_moodle" [readonly]="!editavel" maxlength="63"/><p></p-->
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary botao-barra" (click)="criarAlterarMacro()" [disabled]="!editavel">Ok</button>
-                    <button type="button" class="btn btn-secondary botao-barra" data-dismiss="modal">Fechar</button>
+                    <button type="button" class="btn btn-primary botao-barra" (click)="criarAlterarMacro()" [disabled]="!editavel">
+                        <span class="span-icon-button" ><i class="bi bi-check2" style="-webkit-text-stroke-width: 0.2rem;"></i></span>
+                        Ok
+                    </button>
+                    <button type="button" class="btn btn-secondary botao-barra" data-dismiss="modal">
+                        <span class="span-icon-button"><i class="bi bi-box-arrow-left"></i></span>
+                        Fechar
+                    </button>
                 </div>
             </div>
         </div>

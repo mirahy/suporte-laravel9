@@ -46,13 +46,13 @@
                                 <button style="text-align: center; margin-left: -2px;" title="Editar" type="button"
                                     class="btn btn-info botao-reduzido" data-toggle="modal"
                                     data-target="#dialogCreateSM" (click)="selecionaServidorMoodle(sm)">
-                                    <span class="glyphicon glyphicon-edit"></span>
+                                    <span class="span-icon-button"><i class="bi bi-pencil"></i></span>
                                 </button>
                             </td>
                             <td>
                                 <button style="text-align: center; margin-left: -2px;" title="Remover" type="button"
                                     class="btn btn-danger botao-reduzido" (click)="removeServidorMoodle(sm)">
-                                    <span class="glyphicon glyphicon-remove"></span>
+                                    <span class="span-icon-button"><i class="bi bi-x-lg"></i></span>
                                 </button>
                             </td>
                         </tr>
@@ -72,8 +72,14 @@
             </div>
             <div class="panel-footer">
                 <button type="button" class="btn btn-primary botao-barra" data-toggle="modal"
-                    data-target="#dialogCreateSM" (click)="novoServidorMoodle()" [disabled]="!editavel">Novo</button>
-                <button type="button" name="retrun" class="btn btn-secondary botao-barra" onclick="history.back()">Voltar</button>
+                    data-target="#dialogCreateSM" (click)="novoServidorMoodle()" [disabled]="!editavel">
+                    <span class="span-icon-button" ><i class="bi bi-plus-lg" style="-webkit-text-stroke-width: 0.3rem;"></i></span>
+                    Novo
+                </button>
+                <a type="button" name="retrun" class="btn btn-secondary botao-barra" href="/">
+                    <span class="span-icon-button"><i class="bi bi-box-arrow-left"></i></span>
+                    Voltar
+                </a>
             </div>
         </div>
     </div>
@@ -120,8 +126,14 @@
             </div>
             <div class="modal-footer">
                 <button type="submit" form="servidoresMoodleForm" class="btn btn-primary botao-barra"
-                    [disabled]="!editavel">Enviar</button>
-                <button type="button" class="btn btn-secondary botao-barra" data-dismiss="modal">Fechar</button>
+                    [disabled]="!editavel">
+                    <span class="span-icon-button"><i class="bi bi-send"></i></span>
+                    Enviar
+                </button>
+                <button type="button" class="btn btn-secondary botao-barra" data-dismiss="modal">
+                    <span class="span-icon-button"><i class="bi bi-box-arrow-left"></i></span>
+                    Fechar
+                </button>
             </div>
         </div>
     </div>

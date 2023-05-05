@@ -33,12 +33,12 @@
                     <td class="celula-trunca-texto" title="{{buscador.entrada}}">{{buscador.entrada}}</td>
                     <td class="celula-trunca-texto" title="Editar">
                         <button style="text-align: center; margin-left: 2px;" title="Editar" type="button" class="btn btn-info botao-reduzido" (click)="editar(buscador)">
-                            <span class="glyphicon glyphicon-edit"></span>
+                            <span class="span-icon-button"><i class="bi bi-pencil"></i></span>
                         </button>
                     </td>
                     <td class="celula-trunca-texto" title="Excluir">
                         <button style="text-align: center; margin-left: 2px;" title="Excluir" type="button" class="btn btn-danger botao-reduzido" (click)="deletar(buscador)">
-                            <span class="glyphicon glyphicon-remove"></span>
+                            <span class="span-icon-button"><i class="bi bi-x-lg"></i></span>
                         </button>
                     </td>
                 </ng-container>
@@ -51,12 +51,12 @@
                     </td>
                     <td class="celula-trunca-texto" title="Concluir Edição" style="text-align: center;">
                         <button style="text-align: center; margin-left: 2px;" title="Concluir Edição" type="button" class="btn btn-success botao-reduzido" (click)="concluirEdicao()" [disabled]="invalid">
-                            <span class="glyphicon glyphicon-ok"></span>
+                            <span class="span-icon-button" ><i class="bi bi-check2" style="-webkit-text-stroke-width: 0.2rem;"></i></span>
                         </button>
                     </td>
                     <td class="celula-trunca-texto" title="Cancelar" style="text-align: center;">
                         <button style="text-align: center; margin-left: 2px;" title="Cancelar" type="button" class="btn btn-secondary botao-reduzido" (click)="reset()">
-                            <span class="glyphicon glyphicon-retweet"></span>
+                            <span class="span-icon-button"><i class="bi bi-arrow-repeat"></i></span>
                         </button>
                     </td>
                 </ng-container>
@@ -64,7 +64,7 @@
             <tr *ngIf="!emCriacao && macro.buscadores != null && macro.buscadores.length > 0 && status == COMPLETE">
                 <td *ngIf="buscadorTemp.id == 0" class="celula-trunca-texto" title="Novo" style="text-align: center;" colspan="4">
                     <button style="text-align: center; margin-left: 2px;" title="Novo" type="button" class="btn btn-primary botao-reduzido" (click)="novo()">
-                        <span class="glyphicon glyphicon-plus"></span>
+                        <span class="span-icon-button" ><i class="bi bi-plus-lg" style="-webkit-text-stroke-width: 0.3rem;"></i></span>
                     </button>
                 </td>
             </tr>
@@ -77,12 +77,12 @@
                     </td>
                     <td *ngIf="buscadorTemp.id == 0" class="celula-trunca-texto" title="Concluir"  style="text-align: center;" >
                         <button style="text-align: center; margin-left: 2px;" title="Concluir" type="button" class="btn btn-success botao-reduzido" (click)="concluirEdicao()"  [disabled]="invalid">
-                            <span class="glyphicon glyphicon-ok"></span>
+                            <span class="span-icon-button" ><i class="bi bi-check2" style="-webkit-text-stroke-width: 0.2rem;"></i></span>
                         </button>
                     </td>
                     <td *ngIf="buscadorTemp.id == 0" class="celula-trunca-texto" title="Cancelar"  style="text-align: center;" >
                         <button style="text-align: center; margin-left: 2px;" title="Calcelar" type="button" class="btn btn-secondary botao-reduzido" (click)="reset()">
-                            <span class="glyphicon glyphicon-retweet"></span>
+                            <span class="span-icon-button"><i class="bi bi-arrow-repeat"></i></span>
                         </button>
                     </td>
                 </tr>
@@ -93,7 +93,7 @@
                 <td colspan="4">
                     <i>Não Há Buscadores para serem listados</i><br />
                     <button *ngIf="macro.id > 0" style="text-align: center; margin-left: 2px; margin-top: 5px;" title="Nova" type="button" class="btn btn-primary botao-reduzido" (click)="novo()">
-                        <span class="glyphicon glyphicon-plus"></span>
+                        <span class="span-icon-button" ><i class="bi bi-plus-lg" style="-webkit-text-stroke-width: 0.3rem;"></i></span>
                     </button>
                 </td>
             </tr>
