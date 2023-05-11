@@ -15,19 +15,24 @@
 						<td>
 							<label class="style1"><span>Carregar Estudantes: </span></label>
 							<button data-toggle="modal" data-target="#dialogAjudaEstudantes"
-								class="btn btn-info botao-tooltip"><span
-									class="glyphicon glyphicon-info-sign"></span></button>
+								class="btn btn-info botao-tooltip"><span class="span-icon-button"><i class="bi bi-info-circle"></i></span></button>
 						</td>
 						<td>
 							<div class="custom-file col-md-3" style="width: 150px;">
 								<input type="file" class="custom-file-input" id="customFile"
 									(change)="lerAlunosCSV($event)" [disabled]="!editavel">
 								<label class="custom-file-label btn btn-primary" [ngClass]="{'disabled': !editavel}"
-									for="customFile">Arquivo CSV</label>
+									for="customFile">
+									<span class="span-icon-button"><i class="bi bi-filetype-csv"></i></span>
+									Arquivo CSV
+								</label>
 							</div>
 						</td>
 						<td>
-							<button type="button" class="btn btn-primary botao-barra" style="width: 150px; margin-left: 5px;" data-toggle="modal" data-target="#dialogBuscaImport" [disabled]="!editavel">SIGECAD</button>
+							<button type="button" class="btn btn-primary botao-barra" style="width: 150px; margin-left: 5px;" data-toggle="modal" data-target="#dialogBuscaImport" [disabled]="!editavel">
+								<span class="span-icon-button"><i class="bi bi-box-arrow-in-down"></i></span>
+								SIGECAD
+							</button>
 						</td>
 					</tr>
 				</table>
@@ -52,7 +57,7 @@
 							<button style="text-align: center;" title="Limpar Todos" type="button"
 								class="btn btn-danger botao-reduzido" (click)="limparEstudantes()"
 								[disabled]="!editavel">
-								<span class="glyphicon glyphicon-trash"></span>
+								<span class="span-icon-button"><i class="bi bi-trash" style="-webkit-text-stroke-width: 0.0001rem;"></i></span>
 							</button>
 						</th>
 						<th></th>
@@ -78,7 +83,7 @@
 								<button style="text-align: center;" title="Remover" type="button"
 									class="btn btn-danger botao-reduzido" (click)="removerEstudante(e)"
 									[disabled]="!editavel">
-									<span class="glyphicon glyphicon-remove"></span>
+									<span class="span-icon-button"><i class="bi bi-x-lg"></i></span>
 								</button>
 							</td>
 						</tr>
@@ -87,10 +92,19 @@
 			</div>
 			<div class="panel-footer">
 				<button type="button" class="btn btn-primary botao-barra" data-toggle="modal"
-					data-target="#dialogCreateEstudante" (click)="novoEstudante()" [disabled]="!editavel">Novo</button>
-				<button type="button" class="btn btn-warning botao-barra" data-toggle="modal" style="float: right;"
-					data-target="#dialogExportarEstudante" [disabled]="!editavel || estudantes.length == 0">Exportar</button>
-				<button type="button" name="retrun" class="btn btn-secondary botao-barra" onclick="history.back()">Voltar</button>
+					data-target="#dialogCreateEstudante" (click)="novoEstudante()" [disabled]="!editavel">
+					<span class="span-icon-button"><i class="bi bi-plus-lg" style="-webkit-text-stroke-width: 0.3rem;"></i></span>
+					Novo
+				</button>
+				<button type="button" class="btn btn-warning botao-barra" data-toggle="modal" style="float: right; width: 100px;"
+					data-target="#dialogExportarEstudante" [disabled]="!editavel || estudantes.length == 0">
+					<span class="span-icon-button"><i class="bi bi-people-fill"></i></span>
+					Exportar
+				</button>
+				<a type="button" name="retrun" class="btn btn-secondary botao-barra" href="/">
+					<span class="span-icon-button"><i class="bi bi-box-arrow-left"></i></span>
+					Voltar
+				</a>
 			</div>
 		</div>
 	</div>
@@ -129,8 +143,14 @@
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-primary botao-barra"
-					(click)="adicionarEstudante()">Adicionar</button>
-				<button type="button" class="btn btn-secondary botao-barra" data-dismiss="modal">Fechar</button>
+					(click)="adicionarEstudante()" style="width: 100px;">
+					<span class="span-icon-button"><i class="bi bi-plus-lg" style="-webkit-text-stroke-width: 0.3rem;"></i></span>
+					Adicionar
+				</button>
+				<button type="button" class="btn btn-secondary botao-barra" data-dismiss="modal">
+					<span class="span-icon-button"><i class="bi bi-box-arrow-left"></i></span>
+					Fechar
+				</button>
 			</div>
 		</div>
 	</div>
@@ -168,8 +188,14 @@
 				<p></p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-success botao-barra" (click)="alterarSenhasUsuariosAD()" [disabled]="!editavel">Executar</button>
-                <button type="button" class="btn btn-secondary botao-barra" data-dismiss="modal" [disabled]="!editavel">Cancelar</button>
+                <button type="button" class="btn btn-success botao-barra" (click)="alterarSenhasUsuariosAD()" [disabled]="!editavel" style="width: 100px;">
+					<span class="span-icon-button"><i class="bi bi-bootstrap-reboot"></i></span>
+					Executar
+				</button>
+                <button type="button" class="btn btn-secondary botao-barra" data-dismiss="modal" [disabled]="!editavel">
+					<span class="span-icon-button"><i class="bi bi-box-arrow-left"></i></span>
+					Fechar
+				</button>
             </div>
         </div>
     </div>
@@ -194,7 +220,10 @@
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-secondary botao-barra" data-dismiss="modal"
-					[disabled]="!editavel">Fechar</button>
+					[disabled]="!editavel">
+					<span class="span-icon-button"><i class="bi bi-box-arrow-left"></i></span>
+					Fechar
+				</button>
 			</div>
 		</div>
 	</div>
@@ -213,8 +242,15 @@
                 <app-obtem-plda [ancestral]="eu">Carregando...</app-obtem-plda>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-success botao-barra" (click)="carregarEstudantesSigecad()" [disabled]="!editavel || plDisciplinasAcademicosTemp.disciplina == ''">Carregar</button>
-                <button type="button" class="btn btn-secondary botao-barra" data-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-success botao-barra" (click)="carregarEstudantesSigecad()"
+				 [disabled]="!editavel || plDisciplinasAcademicosTemp.disciplina == ''" style="width: 100px;">
+					<span class="span-icon-button"><i class="bi bi-box-arrow-in-down"></i></span>
+					Carregar
+				</button>
+                <button type="button" class="btn btn-secondary botao-barra" data-dismiss="modal">
+					<span class="span-icon-button"><i class="bi bi-box-arrow-left"></i></span>
+					Fechar
+				</button>
             </div>
         </div>
     </div>
@@ -244,7 +280,10 @@ username,email,fullname
 BeltranoOliveira,BeltranoOliveira@ufgd.edu.br,Beltrano dos Santos Oliveira</pre>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-secondary botao-barra" data-dismiss="modal">Fechar</button>
+				<button type="button" class="btn btn-secondary botao-barra" data-dismiss="modal">
+					<span class="span-icon-button"><i class="bi bi-box-arrow-left"></i></span>
+					Fechar
+				</button>
 			</div>
 		</div>
 	</div>
