@@ -15,6 +15,7 @@ import { PeriodoLetivo } from 'src/app/periodo-letivos/periodo-letivo';
 import { PeriodoLetivosService } from 'src/app/periodo-letivos.service';
 import { ActivatedRoute } from '@angular/router';
 import { Curso } from 'src/app/cursos/curso';
+import { IfStmt } from '@angular/compiler';
 declare var jQuery: any;
 
 @Component({
@@ -51,6 +52,8 @@ export class CriaSalasComponent extends AbstractComponent implements OnInit {
     usuarios: Array<Usuario> = [];
     filteredUsuarios = [];
     nome_professor_temp = "";
+    nome_sala_moodle = "";
+    professor_sala_moodle = "";
 
     get faculdades() {
         return this.faculdadeService.faculdades;
@@ -71,7 +74,7 @@ export class CriaSalasComponent extends AbstractComponent implements OnInit {
     criaSala (ev) {
         ev.preventDefault();
         var salaForm = jQuery('#salaForm')[0];
-		if (salaForm.reportValidity()) {
+		if (salaForm.reportValidity() && this.validaLinkMoodle()) {
             this.editavel = false;
             if (this.plDisciplinasAcademicosService.plDisciplinasAcademicosNameIndex && this.plDisciplinasAcademicosService.plDisciplinasAcademicosNameIndex.get(this.sala.nome_sala))
                 this.salasService.aplicarPlDisciplina(this.sala, this.plDisciplinasAcademicosService.plDisciplinasAcademicosNameIndex.get(this.sala.nome_sala))
@@ -103,6 +106,57 @@ export class CriaSalasComponent extends AbstractComponent implements OnInit {
     geraStatus () {
 
     }
+
+    getSalaMoodle(){
+      this.erroAviso = false;
+      this.aviso = "";
+      if(this.sala.observacao !== "" && this.validaLinkMoodle()){
+            //   this.erroAviso = false;
+            //   this.aviso = "";
+            //   jQuery('#dialogMensagem').modal('show');
+            //   var id = "";
+            //   if(this.sala.observacao != "" && this.sala.observacao.indexOf("&") > 0){
+            //     // url com mais parametros alem do id
+            //     id = this.sala.observacao.substring(this.sala.observacao.indexOf("view.php?id=")+12, this.sala.observacao.indexOf("&"));
+            //   }else{
+            //     // url somemnte com parametro id
+            //     id = this.sala.observacao.substring(this.sala.observacao.indexOf("=") + 1);
+            //   }
+            //   this.nome_sala_moodle = "tecnologia"
+            //   this.professor_sala_moodle = "mirahy"
+              // this.salasService.getSalaMoodle(id, this.sala)
+              //   .then(r => {
+
+
+              //   }).catch(response => {
+              //       this.erroAviso = true;
+              //       this.aviso = this.erroHttp(response);
+              //       this.editavel = true;
+              //   });
+            //   jQuery('#dialogMensagem').modal('hide');
+
+      }
+
+    }
+
+    validaLinkMoodle(){
+      if(this.sala.observacao !== "" &&
+          this.sala.observacao.includes("https://presencial.ead.ufgd.edu.br/course/view.php?id=") ||
+            this.sala.observacao.includes("https://moodle.ead.ufgd.edu.br/course/view.php?id=")){
+          this.erroAviso = false;
+          this.aviso = "";
+          return true;
+      }
+      else if(this.sala.observacao !== ""){
+        jQuery('#dialogMensagem').modal('hide');
+        this.erroAviso = true;
+        this.aviso = "Link incorreto, favor inserir um link válido, ex.: 'https://moodle.ead.ufgd.edu.br/course/view.php?id=***'"
+        return false;
+      }else if(this.sala.observacao == ""){
+        return true;
+      }
+    }
+
     selecionaPeriodoLetivo () {
         if (this.sala.periodo_letivo_id) {
             this.sala.curso = "";
@@ -116,7 +170,7 @@ export class CriaSalasComponent extends AbstractComponent implements OnInit {
             this.sala.curso = "";
             this.sala.nome_sala = "";
         }
-       
+
     }
     selecionaCurso(disciplinaPrevia?:string) {
         if (this.sala.curso) {
@@ -206,7 +260,7 @@ export class CriaSalasComponent extends AbstractComponent implements OnInit {
         //http://suporte-ead-ms/salas/create/133/0623/04000564/P2
         var pars = null;
         this.route.params.subscribe(p => {
-            if (p.hasOwnProperty('periodoLetivoKey') && 
+            if (p.hasOwnProperty('periodoLetivoKey') &&
                 p.hasOwnProperty('codigoCurso') &&
                 p.hasOwnProperty('codigoDisciplina') &&
                 p.hasOwnProperty('salaTurma')) {
@@ -277,7 +331,7 @@ export class CriaSalasComponent extends AbstractComponent implements OnInit {
                                         this.mensagemDialog = this.erroHttp(response);
                                         console.log(response)
                                     })
-                                
+
                             })
                             .catch(response => {
                                 this.status = this.ERROR;
@@ -291,14 +345,14 @@ export class CriaSalasComponent extends AbstractComponent implements OnInit {
                         this.erroAviso = true;
                         this.mensagemDialog = this.erroHttp(response);
                         console.log(response)
-                    })   
+                    })
             })
             .catch(response => {
                 this.status = this.ERROR;
                 this.erroAviso = true;
                 this.mensagemDialog = this.erroHttp(response);
                 console.log(response)
-            })          
+            })
     }
 
 }

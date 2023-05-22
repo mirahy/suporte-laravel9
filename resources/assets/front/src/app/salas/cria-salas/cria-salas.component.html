@@ -17,36 +17,36 @@
 
                     <label class="style1">E-mail: *</label><br>
                     <input class="form-control" type="email" name="email" placeholder="Preferência institucional" [(ngModel)]="sala.email" size="60" [readonly]="!editavel" required><p></p>
-                    
-                    <label class="style1">Confirmar E-mail: * </label> 
+
+                    <label class="style1">Confirmar E-mail: * </label>
                     <input type="checkbox" name="verificacao" value="" required><br><p></p>
 
                     <label class="style1">Período Letivo: *</label><br>
-                    <select class="form-control" name="periodo_letivo"  [disabled]="!editavel" [(ngModel)]="sala.periodo_letivo_id" (change)="selecionaPeriodoLetivo()" required>   
+                    <select class="form-control" name="periodo_letivo"  [disabled]="!editavel" [(ngModel)]="sala.periodo_letivo_id" (change)="selecionaPeriodoLetivo()" required>
                         <option hidden disabled selected value> -- Selecione -- </option>
                         <ng-container *ngFor="let pl of periodoLetivos">
                             <option *ngIf="pl.ativo || sala.periodo_letivo_id == pl.id.toString()" [value]="pl.id">{{pl.nome + (pl.descricao ? " (" + pl.descricao + ")" : "")}}</option>
-                        </ng-container>  
+                        </ng-container>
                     </select><p></p>
 
                     <label class="style1">Faculdade: *</label><br>
                     <!--p-dropdown name="faculdade" [options]="faculdadesOptions" [(ngModel)]="faculdadeTemp" [disabled]="!editavel" [required]="true"
                         placeholder="-- Selecione --" styleClass="prime-combobox" (change)="selecionaFaculdade()"></p-dropdown-->
-                    <select class="form-control" name="faculdade"  [disabled]="!editavel" [(ngModel)]="faculdadeSelecionadaId" (change)="selecionaFaculdade()" required>   
+                    <select class="form-control" name="faculdade"  [disabled]="!editavel" [(ngModel)]="faculdadeSelecionadaId" (change)="selecionaFaculdade()" required>
                         <option hidden disabled selected value> -- Selecione -- </option>
                         <ng-container *ngFor="let f of faculdades">
                             <option *ngIf="f.ativo || faculdadeSelecionadaId == f.id.toString()" [value]="f.id">{{f.sigla}}</option>
-                        </ng-container>  
+                        </ng-container>
                     </select><p></p>
 
                     <label class="style1">Curso: *</label><br>
                     <ng-container *ngIf="!faculdadeSelecionadaId">
-                        <select class="form-control" name="curso"  disabled >   
+                        <select class="form-control" name="curso"  disabled >
                             <option hidden disabled selected value> -- </option>
                         </select>
                     </ng-container>
                     <ng-container *ngIf="faculdadeSelecionadaId">
-                        <select class="form-control" name="curso"  [disabled]="!editavel" [(ngModel)]="sala.curso" (change)="selecionaCurso()" required>   
+                        <select class="form-control" name="curso"  [disabled]="!editavel" [(ngModel)]="sala.curso" (change)="selecionaCurso()" required>
                             <option hidden disabled selected value> -- Selecione -- </option>
                             <ng-container *ngFor="let c of faculdadeTemp.cursos">
                                 <option  *ngIf="c.ativo || sala.curso == c.id" [value]="c.id">{{c.curso_key ? c.curso_key + " - " + c.nome : c.nome}}</option>
@@ -61,23 +61,37 @@
                     <br><p></p>
 
                     <label class="style1">Modalidade da Disciplina: *</label><br>
-                    <select class="form-control" name="modalidade" [(ngModel)]="sala.modalidade" [disabled]="!editavel" required>   
-                        <option hidden disabled selected value> -- Selecione -- </option>  
+                    <select class="form-control" name="modalidade" [(ngModel)]="sala.modalidade" [disabled]="!editavel" required>
+                        <option hidden disabled selected value> -- Selecione -- </option>
                         <option *ngFor="let m of modalidades" [hidden]="!m.visivel" value="{{m.sigla}}">{{m.descricao}}</option>
                     </select><p></p>
-                    
+
                     <label class="style1">Objetivo da Disciplina: *</label><br>
-                    <select class="form-control" name="objetivo_sala" [(ngModel)]="sala.objetivo_sala" [disabled]="!editavel" required>   
-                        <option hidden disabled selected value> -- Selecione -- </option>                      
+                    <select class="form-control" name="objetivo_sala" [(ngModel)]="sala.objetivo_sala" [disabled]="!editavel" required>
+                        <option hidden disabled selected value> -- Selecione -- </option>
                         <option *ngFor="let o of objetivosSalas" [hidden]="!o.visivel" value="{{o.sigla}}">{{o.descricao}}</option>
                     </select><p></p>
-                    
+
                     <label class="style1">Chave de Inscrição para Estudantes acessarem a sala:</label><br>
                     <input class="form-control" type="text" name="senha_aluno" placeholder="" [(ngModel)]="sala.senha_aluno" size="60" [readonly]="!editavel"><p></p>
 
                     <label class="style1">Caso deseje usar o coteúdo da sala de anos anteriores, cole o link aqui!:</label><br>
-                    <textarea class="form-control" name="observacao" placeholder="Ex:. Utilizem o conteúdo da sala de anos anteriores: Link da sala" [(ngModel)]="sala.observacao" [readonly]="!editavel"></textarea><p></p>
-                    
+                    <input class="form-control" type="text" name="observacao" placeholder="Ex.: https://presencial.ead.ufgd.edu.br/course/view.php?id=***"
+                    [(ngModel)]="sala.observacao" [readonly]="!editavel" (focusout)="getSalaMoodle()" maxlength="60"><p></p>
+
+                    <ng-container *ngIf="nome_sala_moodle">
+                      <label class="style1">Nome da sala moodle:</label><br>
+                      <input class="form-control" type="text" name="nome_sala_moodle" placeholder="Nome da sala moodle" [(ngModel)]="nome_sala_moodle"
+                      disabled><p></p>
+                    </ng-container>
+
+                    <ng-container *ngIf="professor_sala_moodle">
+                      <label class="style1">Professor da sala no moodle:</label><br>
+                      <input class="form-control" type="text" name="professor_sala_moodle" placeholder="Professor da sala no moodle" [(ngModel)]="professor_sala_moodle"
+                      disabled><p></p>
+                    </ng-container>
+
+
                     <!--label class="style1">Estudantes:</label><br>
                     <table class="table">
                         <caption *ngIf="estudantes.length == 0">
@@ -132,7 +146,7 @@
                                         </button>
                                     </td>
                                 </tr>
-                                
+
                             </tbody>
                         </table>
                     </div-->
@@ -206,7 +220,7 @@
         <div class="modal-content">
             <div class="modal-body" style="width: 400px;">
                 <div class="alert"  [ngClass]="{'alert-info': !erroAviso, 'alert-danger': erroAviso}">
-                    <strong>{{mensagemDialog}}</strong> 
+                    <strong>{{mensagemDialog}}</strong>
                 </div>
             </div>
         </div>
