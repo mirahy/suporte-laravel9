@@ -10,3 +10,6 @@ npm-debug.log
 yarn-error.log
 docker-compose.yml
 .env
+.env-local
+docker/nginx/certs.ufgd.edu.br.crt
+docker/nginx/key.ufgd.edu.br.key
