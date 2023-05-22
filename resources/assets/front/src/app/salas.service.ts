@@ -64,6 +64,26 @@ export class SalasService {
             });
     }
 
+    getSalaMoodle(id, sala){
+
+      return this.http.post("/salas/salaMoodle/"+id, sala)
+          .toPromise()
+          .then(response => {
+              // this.salas = Sala.generateListPlus(response.json().reverse(), this.cursosService.cursosIndex);
+              /*this.salasIndex = {};
+              var ss = response.json();
+              for (var i = 0; i < ss.length; i++) {
+                  var sala = this.criaSala(ss[i]);
+                  this.salasIndex[sala.id] = sala;
+                  this.salas.push( sala );
+              }
+              this.salas.sort(this.sortSalas);*/
+              console.log(response)
+              return response;
+          });
+
+  }
+
     statusSala(sala:Sala, status:string, mensagem:string) :Promise<any> {
         return this.http.patch ('/salas/status/' + sala.id, {status: status, mensagem: mensagem})
             .toPromise()
@@ -97,7 +117,7 @@ export class SalasService {
             sala.periodo_letivo_key = plda.periodo_letivo.id_sigecad;
         else
             sala.periodo_letivo_key = plda.periodo_letivo.toString();
-        //sala.curso_key = plda.curso; 
+        //sala.curso_key = plda.curso;
         sala.disciplina_key = plda.disciplina_key;
         return sala;
     }
@@ -140,7 +160,7 @@ export class SalasService {
     convertCreatedSala(s, sala?:Sala, status?:Status) {
         if (!sala)
             sala = Sala.geraNovaSala();
-        else 
+        else
             sala.id = s.id;
         sala.email = s.email;
         sala.curso = this.cursosService.cursosIndex.get( s.curso_id );
@@ -162,7 +182,7 @@ export class SalasService {
         sala.disciplina_key = s.disciplina_key;
         sala.macro_id = s.macro_id;
         sala.status = s.status ? s.status : status;
-        //sala.solicitante_id = s.solicitante_id;   
+        //sala.solicitante_id = s.solicitante_id;
         return sala;
     }
 
@@ -177,7 +197,7 @@ export class SalasService {
         else {
             sala.curso = this.cursosService.cursosIndex.get( s.curso_id );
             s.codigo_curso = sala.curso.curso_key;
-        }   
+        }
         //sala.mensagem = s.mensagem;
         //sala.nome_professor = s.nome_professor;
         sala.nome_sala = s.nome_disciplina;
@@ -197,7 +217,7 @@ export class SalasService {
         sala.disciplina_key = s.codigo_disciplina;
         if (status)
             sala.status = status;
-        //sala.solicitante_id = s.solicitante_id;   
+        //sala.solicitante_id = s.solicitante_id;
         return sala;
     }
     chargeSala (sala:Sala, plKey, codigoCurso, codigoDiscoplina, salaTurma) {

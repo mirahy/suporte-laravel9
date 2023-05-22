@@ -43,7 +43,7 @@ export class SalasComponent extends AbstractComponent implements OnInit {
 
     saidaRestore = "";
     blockAutoRestore = false;
-    
+
     faculdadeTemp = Faculdade.generateFaculdade();
     faculdadeSelecionadaId = "";
     disciplinaSelecionadaId = "";
@@ -91,7 +91,7 @@ export class SalasComponent extends AbstractComponent implements OnInit {
     get periodoLetivos () : Array<PeriodoLetivo> {
         return this.periodoLetivoService.periodoLetivos;
     }
-    
+
     eu() {
         return this;
     }
@@ -120,9 +120,9 @@ export class SalasComponent extends AbstractComponent implements OnInit {
                 var plda = this.plDisciplinasAcademicosService.plDisciplinasAcademicosNameIndex.get(this.sala.nome_sala)
                 if (plda)
                     this.disciplinaSelecionadaId = plda.disciplina;
-                else 
+                else
                     this.disciplinaSelecionadaId = "";
-                    
+
                 this.editavel = sala.status.chave == this.STATUS_INICIAL_PADRAO || outrosDados;
             }).catch(response => {
                 this.erroAviso = true;
@@ -197,11 +197,11 @@ export class SalasComponent extends AbstractComponent implements OnInit {
             jQuery('#dialogEstudante').modal('hide');
             this.estudanteTemp = new Estudante("","","",false);
         }
-        else 
+        else
             alert ("Usuário Inválido!");
     }
     removerEstudante(estudante:Estudante) {
-        if (!confirm ("Deseja remover este estudante")) 
+        if (!confirm ("Deseja remover este estudante"))
             return;
         var i = 0;
         for (; i < this.estudantes.length; i++) {
@@ -273,7 +273,21 @@ export class SalasComponent extends AbstractComponent implements OnInit {
         this.editarVisualizar(sala, true);
         this.erroAviso = false;
         jQuery('#saidaRestore').html('<div  style="text-align: center"><b>...</b></div>');
-        this.courseImportId = "";
+        if(this.sala.observacao == null){
+          //campo vazio
+          this.courseImportId = "";
+      }else if(this.sala.observacao != null){
+              if ((this.sala.observacao.match(/http/g) || []).length > 1){
+                  //campo com mais de 1 url
+                  this.courseImportId = "";
+              }else if(this.sala.observacao != "" && this.sala.observacao.indexOf("&") > 0){
+                  // url com mais parametros alem do id
+                  this.courseImportId = this.sala.observacao.substring(this.sala.observacao.indexOf("view.php?id=")+12, this.sala.observacao.indexOf("&"));
+              }else{
+                  // url somemnte com parametro id
+                  this.courseImportId = this.sala.observacao.substring(this.sala.observacao.indexOf("=") + 1);
+              }
+      }
         //this.editavel = true;
         this.blockAutoRestore = false;
     }
@@ -425,7 +439,7 @@ export class SalasComponent extends AbstractComponent implements OnInit {
                                                             .catch(response => {
                                                                 this.status = this.ERROR;
                                                                 console.log(response)
-                                                            }) 
+                                                            })
                                                     })
                                                     .catch(response => {
                                                         this.status = this.ERROR;
@@ -435,7 +449,7 @@ export class SalasComponent extends AbstractComponent implements OnInit {
                                             .catch(response => {
                                                 this.status = this.ERROR;
                                                 console.log(response)
-                                            })                                        
+                                            })
                                     })
                                     .catch(response => {
                                         this.status = this.ERROR;
@@ -456,7 +470,7 @@ export class SalasComponent extends AbstractComponent implements OnInit {
                 this.status = this.ERROR;
                 console.log(response)
             });
-        
+
         this.salasService.getSufixoNomeSala()
             .then(response => {
                 this.sufixoNomeSala = response;
@@ -470,7 +484,7 @@ export class SalasComponent extends AbstractComponent implements OnInit {
             jQuery(this).siblings(".custom-file-label").addClass("selected").html(fileName);
         });
     }
-    
+
     readonly TOOLTIP = '<b>Selecionar um Arquivo CSV: </b><br>'
             + 'importa um arquivo CSV que contêm os estudantes desta disciplina; o formato do arquivo deve seguir o seguinte padrão:<br>'
             + '<table>'
