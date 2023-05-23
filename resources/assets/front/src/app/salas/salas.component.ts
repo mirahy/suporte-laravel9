@@ -276,7 +276,7 @@ export class SalasComponent extends AbstractComponent implements OnInit {
         if(this.sala.observacao == null){
           //campo vazio
           this.courseImportId = "";
-      }else if(this.sala.observacao != null){
+        }else if(this.sala.observacao != null){
               if ((this.sala.observacao.match(/http/g) || []).length > 1){
                   //campo com mais de 1 url
                   this.courseImportId = "";

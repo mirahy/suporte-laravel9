@@ -20,6 +20,7 @@ use App\User;
 use App\Status;
 use Exception;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Redirect;
 
 class SalaController extends Controller
@@ -45,7 +46,7 @@ class SalaController extends Controller
     {
         return view("layouts.app-angular");
     }
-    
+
     public function listar()
     {
         return Sala::all();
@@ -57,7 +58,7 @@ class SalaController extends Controller
     }
 
     public function visualizar($id)
-    {           
+    {
         $sala = Sala::findOrFail($id);
         return view("salas.visualiza-sala", ['sala' => $sala]);
     }
@@ -79,13 +80,92 @@ class SalaController extends Controller
         if ($sufixoNomeSala === "NULL")
             return "";
         if ($sufixoNomeSala)
-            return $sufixoNomeSala; 
+            return $sufixoNomeSala;
         $pl = PeriodoLetivo::find($plId);
         if (!$pl) {
             //abort(400, "Período letivo não encontrado");
             return "";
-        } 
+        }
         return $pl->sufixo;
+    }
+
+    public function getSalaMoodle (Request $request, $id){
+
+        $linkMoodle = "http://host-apache-2/";
+        $login = substr($request->get('email'), 0, strripos($request->get('email'), "@"));
+
+        //Obter id de usuário no moodle
+        $userMoodle = Http::get($linkMoodle . 'webservice/rest/server.php/', [
+            'moodlewsrestformat'    => 'json',
+            'wstoken'               => getenv('CHAVE_USER_WEBSERVICE_MOODLE'),
+            'wsfunction'            => 'core_user_get_users_by_field',
+            'field'                 => 'username',
+            'values[0]'             => $login
+        ]);
+        $user = $userMoodle->json();
+
+        //obter curso
+        $course = Http::get($linkMoodle . 'webservice/rest/server.php/', [
+            'moodlewsrestformat'    => 'json',
+            'wstoken'               => getenv('CHAVE_USER_WEBSERVICE_MOODLE'),
+            'wsfunction'            => 'core_course_get_courses',
+            'options[ids][0]'       => $id,
+        ]);
+        if(!$course->json()){
+            abort(404, 'Sala do link informado não encontrada!');
+        }
+
+
+        //Obter perfis de usuário do curso por id
+        $response = Http::get($linkMoodle . 'webservice/rest/server.php/', [
+            'moodlewsrestformat'    => 'json',
+            'wstoken'               => getenv('CHAVE_USER_WEBSERVICE_MOODLE'),
+            'wsfunction'            => 'core_user_get_course_user_profiles',
+            'userlist[0][userid]'   => $user[0]['id'],
+            'userlist[0][courseid]' => $id
+        ]);
+        $response = $response->json();
+
+        // verificar se solicitante é professor na sala do link informado
+        $roles = $response[0]['roles'];
+        $isTeacher = false;
+        foreach($roles as $role){
+            if($role['roleid'] == 3 || $role['shortname'] == 'editingteacher' ){
+                $isTeacher = true;
+            }
+        }
+        if(!$isTeacher){
+            // se solicitante não é professor da sala, retorna o professor
+            $response = Http::get($linkMoodle . 'webservice/rest/server.php/', [
+                'moodlewsrestformat'    => 'json',
+                'wstoken'               => getenv('CHAVE_USER_WEBSERVICE_MOODLE'),
+                'wsfunction'            => 'core_enrol_get_enrolled_users',
+                'courseid'              => $id
+            ]);
+
+            $response = $response->json();
+            foreach($response as $user){
+                if($user['roles'][0]['roleid'] == 3 || $user['roles'][0]['shortname'] == 'editingteacher' ){
+                    return $user;
+                }
+            }
+        }
+
+
+        // // verificar se solicitante é professor na sala do link informado <- implementar tambem como informação na função gravar sala *******
+        // $roles = $response[0]['roles'];
+        // $isTeacher = false;
+        // foreach($roles as $role){
+        //     if($role['roleid'] == 3 || $role['shortname'] == 'editingteacher' ){
+        //         $isTeacher = true;
+        //     }
+        // }
+        // if(!$isTeacher){
+        //     abort(400, 'Solicitante não é professor na sala do link informado!');
+        // }
+
+        return $response[0];
+
     }
 
     /**
@@ -106,7 +186,7 @@ class SalaController extends Controller
             $sala->nome_professor = $usuarioLogado->name;
             $sala->email = App::make('UsuarioService')->usuarioEmail($usuarioLogado->id);
         }
-        
+
         return view("salas.cria-sala", ['sala' => $sala]);
     }
 
@@ -121,7 +201,7 @@ class SalaController extends Controller
             $sala->solicitante_id = $usuarioLogado->id;
             $sala->email = App::make('UsuarioService')->usuarioEmail($usuarioLogado->id);
         }
-        
+
         //return json_encode($sala);
         if (!$this->crivoUsuariosAutorizados($sala))
             abort(401,"Usuário não autorizado à criar salas no moodle!");
@@ -139,7 +219,7 @@ class SalaController extends Controller
         $sala = Sala::find($salaId);
         if ($sala == NULL)
             abort(404, "Sala não Encontrada");
-        if ($status == NULL) 
+        if ($status == NULL)
             $status = $request->input('status');
         if ($mensagem == NULL)
             $mensagem = $request->input('mensagem');
@@ -208,15 +288,15 @@ class SalaController extends Controller
             $sala->periodo_letivo_key = $request->input('periodo_letivo_key');
             //$sala->curso_key = $request->input('curso_key');
             $sala->disciplina_key = $request->input('disciplina_key');
-            
+
             $macro = App::make('SuperMacroService')->getMacroEspecializada($request, $sala);
             $sala->macro_id = $macro->id;
 
             $sala->estudantes = $request->input('estudantes') ?  $request->input('estudantes') : $this->findEstudantesSigecad ($request, $sala->disciplina_key, $sala->periodo_letivo_id, $sala->turma_id, $sala->turma_nome, $sala->solicitante_id);
-           
+
             if ($this->crivoUsuariosAutorizados($sala))
                 $sala->save();
-            else 
+            else
                 abort(401,"Usuário não autorizado à criar salas no moodle!");
 
             $sala = $this->posCriaSala($request, $sala);
@@ -233,7 +313,7 @@ class SalaController extends Controller
                 return ['sala' => $sala, 'email' => ($configEmail == NULL ? "" : $configEmail->valor ), 'redirect' => '/salas/success/'];
                 //return Redirect::action('SalaController@success');
             }
-            
+
             //return compact($a);
         }
     }
@@ -259,7 +339,7 @@ class SalaController extends Controller
         if ($sala == NULL) {
             if($naoAbortar)
                 return false;
-            else 
+            else
                 abort(404, "Sala não Encontrada");
         }
         if ($request->input('sala_moodle_id'))
@@ -272,14 +352,14 @@ class SalaController extends Controller
         if (!$linkServidorMoodle) {
             if($naoAbortar)
                 return false;
-            else 
+            else
                 abort(404, "Link de Servidor Moodle não encontrado");
         }
         $categoriaId = $sala->getCategoriaId();
         if (!$categoriaId) {
             if($naoAbortar)
                 return false;
-            else 
+            else
                 abort(400, "ID de Categoria não cadastrada para esta Sala");
         }
 
@@ -304,7 +384,7 @@ class SalaController extends Controller
                 'chaveWebservice' => base64_encode( env('CHAVE_WEBSERVICE_MOODLE', '') )
             ));
         curl_setopt($cURLConnection, CURLOPT_RETURNTRANSFER, true);
-        
+
         $resposta = curl_exec($cURLConnection);
         curl_close($cURLConnection);
 
@@ -351,7 +431,7 @@ class SalaController extends Controller
         $prof = User::find($solicitanteId);
         if (!$prof)
             abort(400, "Usuário não encontrado");
-        
+
         try {
             $estudantes = App::make('SigecadService')->getAcademicosDisciplina($request, $codigoDisciplina, $pl->nome, $turmaId, $turmaNome, $prof);
             if ($estudantes)
@@ -360,7 +440,7 @@ class SalaController extends Controller
         catch (Exception $e) {
             //abort(500,$e->getMessage());
         }
-        
+
         return "[]";
     }
 
@@ -371,7 +451,7 @@ class SalaController extends Controller
             $link = $request->session()->get('link');
             $request->session()->forget('link');
         }
-            
+
         return view('salas.sucesso',['link' => $link]);
     }
 
@@ -464,7 +544,7 @@ class SalaController extends Controller
             //$sala->curso_key = $request->input('curso_key');
             $sala->disciplina_key = $request->input('disciplina_key');
             $sala->sala_moodle_id = $request->input('sala_moodle_id');
-            
+
             //$macro = App::make('SuperMacroService')->getMacroEspecializada($request, $sala);
             $sala->macro_id = $request->input('macro_id');
             $sala->save();

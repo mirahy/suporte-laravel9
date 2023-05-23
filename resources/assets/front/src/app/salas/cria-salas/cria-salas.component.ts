@@ -15,7 +15,7 @@ import { PeriodoLetivo } from 'src/app/periodo-letivos/periodo-letivo';
 import { PeriodoLetivosService } from 'src/app/periodo-letivos.service';
 import { ActivatedRoute } from '@angular/router';
 import { Curso } from 'src/app/cursos/curso';
-import { IfStmt } from '@angular/compiler';
+import { forEach } from '@angular-devkit/schematics';
 declare var jQuery: any;
 
 @Component({
@@ -110,53 +110,66 @@ export class CriaSalasComponent extends AbstractComponent implements OnInit {
     getSalaMoodle(){
       this.erroAviso = false;
       this.aviso = "";
-      if(this.sala.observacao !== "" && this.validaLinkMoodle()){
-            //   this.erroAviso = false;
-            //   this.aviso = "";
-            //   jQuery('#dialogMensagem').modal('show');
-            //   var id = "";
-            //   if(this.sala.observacao != "" && this.sala.observacao.indexOf("&") > 0){
-            //     // url com mais parametros alem do id
-            //     id = this.sala.observacao.substring(this.sala.observacao.indexOf("view.php?id=")+12, this.sala.observacao.indexOf("&"));
-            //   }else{
-            //     // url somemnte com parametro id
-            //     id = this.sala.observacao.substring(this.sala.observacao.indexOf("=") + 1);
-            //   }
-            //   this.nome_sala_moodle = "tecnologia"
-            //   this.professor_sala_moodle = "mirahy"
-              // this.salasService.getSalaMoodle(id, this.sala)
-              //   .then(r => {
-
-
-              //   }).catch(response => {
-              //       this.erroAviso = true;
-              //       this.aviso = this.erroHttp(response);
-              //       this.editavel = true;
-              //   });
-            //   jQuery('#dialogMensagem').modal('hide');
-
+      this.nome_sala_moodle = "";
+      this.professor_sala_moodle = "";
+      // removendo todos os espaços em branco
+      var link = this.sala.observacao.replace(/\s+/g, '');
+      if(link !== "" && this.validaLinkMoodle()){
+              jQuery('#dialogMensagem').modal('show');
+              var id = "";
+              if(link !== "" && link.indexOf("&") > 0){
+                // url com mais parametros alem do id
+                id = link.substring(link.indexOf("view.php?id=")+12, link.indexOf("&"));
+              }else{
+                // url somemnte com parametro id
+                id = link.substring(link.indexOf("=") + 1);
+              }
+              if(id == ""){
+                jQuery('#dialogMensagem').modal('hide');
+                this.erroAviso = true;
+                this.aviso = link + "***{O ID NÃO PODE ESTAR VAZIO!!!}***"
+                return ;
+              }
+              this.salasService.getSalaMoodle(id, this.sala)
+                .then(r => {
+                  var result = r.json()
+                  var salas = result.enrolledcourses;
+                  salas.forEach(element => {
+                    if(element.id == id){
+                      this.nome_sala_moodle = element.fullname;
+                    }
+                  });
+                  this.professor_sala_moodle = result.fullname
+                }).catch(response => {
+                    this.erroAviso = true;
+                    this.aviso = this.erroHttp(response);
+                    this.editavel = true;
+                });
+              jQuery('#dialogMensagem').modal('hide');
       }
 
     }
 
     validaLinkMoodle(){
-      if(this.sala.observacao !== "" &&
-          this.sala.observacao.includes("https://presencial.ead.ufgd.edu.br/course/view.php?id=") ||
-            this.sala.observacao.includes("https://moodle.ead.ufgd.edu.br/course/view.php?id=")){
+      // removendo todos os espaços em branco
+      var link = this.sala.observacao.replace(/\s+/g, '');
+      if(link !== "" &&
+          link.includes("https://presencial.ead.ufgd.edu.br/course/view.php?id=") ||
+          link.includes("https://moodle.ead.ufgd.edu.br/course/view.php?id=") ||
+          link.includes("http://host-apache-2/course/view.php?id=")){         //link de testes, comentar em servidor da produção
           this.erroAviso = false;
           this.aviso = "";
           return true;
       }
-      else if(this.sala.observacao !== ""){
+      else if(link !== ""){
         jQuery('#dialogMensagem').modal('hide');
         this.erroAviso = true;
         this.aviso = "Link incorreto, favor inserir um link válido, ex.: 'https://moodle.ead.ufgd.edu.br/course/view.php?id=***'"
         return false;
-      }else if(this.sala.observacao == ""){
+      }else if(link == ""){
         return true;
       }
     }
-
     selecionaPeriodoLetivo () {
         if (this.sala.periodo_letivo_id) {
             this.sala.curso = "";

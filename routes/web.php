@@ -56,6 +56,7 @@ Route::get('/salas/status/{salaId}/{status}/{mensagem?}', 'SalaController@status
 //Route::get('/salas/status/{salaId}/{status}/{mensagem?}', 'TesteController@email')->where('mensagem', '(.*)');
 Route::patch('/salas/status/{salaId}', 'SalaController@statusSala');
 Route::get('/salas/mensagem/{salaId}', 'SalaController@mensagem');
+Route::post('/salas/sala-moodle/{salaId}', 'SalaController@getSalaMoodle');
 Route::post('/salas/autorestore/{salaId}', 'SalaController@executarRestauracaoAutomatica');
 Route::post('/salas/autorestore-estudantes/{salaId}', 'SalaController@exportarEstudantesMoodle');
 Route::get('/salas/success/', 'SalaController@success');

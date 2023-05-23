@@ -66,19 +66,9 @@ export class SalasService {
 
     getSalaMoodle(id, sala){
 
-      return this.http.post("/salas/salaMoodle/"+id, sala)
+      return this.http.post("/salas/sala-moodle/"+id, sala)
           .toPromise()
           .then(response => {
-              // this.salas = Sala.generateListPlus(response.json().reverse(), this.cursosService.cursosIndex);
-              /*this.salasIndex = {};
-              var ss = response.json();
-              for (var i = 0; i < ss.length; i++) {
-                  var sala = this.criaSala(ss[i]);
-                  this.salasIndex[sala.id] = sala;
-                  this.salas.push( sala );
-              }
-              this.salas.sort(this.sortSalas);*/
-              console.log(response)
               return response;
           });
 
