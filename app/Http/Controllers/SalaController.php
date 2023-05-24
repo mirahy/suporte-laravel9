@@ -117,23 +117,26 @@ class SalaController extends Controller
 
 
         //Obter perfis de usuário do curso por id
-        $response = Http::get($linkMoodle . 'webservice/rest/server.php/', [
+        $couserUser = Http::get($linkMoodle . 'webservice/rest/server.php/', [
             'moodlewsrestformat'    => 'json',
             'wstoken'               => getenv('CHAVE_USER_WEBSERVICE_MOODLE'),
             'wsfunction'            => 'core_user_get_course_user_profiles',
             'userlist[0][userid]'   => $user[0]['id'],
             'userlist[0][courseid]' => $id
         ]);
-        $response = $response->json();
+        $couserUser = $couserUser->json();
 
         // verificar se solicitante é professor na sala do link informado
-        $roles = $response[0]['roles'];
         $isTeacher = false;
-        foreach($roles as $role){
-            if($role['roleid'] == 3 || $role['shortname'] == 'editingteacher' ){
-                $isTeacher = true;
+        if(in_array("roles", $couserUser)){
+            $roles = $couserUser[0]['roles'];
+            foreach($roles as $role){
+                if($role['roleid'] == 3 || $role['shortname'] == 'editingteacher' ){
+                    $isTeacher = true;
+                }
             }
         }
+
         if(!$isTeacher){
             // se solicitante não é professor da sala, retorna o professor
             $response = Http::get($linkMoodle . 'webservice/rest/server.php/', [
@@ -143,10 +146,13 @@ class SalaController extends Controller
                 'courseid'              => $id
             ]);
 
+
             $response = $response->json();
-            foreach($response as $user){
-                if($user['roles'][0]['roleid'] == 3 || $user['roles'][0]['shortname'] == 'editingteacher' ){
-                    return $user;
+            if(in_array("roles", $response)){
+                foreach($response as $user){
+                    if($user['roles'][0]['roleid'] == 3 || $user['roles'][0]['shortname'] == 'editingteacher' ){
+                        return $user;
+                    }
                 }
             }
         }
@@ -163,8 +169,12 @@ class SalaController extends Controller
         // if(!$isTeacher){
         //     abort(400, 'Solicitante não é professor na sala do link informado!');
         // }
+        if(array_key_exists(0, $response)){
+            return $response[0];
+        }else{
+            return $response;
+        }
 
-        return $response[0];
 
     }
 
