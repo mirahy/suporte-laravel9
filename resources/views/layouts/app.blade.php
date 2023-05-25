@@ -11,22 +11,23 @@
 
     <title>{{ config('app.name') }}</title>
 
-    <link rel="shortcut icon" href="/favicon.png" />
+    <link rel="shortcut icon" href="/favicon.png?date("ymdHis")" />
 
     <!-- Styles -->
-    <link href="{{ asset('css/codigo-barras.css')}}" rel="stylesheet">
-    <link href="{{ asset('css/font/bootstrap-icons.css')}}" rel="stylesheet">
-    <link href="{{ asset('css/app.css')}}" rel="stylesheet">
+    <link href="{{ asset('css/codigo-barras.css?date("ymdHis")')}}" rel="stylesheet">
+    <link href="{{ asset('css/font/bootstrap-icons.css?date("ymdHis")')}}" rel="stylesheet">
+    <link href="{{ asset('css/app.css?date("ymdHis")')}}" rel="stylesheet">
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <!--script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script-->
 
-    <script type="text/javascript" src="{{ asset('js/browser-detect.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('js/browser-detect.js?date("ymdHis")')}}"></script>
 
     @yield('innerhead')
 
-    <link href="{{ asset('css/style.css')}}" rel="stylesheet">
+    <link href="{{ asset('css/style.css?v=@phpgetenv("VERSION_FILES")')}}" rel="stylesheet">
+    
 
     @inject('resources', 'App\Services\ResourcesService')
 </head>
@@ -263,6 +264,7 @@
     <script src="{{ asset('js/app.js')}}"></script>
     @yield('postscripts')
     <script src="{{ asset('js/post-scrips.js')}}"></script>
+    <link href="https://suporte.ead.ufgd.edu.br/css/callendar.css" rel="stylesheet">
 </body>
 
 </html>
