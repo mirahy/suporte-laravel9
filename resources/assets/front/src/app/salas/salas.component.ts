@@ -420,7 +420,7 @@ export class SalasComponent extends AbstractComponent implements OnInit {
     let link = this.sala.observacao.replace(/\s+/g, '');
     let validaLink = this.salasService.validaLinkMoodle(link);
     let id = this.salasService.getIdLinkMoodle(link);
-    if (link !== "" && validaLink['status'].value && id['status'].value) {
+    if (link !== "" && validaLink['status'].value && id['status'].value && this.sala.curso && this.sala.periodo_letivo_id) {
       jQuery('#dialogMensagem').modal('show');
       this.salasService.getSalaMoodle(id['id'].value, this.sala)
         .then(r => {

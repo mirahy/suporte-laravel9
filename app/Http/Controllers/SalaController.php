@@ -91,13 +91,31 @@ class SalaController extends Controller
 
     public function getSalaMoodle (Request $request, $id){
 
-        $linkMoodle = "http://host-apache-2/";
+        $sala = new Sala();
+        $sala->curso_id = $request->input('curso');
+        $sala->periodo_letivo_id = $request->input('periodo_letivo_id');
+        $sala->carga_horaria_total_disciplina = $request->input('carga_horaria_total_disciplina');
+
+        $macro = App::make('SuperMacroService')->getMacroEspecializada($request, $sala);
+        $sala->macro_id = $macro->id;
+
+        $linkServidorMoodle = $sala->macro->link_servidor_moodle;
+
+        if(str_contains($linkServidorMoodle,'ead'))
+            $token = getenv('CHAVE_USER_WEBSERVICE_EAD');
+        if(str_contains($linkServidorMoodle,'presencial'))
+            $token = getenv('CHAVE_USER_WEBSERVICE_PRESENCIAL');
+        if(str_contains($linkServidorMoodle,'host-apache'))
+            $token = getenv('CHAVE_USER_WEBSERVICE_LOCAL');
+
+
+
         $login = substr($request->get('email'), 0, strripos($request->get('email'), "@"));
 
         //Obter id de usuário no moodle
-        $userMoodle = Http::get($linkMoodle . 'webservice/rest/server.php/', [
+        $userMoodle = Http::get($linkServidorMoodle . '/webservice/rest/server.php/', [
             'moodlewsrestformat'    => 'json',
-            'wstoken'               => getenv('CHAVE_USER_WEBSERVICE_MOODLE'),
+            'wstoken'               => $token,
             'wsfunction'            => 'core_user_get_users_by_field',
             'field'                 => 'username',
             'values[0]'             => $login
@@ -105,9 +123,9 @@ class SalaController extends Controller
         $user = $userMoodle->json();
 
         //obter curso
-        $course = Http::get($linkMoodle . 'webservice/rest/server.php/', [
+        $course = Http::get($linkServidorMoodle . '/webservice/rest/server.php/', [
             'moodlewsrestformat'    => 'json',
-            'wstoken'               => getenv('CHAVE_USER_WEBSERVICE_MOODLE'),
+            'wstoken'               => $token,
             'wsfunction'            => 'core_course_get_courses',
             'options[ids][0]'       => $id,
         ]);
@@ -117,9 +135,9 @@ class SalaController extends Controller
 
 
         //Obter perfis de usuário do curso por id
-        $couserUser = Http::get($linkMoodle . 'webservice/rest/server.php/', [
+        $couserUser = Http::get($linkServidorMoodle . '/webservice/rest/server.php/', [
             'moodlewsrestformat'    => 'json',
-            'wstoken'               => getenv('CHAVE_USER_WEBSERVICE_MOODLE'),
+            'wstoken'               => $token,
             'wsfunction'            => 'core_user_get_course_user_profiles',
             'userlist[0][userid]'   => $user[0]['id'],
             'userlist[0][courseid]' => $id
@@ -139,9 +157,9 @@ class SalaController extends Controller
 
         if(!$isTeacher){
             // se solicitante não é professor da sala, retorna o professor
-            $response = Http::get($linkMoodle . 'webservice/rest/server.php/', [
+            $response = Http::get($linkServidorMoodle . '/webservice/rest/server.php/', [
                 'moodlewsrestformat'    => 'json',
-                'wstoken'               => getenv('CHAVE_USER_WEBSERVICE_MOODLE'),
+                'wstoken'               => $token,
                 'wsfunction'            => 'core_enrol_get_enrolled_users',
                 'courseid'              => $id
             ]);
@@ -158,7 +176,7 @@ class SalaController extends Controller
         }
 
 
-        // // verificar se solicitante é professor na sala do link informado <- implementar tambem como informação na função gravar sala *******
+        // // verificar se solicitante é professor na sala do link informado <- implementar tambem como informação na função gravar sala para exportação automática *******
         // $roles = $response[0]['roles'];
         // $isTeacher = false;
         // foreach($roles as $role){
@@ -169,6 +187,8 @@ class SalaController extends Controller
         // if(!$isTeacher){
         //     abort(400, 'Solicitante não é professor na sala do link informado!');
         // }
+
+
         if(array_key_exists(0, $response)){
             return $response[0];
         }else{
