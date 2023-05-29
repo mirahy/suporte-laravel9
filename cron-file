@@ -23,5 +23,5 @@
 # m h  dom mon dow   command
 
 MAILTO="ti.ead@ufgd.edu.br"
-1 * * * * /bin/sh /var/www/storage/app/script/gera-logs.sh
+0 2 * * * /bin/sh /var/www/storage/app/script/gera-logs.sh
 

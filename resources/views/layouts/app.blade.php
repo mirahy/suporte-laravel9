@@ -27,7 +27,7 @@
     @yield('innerhead')
 
     <link href="{{ asset('css/style.css?v=@phpgetenv("VERSION_FILES")')}}" rel="stylesheet">
-    
+
 
     @inject('resources', 'App\Services\ResourcesService')
 </head>
@@ -46,7 +46,7 @@
                         <span class="icon-bar"></span>
                     </button>
                 </div>
-            
+
 
                 <!-- Branding Image -->
                     <div class="container-flex logo-name">
@@ -256,7 +256,7 @@
 
     <footer class="footer">
         <div class="container">
-            <p>© EAD - UFGD</p>
+            <p>© EAD - UFGD 2023</p>
         </div>
     </footer>
 

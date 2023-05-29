@@ -51,7 +51,7 @@
 
                     <div class="collapse navbar-collapse" id="app-navbar-collapse">
                         <!-- Left Side Of Navbar -->
-                        
+
                     </div>
                 </div>
             </nav>
@@ -67,15 +67,15 @@
                         <div class="xdebug">
                             <table>
                                 {!! $exception->xdebug_message !!}
-                            </table> 
+                            </table>
                         </div>
                         @elseif(isset($exception->getPrevious()->xdebug_message))
                         <div class="xdebug">
                             <table>
                                 {!! $exception->getPrevious()->xdebug_message !!}
-                            </table> 
+                            </table>
                         </div>
-                        @else 
+                        @else
                             <pre style="margin: 10px; text-align: left;">
 {!! $exception !!}
                             </pre>
@@ -89,7 +89,7 @@
 
     <footer class="footer">
         <div class="container">
-            <p>© EAD - UFGD</p>
+            <p>© EAD - UFGD 2023</p>
         </div>
     </footer>
 
