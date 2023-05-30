@@ -61,6 +61,8 @@ export class SalasComponent extends AbstractComponent implements OnInit {
 
   courseImportId = "";
 
+  mensagemDialog = "Carregando dados...";
+
   constructor(private salasService: SalasService, private dadosService: DadosService, private faculdadeService: FaculdadeService, private periodoLetivoService: PeriodoLetivosService
     , private usuarioService: UsuarioService, private plDisciplinasAcademicosService: PlDisciplinasAcademicosService, private macroService: MacroService, private cursosService: CursosService) {
     super();
@@ -422,6 +424,7 @@ export class SalasComponent extends AbstractComponent implements OnInit {
     let id = this.salasService.getIdLinkMoodle(link);
     if (link !== "" && validaLink['status'].value && id['status'].value && this.sala.curso && this.sala.periodo_letivo_id) {
       jQuery('#dialogMensagem').modal('show');
+      this.mensagemDialog = "Buscando dados no moodle..."
       this.salasService.getSalaMoodle(id['id'].value, this.sala)
         .then(r => {
           var result = r.json()
@@ -433,13 +436,13 @@ export class SalasComponent extends AbstractComponent implements OnInit {
               }
             });
           this.professor_sala_moodle = result.fullname
+          jQuery('#dialogMensagem').modal('hide');
         }).catch(response => {
           this.erroAviso = true;
           this.aviso = this.erroHttp(response);
           this.editavel = true;
+          jQuery('#dialogMensagem').modal('hide');
         });
-      jQuery('#dialogMensagem').modal('hide');
-
     } else {
       jQuery('#dialogMensagem').modal('hide');
       this.erroAviso = !validaLink['status'].value || !id['status'].value;

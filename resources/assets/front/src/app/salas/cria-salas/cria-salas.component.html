@@ -46,7 +46,7 @@
                         </select>
                     </ng-container>
                     <ng-container *ngIf="faculdadeSelecionadaId">
-                        <select class="form-control" name="curso"  [disabled]="!editavel" [(ngModel)]="sala.curso" (change)="selecionaCurso()" required>
+                        <select class="form-control" name="curso"  [disabled]="!editavel" [(ngModel)]="sala.curso" (change)="selecionaCurso(); getSalaMoodle()" required>
                             <option hidden disabled selected value> -- Selecione -- </option>
                             <ng-container *ngFor="let c of faculdadeTemp.cursos">
                                 <option  *ngIf="c.ativo || sala.curso == c.id" [value]="c.id">{{c.curso_key ? c.curso_key + " - " + c.nome : c.nome}}</option>

@@ -192,7 +192,7 @@
                             </select>
                         </ng-container>
                         <ng-container *ngIf="faculdadeSelecionadaId">
-                            <select class="form-control" name="curso"  [disabled]="!editavel" [(ngModel)]="sala.curso"  (change)="selecionaCurso()" required>
+                            <select class="form-control" name="curso"  [disabled]="!editavel" [(ngModel)]="sala.curso"  (change)="selecionaCurso(); getSalaMoodle()" required>
                                 <option hidden disabled selected value> -- Selecione -- </option>
                                 <ng-container *ngFor="let c of faculdadeTemp.cursos">
                                     <option  *ngIf="c.ativo || sala.curso == c.id" [value]="c.id">{{c.nome}}</option>
@@ -598,4 +598,16 @@ BeltranoOliveira,BeltranoOliveira@ufgd.edu.br,Beltrano dos Santos Oliveira</pre>
             </div>
         </div>
     </div>
+</div>
+
+<div class="modal fade" id="dialogMensagem" tabindex="-1" role="dialog"  data-backdrop="static" aria-labelledby="dialogMensagemTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+          <div class="modal-body" style="width: 400px;">
+              <div class="alert"  [ngClass]="{'alert-info': !erroAviso, 'alert-danger': erroAviso}">
+                  <strong>{{mensagemDialog}}</strong>
+              </div>
+          </div>
+      </div>
+  </div>
 </div>
