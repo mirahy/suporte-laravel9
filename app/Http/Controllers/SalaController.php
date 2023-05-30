@@ -22,6 +22,7 @@ use Exception;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Redirect;
+use App\Http\Controllers\MessagesController;
 
 class SalaController extends Controller
 {
@@ -30,12 +31,17 @@ class SalaController extends Controller
     const STRING_BUSCA_INIC_SALAID = "Curso Criado: [";
     const STRING_BUSCA_FIM_SALAID = "]";
 
-    public function __construct()
+    protected $messagesController;
+
+    public function __construct( MessagesController $messagesController)
     {
         $this->middleware('auth');
         //$this->middleware('authdev:RubensMarcon');
         $this->middleware('permissao:'.User::PERMISSAO_ADMINISTRADOR.','.User::PERMISSAO_USUARIO);
         $this->middleware('permissao:'.User::PERMISSAO_ADMINISTRADOR)->except(['create', 'store', 'success', 'preparaCreate', 'chargeDisciplina', 'getModalidades', 'getObjetivosSalas']);
+
+        $this->messagesController  =  $messagesController;
+
     }
     /**
      * Display a listing of the resource.
@@ -120,7 +126,12 @@ class SalaController extends Controller
             'field'                 => 'username',
             'values[0]'             => $login
         ]);
-        $user = $userMoodle->json();
+        if($userMoodle->successful() && !empty($userMoodle->json())){
+            $user = $userMoodle->json();
+        }elseif($userMoodle->failed() || empty($userMoodle->json()) ){
+           $this->messagesController->messagesHttp(404 , null, 'Usuário não encontrado no moodle');
+        }
+
 
         //obter curso
         $course = Http::get($linkServidorMoodle . '/webservice/rest/server.php/', [
@@ -129,8 +140,8 @@ class SalaController extends Controller
             'wsfunction'            => 'core_course_get_courses',
             'options[ids][0]'       => $id,
         ]);
-        if(!$course->json()){
-            abort(404, 'Sala do link informado não encontrada!');
+        if($course->failed() || empty($course->json())){
+            $this->messagesController->messagesHttp(404, null, 'Sala do link informado não encontrada no moodle!');
         }
 
 
@@ -142,7 +153,11 @@ class SalaController extends Controller
             'userlist[0][userid]'   => $user[0]['id'],
             'userlist[0][courseid]' => $id
         ]);
-        $couserUser = $couserUser->json();
+        if($couserUser->successful() && !empty($couserUser->json())){
+            $couserUser = $couserUser->json();
+        }elseif($couserUser->failed() || empty($couserUser->json())){
+            $this->messagesController->messagesHttp(404, null, 'Usuário não inscrito na sala!');
+        }
 
         // verificar se solicitante é professor na sala do link informado
         $isTeacher = false;
@@ -156,24 +171,31 @@ class SalaController extends Controller
         }
 
         if(!$isTeacher){
-            // se solicitante não é professor da sala, retorna o professor
+            // se solicitante não é professor da sala, procura o professor
             $response = Http::get($linkServidorMoodle . '/webservice/rest/server.php/', [
                 'moodlewsrestformat'    => 'json',
                 'wstoken'               => $token,
                 'wsfunction'            => 'core_enrol_get_enrolled_users',
                 'courseid'              => $id
             ]);
+            if($response->successful() && !empty($response->json())){
+                $response = $response->json();
+            }elseif($response->failed() || empty($response->json())){
+                $this->messagesController->messagesHttp(404, null, 'Usuários não encontrados para a sala id '. $id .'!');
+            }
 
 
-            $response = $response->json();
             if(is_array($response)){
                 foreach($response as $user){
                     if(isset($user['roles']) && !empty($user['roles'])){
+                        unset($couserUser);
                         if($user['roles'][0]['roleid'] == 3 || $user['roles'][0]['shortname'] == 'editingteacher' ){
-                            unset($couserUser);
                             $couserUser = $user;
                             return $couserUser;
                         }
+                    }
+                    if(empty($couserUser)) {
+                        $this->messagesController->messagesHttp(404, null, 'Sala sem professores!');
                     }
 
                 }
