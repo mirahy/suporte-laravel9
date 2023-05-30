@@ -194,10 +194,9 @@ class SalaController extends Controller
                             return $couserUser;
                         }
                     }
-                    if(empty($couserUser)) {
-                        $this->messagesController->messagesHttp(404, null, 'Sala sem professores!');
-                    }
-
+                }
+                if(empty($couserUser)) {
+                    $this->messagesController->messagesHttp(404, null, 'Sala sem professores!');
                 }
             }
         }else{
