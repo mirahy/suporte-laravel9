@@ -24,6 +24,7 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Redirect;
 use App\Http\Controllers\MessagesController;
 
+
 class SalaController extends Controller
 {
     const ARQUIVO_SCRIPT_RESTAURACAO_AUTOMATICA = "auto-restore.php";
@@ -38,7 +39,8 @@ class SalaController extends Controller
         $this->middleware('auth');
         //$this->middleware('authdev:RubensMarcon');
         $this->middleware('permissao:'.User::PERMISSAO_ADMINISTRADOR.','.User::PERMISSAO_USUARIO);
-        $this->middleware('permissao:'.User::PERMISSAO_ADMINISTRADOR)->except(['create', 'store', 'success', 'preparaCreate', 'chargeDisciplina', 'getModalidades', 'getObjetivosSalas']);
+        $this->middleware('permissao:'.User::PERMISSAO_ADMINISTRADOR)->except(['create', 'store', 'success', 'preparaCreate', 'chargeDisciplina',
+         'getModalidades', 'getObjetivosSalas', 'listar', 'getSalaMoodle',  'update', 'index']);
 
         $this->messagesController  =  $messagesController;
 

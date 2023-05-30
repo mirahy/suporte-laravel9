@@ -29,10 +29,10 @@
                         <col width="25%"/>
                         <col width="125px"/>
                         <col width="100px"/>
-                        <col width="32px"/>
-                        <col width="32px"/>
-                        <col width="32px"/>
-                        <col width="32px"/>
+                        <col width="32px" *ngIf="permissao == 'ADMINISTRADOR'"/>
+                        <col width="32px" *ngIf="permissao == 'ADMINISTRADOR'"/>
+                        <col width="32px" *ngIf="permissao == 'ADMINISTRADOR'"/>
+                        <col width="32px" *ngIf="permissao == 'ADMINISTRADOR'"/>
                         <col width="32px"/>
                         <col width="36px"/>
                         <col width="15px"/>
@@ -64,10 +64,10 @@
                         <col width="25%"/>
                         <col width="125px"/>
                         <col width="110px"/>
-                        <col width="32px"/>
-                        <col width="32px"/>
-                        <col width="32px"/>
-                        <col width="32px"/>
+                        <col width="32px" *ngIf="permissao == 'ADMINISTRADOR'"/>
+                        <col width="32px" *ngIf="permissao == 'ADMINISTRADOR'"/>
+                        <col width="32px" *ngIf="permissao == 'ADMINISTRADOR'"/>
+                        <col width="32px" *ngIf="permissao == 'ADMINISTRADOR'"/>
                         <col width="32px"/>
                         <col width="36px"/>
                     </colgroup>
@@ -81,32 +81,34 @@
                             <td class="celula-trunca-texto" title="{{sala.observacao}}">{{sala.observacao}}</td>
                             <td>{{sala.created_at | formatadorData:true}}</td>
                             <td class="celula-status {{sala.status.chave}}">{{sala.status.descricao}}</td>
-                            <td >
+
+                            <td *ngIf="permissao == 'ADMINISTRADOR'">
                                 <a title="Gerar Backup" style="text-align: center; margin-left: -2px;" type="button" class="btn btn-primary botao-reduzido" href="/exec/{{sala.id}}">
                                     <span class="span-icon-button"><i class="bi bi-download"></i></span>
                                 </a>
                             </td>
-                            <td>
+
+                            <td *ngIf="permissao == 'ADMINISTRADOR'">
                                 <button style="text-align: center; margin-left: -2px;" title="Exportar Para Moodle" type="button" class="btn btn-primary botao-reduzido"  data-toggle="modal" data-target="#dialogRestore" (click)="preparaRestauracaoAutomatica(sala)">
                                     <span class="span-icon-button"><i class="bi bi-box-arrow-up-right"></i></span>
                                 </button>
                             </td>
-                            <td>
+                            <td *ngIf="permissao == 'ADMINISTRADOR' || permissao == 'USUARIO'">
                                 <button style="text-align: center; margin-left: -2px;" title="{{sala.status.chave == STATUS_INICIAL_PADRAO ? 'Editar' : 'Vizualizar'}}" type="button" class="btn btn-info botao-reduzido"  data-toggle="modal" data-target="#dialogSalas" (click)="editarVisualizar(sala, false)">
                                     <span class="span-icon-button" ><i class="bi bi-{{sala.status.chave == STATUS_INICIAL_PADRAO ? 'pencil' : 'search'}}"></i></span>
                                 </button>
                             </td>
-                            <td>
+                            <td *ngIf="permissao == 'ADMINISTRADOR'">
                                 <button style="text-align: center; margin-left: -2px;" title="Estudantes" type="button" class="btn btn-{{(sala.estudantes != null && sala.estudantes.length > 0 && sala.estudantes != '[]') ? 'info' : 'warning'}} botao-reduzido"  data-toggle="modal" data-target="#dialogMasterEstudantes" (click)="editarVisualizar(sala, true)">
                                     <span class="span-icon-button" ><i class="bi bi-person-fill"></i></span>
                                 </button>
                             </td>
-                            <td>
+                            <td *ngIf="permissao == 'ADMINISTRADOR'">
                                 <button style="text-align: center; margin-left: -2px;" title="Demanda Concluída" type="button" class="btn btn-success botao-reduzido" data-toggle="modal" data-target="#dialogStatus" (click)="preparaSetStatusSala(sala,true)" [disabled]="sala.status.chave != STATUS_INICIAL_PADRAO">
                                     <span class="span-icon-button" ><i class="bi bi-check2" style="-webkit-text-stroke-width: 0.2rem;"></i></span>
                                 </button>
                             </td>
-                            <td>
+                            <td *ngIf="permissao == 'ADMINISTRADOR'">
                                 <button style="text-align: center; margin-left: -2px;" title="Rejeitar Demanda" type="button" class="btn btn-danger botao-reduzido" data-toggle="modal" data-target="#dialogStatus" (click)="preparaSetStatusSala(sala,false)"  [disabled]="sala.status.chave != STATUS_INICIAL_PADRAO">
                                     <span class="span-icon-button"><i class="bi bi-x-lg"></i></span>
                                 </button>

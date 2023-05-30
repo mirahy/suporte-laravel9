@@ -13,7 +13,7 @@
         @if(isset($resources->permissao) && ($resources->permissao == 'ADMINISTRADOR'))
         @include('templates.cards', ['link' => '/lote-salas-simplificados', 'text' => 'Lotes Simplificados', 'classIcon' => 'bi bi-database-add', 'classLink' => '' ])
         @endif
-        @if(isset($resources->permissao) && ($resources->permissao == 'ADMINISTRADOR'))
+        @if(isset($resources->permissao) && ($resources->permissao == 'USUARIO' || $resources->permissao == 'ADMINISTRADOR'))
         @include('templates.cards', ['link' => '/salas/', 'text' => 'Lista de Solicitações', 'classIcon' => 'bi bi-list-check', 'classLink' => '' ])
         @endif
         @if(isset($resources->permissao) && ($resources->permissao == 'ADMINISTRADOR'))

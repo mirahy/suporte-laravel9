@@ -61,6 +61,7 @@ export class SalasComponent extends AbstractComponent implements OnInit {
 
   courseImportId = "";
 
+  permissao = "";
 
   constructor(private salasService: SalasService, private dadosService: DadosService, private faculdadeService: FaculdadeService, private periodoLetivoService: PeriodoLetivosService
     , private usuarioService: UsuarioService, private plDisciplinasAcademicosService: PlDisciplinasAcademicosService, private macroService: MacroService, private cursosService: CursosService) {
@@ -446,24 +447,32 @@ export class SalasComponent extends AbstractComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.dadosService.statusList()
-      .then(response => {
-        this.periodoLetivoService.getPeriodoLetivos()
+    this.usuarioService.usuarioLogado()
+    .then(response => {
+      this.permissao = response.permissao
+        this.dadosService.statusList()
           .then(response => {
-            this.usuarioService.listaUsuariosCriaSala()
+            this.periodoLetivoService.getPeriodoLetivos()
               .then(response => {
-                this.usuarios = response;
-                this.faculdadeService.listar()
+                this.usuarioService.listaUsuariosCriaSala()
                   .then(response => {
-                    this.macroService.getMacros()
+                    this.usuarios = response;
+                    this.faculdadeService.listar()
                       .then(response => {
-                        this.salasService.getObjetivosSalas()
+                        this.macroService.getMacros()
                           .then(response => {
-                            this.salasService.getModalidades()
+                            this.salasService.getObjetivosSalas()
                               .then(response => {
-                                this.salasService.listar()
+                                this.salasService.getModalidades()
                                   .then(response => {
-                                    this.status = this.COMPLETE;
+                                    this.salasService.listar()
+                                      .then(response => {
+                                        this.status = this.COMPLETE;
+                                      })
+                                      .catch(response => {
+                                        this.status = this.ERROR;
+                                        console.log(response)
+                                      })
                                   })
                                   .catch(response => {
                                     this.status = this.ERROR;
@@ -505,6 +514,7 @@ export class SalasComponent extends AbstractComponent implements OnInit {
         console.log(response)
       });
 
+
     this.salasService.getSufixoNomeSala()
       .then(response => {
         this.sufixoNomeSala = response;
@@ -512,6 +522,7 @@ export class SalasComponent extends AbstractComponent implements OnInit {
       .catch(response => {
         console.log(response)
       })
+
 
     jQuery(".custom-file-input").on("change", function () {
       var fileName = jQuery(this).val().split("\\").pop();

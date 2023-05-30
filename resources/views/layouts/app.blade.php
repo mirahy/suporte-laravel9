@@ -93,7 +93,7 @@
                                     </a>
                                 </li>
                                 @endif
-                                @if($resources->permissao == 'ADMINISTRADOR')
+                                @if($resources->permissao == 'USUARIO' || $resources->permissao == 'ADMINISTRADOR')
                                 <li>
                                     <a href="/salas/">
                                         Lista de Solicitações

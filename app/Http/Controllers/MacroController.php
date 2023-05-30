@@ -32,7 +32,7 @@ class MacroController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        $this->middleware('permissao:'.User::PERMISSAO_ADMINISTRADOR);
+        $this->middleware('permissao:'.User::PERMISSAO_ADMINISTRADOR)->except(['all']);
     }
 
     public function config() {
@@ -43,12 +43,12 @@ class MacroController extends Controller
         $idSuperMacroPadrao = Configuracoes::where('nome', Configuracoes::CONFIGURACAO_SUPER_MACRO_PADRAO)->first();
         $regexLiberados = Configuracoes::where('nome', Configuracoes::CONFIGURACAO_REGEX_EMAILS_LIBERADOS)->first();
         return view('config.geral', [
-            'emailSuporte'=> $emailSuporte->valor, 
+            'emailSuporte'=> $emailSuporte->valor,
             'periodoLetivos' => PeriodoLetivo::all(),
-            'superMacros' => SuperMacro::all(), 
-            'arquivoSaida' => $arquivoSaida->valor,  
-            'idPeriodoLetivoPadrao' => $idPeriodoLetivoPadrao->valor, 
-            'idSuperMacroPadrao' => $idSuperMacroPadrao->valor, 
+            'superMacros' => SuperMacro::all(),
+            'arquivoSaida' => $arquivoSaida->valor,
+            'idPeriodoLetivoPadrao' => $idPeriodoLetivoPadrao->valor,
+            'idSuperMacroPadrao' => $idSuperMacroPadrao->valor,
             'sufixoNomeSala' => $sufixoNomeSala->valor,
             'regexLiberados' => $regexLiberados->valor
         ]);
@@ -74,13 +74,13 @@ class MacroController extends Controller
         $regexLiberados->valor = $request->input('regex-liberados');
         $regexLiberados->save();
         return view('config.geral', [
-            'emailSuporte'=> $emailSuporte->valor, 
+            'emailSuporte'=> $emailSuporte->valor,
             'periodoLetivos' => PeriodoLetivo::all(),
-            'superMacros' => SuperMacro::all(), 
-            'arquivoSaida' => $arquivoSaida->valor, 
-            'idPeriodoLetivoPadrao' => $idPeriodoLetivoPadrao->valor, 
-            'idSuperMacroPadrao' => $idSuperMacroPadrao->valor, 
-            'sufixoNomeSala' => $sufixoNomeSala->valor, 
+            'superMacros' => SuperMacro::all(),
+            'arquivoSaida' => $arquivoSaida->valor,
+            'idPeriodoLetivoPadrao' => $idPeriodoLetivoPadrao->valor,
+            'idSuperMacroPadrao' => $idSuperMacroPadrao->valor,
+            'sufixoNomeSala' => $sufixoNomeSala->valor,
             'regexLiberados' => $regexLiberados->valor,
             'aviso' => 'Configurações Atualizadas!'
         ]);
@@ -104,7 +104,7 @@ class MacroController extends Controller
     public function index () {
         return view("layouts.app-angular");
     }
-    
+
     public function all () {
         return Macro::all();
     }
@@ -152,13 +152,13 @@ class MacroController extends Controller
         $macroSelecionada = Macro::find($request->input('id'));
         $nome = $request->input('nome');
         if ($nome == null)
-            abort(400, "Um nome deve ser Informado!"); 
+            abort(400, "Um nome deve ser Informado!");
         $periodo_letivo_id = $request->input('periodo_letivo_id');
         if ($periodo_letivo_id == null)
-            abort(400, "Um Período Letivo deve ser Informado!"); 
+            abort(400, "Um Período Letivo deve ser Informado!");
         $link_servidor_moodle = $request->input('link_servidor_moodle');
         if ($link_servidor_moodle == null)
-            abort(400, "Um Link deve ser Informado!"); 
+            abort(400, "Um Link deve ser Informado!");
         if ($macroSelecionada == null) {
             $macroSelecionada = new Macro();
         }
@@ -206,19 +206,19 @@ class MacroController extends Controller
      */
     public function store(Request $request)
     {
-        // Define o valor default para a variável que contém o nome do arquivo 
+        // Define o valor default para a variável que contém o nome do arquivo
         $nameFile = null;
-    
+
         // Verifica se informou o arquivo e se é válido
-        if (!$request->arquivo) 
+        if (!$request->arquivo)
             abort(400, "Arquivo de Upload não encontrado");
         if (!$request->file('arquivo')->isValid())
             abort(400, "Arquivo de Upload inválido");
-        
+
         // Define um aleatório para o arquivo baseado no timestamps atual
         $name = uniqid(date('HisYmd'));
 
-        // recupera o nome original do arquivo enviado, com extensão 
+        // recupera o nome original do arquivo enviado, com extensão
         $originalName =  $request->arquivo->getClientOriginalName();
 
         // Recupera a extensão do arquivo
@@ -228,7 +228,7 @@ class MacroController extends Controller
         $nameSize = strlen($originalName) - strlen ($extension) - 1;
         $originalName =  substr( $originalName, 0, $nameSize > 31 ? 31 : $nameSize);
 
-        
+
         if ($extension == "php")
             abort(400, "Vá tentar hackear a mãe!");
         /*return redirect()
@@ -362,12 +362,12 @@ class MacroController extends Controller
         $escapes   = array("\\\\", "\\'", '\\$','\\"', "&amp;", "&lt;", "&gt;");
         $entrada = str_replace($caracteres, $escapes, $entrada);
 
-        $comando = 
+        $comando =
         'entrada="'.$entrada.'"
 chave="'.$buscador->chave.'"
 find '.self::CAMINHO_STORAGE_PADRAO.'/temp -type f -exec sed -i "s/$chave/$(echo $entrada | sed -e \'s/\\\\/\\\\\\\\/g; s/\\//\\\\\//g; s/&/\\\\\\&/g\')/g" "{}" \\;';
         //$comando = "find storage/temp -type f -exec sed -i 's/".$buscador->chave."/".$entrada."/g' '{}' \;";
-        
+
         exec($comando);
     }
 
@@ -445,12 +445,12 @@ find '.self::CAMINHO_STORAGE_PADRAO.'/temp -type f -exec sed -i "s/$chave/$(echo
         $escapes   = array("\\\\", "\\'", '\\$','\\"', "&amp;", "&lt;", "&gt;");
         $entrada = str_replace($caracteres, $escapes, $entrada);
 
-        $comando = 
+        $comando =
         'entrada="'.$entrada.'"
 chave="'.$buscador->chave.'"
 find '.self::CAMINHO_STORAGE_PADRAO.'/temp -type f -exec sed -i "s/$chave/$(echo $entrada | sed -e \'s/\\\\/\\\\\\\\/g; s/\\//\\\\\//g; s/&/\\\\\\&/g\')/g" "{}" \\;';
         //$comando = "find storage/temp -type f -exec sed -i 's/".$buscador->chave."/".$entrada."/g' '{}' \;";
-        
+
         exec($comando);
     }
 
