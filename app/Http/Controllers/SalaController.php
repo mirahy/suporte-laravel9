@@ -146,7 +146,7 @@ class SalaController extends Controller
 
         // verificar se solicitante é professor na sala do link informado
         $isTeacher = false;
-        if(in_array("roles", $couserUser)){
+        if(isset($couserUser[0]['roles']) && !empty($couserUser[0]['roles'])){
             $roles = $couserUser[0]['roles'];
             foreach($roles as $role){
                 if($role['roleid'] == 3 || $role['shortname'] == 'editingteacher' ){
@@ -166,12 +166,23 @@ class SalaController extends Controller
 
 
             $response = $response->json();
-            if(in_array("roles", $response)){
+            if(is_array($response)){
                 foreach($response as $user){
-                    if($user['roles'][0]['roleid'] == 3 || $user['roles'][0]['shortname'] == 'editingteacher' ){
-                        return $user;
+                    if(isset($user['roles']) && !empty($user['roles'])){
+                        if($user['roles'][0]['roleid'] == 3 || $user['roles'][0]['shortname'] == 'editingteacher' ){
+                            unset($couserUser);
+                            $couserUser = $user;
+                            return $couserUser;
+                        }
                     }
+
                 }
+            }
+        }else{
+            if(array_key_exists(0, $couserUser)){
+                return $couserUser[0];
+            }else{
+                return $couserUser;
             }
         }
 
@@ -187,14 +198,6 @@ class SalaController extends Controller
         // if(!$isTeacher){
         //     abort(400, 'Solicitante não é professor na sala do link informado!');
         // }
-
-
-        if(array_key_exists(0, $response)){
-            return $response[0];
-        }else{
-            return $response;
-        }
-
 
     }
 
