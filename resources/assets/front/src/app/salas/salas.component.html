@@ -218,6 +218,10 @@
                         <label class="style1">Chave de Inscrição para Estudantes acessarem a sala:</label><br>
                         <input class="form-control" type="text" name="senha_aluno" placeholder="" [(ngModel)]="sala.senha_aluno" size="60" [readonly]="!editavel"><p></p>
 
+                        <ng-container *ngIf="!professor_sala_moodle && sala.observacao">
+                          <div class="style1 loadingMoodle" >Buscando dados no moodle  <div class="c-loader"></div></div><br>
+                        </ng-container>
+
                         <label class="style1">Caso deseje usar o coteúdo da sala de anos anteriores, cole o link aqui!:</label><br>
                         <input class="form-control" type="text" name="observacao" placeholder="Ex.: https://presencial.ead.ufgd.edu.br/course/view.php?id=***"
                         [(ngModel)]="sala.observacao" [readonly]="!editavel" (focusout)="getSalaMoodle()" maxlength="60"><p></p>

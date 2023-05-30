@@ -349,7 +349,7 @@ button.botao-tooltip {
 }
 .tooltip-inner {
     min-width: 100px;
-    max-width: 100%; 
+    max-width: 100%;
 }
 button.botao-reduzido, a.botao-reduzido {
     width: 25px;
@@ -423,7 +423,7 @@ td.celula-status.ANALISE, td.celula-status.PROCESSO {
     background-color: #ffd700
 }
 td.celula-status.CONCLUIDO, td.celula-status.DEFERIDO {
-    background-color: #00b900 
+    background-color: #00b900
 }
 td.celula-status.REJEITADO, td.celula-status.INDEFERIDO, td.celula-status.CANCELADO {
     background-color: #ff5050
@@ -563,7 +563,7 @@ body .ui-progressbar .ui-progressbar-value {
 .span-icone{
     display: table-cell;
     vertical-align: middle;
-    font-size: 6rem; 
+    font-size: 6rem;
     color: #025310;
 }
 
@@ -597,7 +597,7 @@ body .ui-progressbar .ui-progressbar-value {
     margin: 0 auto;
     padding-bottom: 40px;
     margin-bottom: 10px;
-    
+
 }
 
 .title-card {
@@ -612,10 +612,10 @@ body .ui-progressbar .ui-progressbar-value {
 }
 
 .title-card > a {
-    text-decoration: none;  
+    text-decoration: none;
 }
 
-.navbar-nav, 
+.navbar-nav,
 .dropdown-menu>li>a,
 .nav-app-name > a {
     color: #fafafa !important;
@@ -674,4 +674,27 @@ body .ui-progressbar .ui-progressbar-value {
 
 .navbar-nav>li>.dropdown-menu{
     background-color: #025310;
+}
+
+
+.c-loader {
+    animation: is-rotating 1s infinite;
+    border: 3px solid #e5e5e5;
+    border-radius: 50%;
+    border-top-color: #1ea04c;
+    height: 15px;
+    width: 15px;
+    margin: 2px;
+  }
+
+  @keyframes is-rotating {
+    to {
+      transform: rotate(1turn);
+    }
+  }
+
+.loadingMoodle{
+    display: inline-flex;
+    align-items: center;
+    font-weight: 600;
 }

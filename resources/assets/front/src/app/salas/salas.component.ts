@@ -61,7 +61,6 @@ export class SalasComponent extends AbstractComponent implements OnInit {
 
   courseImportId = "";
 
-  mensagemDialog = "Carregando dados...";
 
   constructor(private salasService: SalasService, private dadosService: DadosService, private faculdadeService: FaculdadeService, private periodoLetivoService: PeriodoLetivosService
     , private usuarioService: UsuarioService, private plDisciplinasAcademicosService: PlDisciplinasAcademicosService, private macroService: MacroService, private cursosService: CursosService) {
@@ -419,12 +418,10 @@ export class SalasComponent extends AbstractComponent implements OnInit {
     this.nome_sala_moodle = "";
     this.professor_sala_moodle = "";
     // removendo todos os espaços em branco
-    let link = this.sala.observacao.replace(/\s+/g, '');
+    let link = this.sala.observacao ? this.sala.observacao.replace(/\s+/g, '') : "";
     let validaLink = this.salasService.validaLinkMoodle(link);
     let id = this.salasService.getIdLinkMoodle(link);
     if (link !== "" && validaLink['status'].value && id['status'].value && this.sala.curso && this.sala.periodo_letivo_id) {
-      jQuery('#dialogMensagem').modal('show');
-      this.mensagemDialog = "Buscando dados no moodle..."
       this.salasService.getSalaMoodle(id['id'].value, this.sala)
         .then(r => {
           var result = r.json()
@@ -436,15 +433,12 @@ export class SalasComponent extends AbstractComponent implements OnInit {
               }
             });
           this.professor_sala_moodle = result.fullname
-          jQuery('#dialogMensagem').modal('hide');
         }).catch(response => {
           this.erroAviso = true;
           this.aviso = this.erroHttp(response);
           this.editavel = true;
-          jQuery('#dialogMensagem').modal('hide');
         });
     } else {
-      jQuery('#dialogMensagem').modal('hide');
       this.erroAviso = !validaLink['status'].value || !id['status'].value;
       this.aviso = validaLink['msg'] ? validaLink['msg'].value : "" ||  id['msg'] ? id['msg'].value : "" ;
     }

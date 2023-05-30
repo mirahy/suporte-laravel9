@@ -120,7 +120,7 @@ export class CriaSalasComponent extends AbstractComponent implements OnInit {
     this.nome_sala_moodle = "";
     this.professor_sala_moodle = "";
     // removendo todos os espaços em branco
-    let link = this.sala.observacao.replace(/\s+/g, '');
+    let link = this.sala.observacao ? this.sala.observacao.replace(/\s+/g, '') : "";
     let validaLink = this.salasService.validaLinkMoodle(link);
     let id = this.salasService.getIdLinkMoodle(link);
     if (link !== "" && validaLink['status'].value && id['status'].value  && this.sala.curso && this.sala.periodo_letivo_id) {
