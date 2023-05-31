@@ -188,6 +188,7 @@ return [
         App\Providers\SalaServiceProvider::class,
         App\Providers\SalaSimplificadaServiceProvider::class,
         App\Providers\GrupoLotesSimplificadoServiceProvider::class,
+        App\Providers\MessagesServiceProvider::class,
     ],
 
     /*
