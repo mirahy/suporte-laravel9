@@ -76,8 +76,8 @@
                     <input class="form-control" type="text" name="senha_aluno" placeholder="" [(ngModel)]="sala.senha_aluno" size="60" [readonly]="!editavel"><p></p>
 
                     <label class="style1">Caso deseje usar o coteúdo da sala de anos anteriores, cole o link aqui!:</label><br>
-                    <input class="form-control" type="text" name="observacao" placeholder="Ex.: https://presencial.ead.ufgd.edu.br/course/view.php?id=***"
-                    [(ngModel)]="sala.observacao" [readonly]="!editavel" (focusout)="getSalaMoodle()" maxlength="60"><p></p>
+                    <input class="form-control" type="text" name="link_backup_moodle" placeholder="Ex.: https://presencial.ead.ufgd.edu.br/course/view.php?id=***"
+                    [(ngModel)]="sala.link_backup_moodle" [readonly]="!editavel" (focusout)="getSalaMoodle()" maxlength="60"><p></p>
 
                     <ng-container *ngIf="nome_sala_moodle">
                       <label class="style1">Nome da sala moodle:</label><br>
@@ -90,6 +90,9 @@
                       <input class="form-control" type="text" name="professor_sala_moodle" placeholder="Professor da sala no moodle" [(ngModel)]="professor_sala_moodle"
                       disabled><p></p>
                     </ng-container>
+
+                    <label class="style1">Observação:</label><br>
+                    <textarea class="form-control" type="text" name="observacao" placeholder="" [(ngModel)]="sala.observacao" [readonly]="!editavel"></textarea><p></p>
                     <!--label class="style1">Estudantes:</label><br>
                     <table class="table">
                         <caption *ngIf="estudantes.length == 0">

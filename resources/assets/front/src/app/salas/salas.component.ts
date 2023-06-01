@@ -62,6 +62,7 @@ export class SalasComponent extends AbstractComponent implements OnInit {
   courseImportId = "";
 
   permissao = "";
+  toDisplay = false;
 
   constructor(private salasService: SalasService, private dadosService: DadosService, private faculdadeService: FaculdadeService, private periodoLetivoService: PeriodoLetivosService
     , private usuarioService: UsuarioService, private plDisciplinasAcademicosService: PlDisciplinasAcademicosService, private macroService: MacroService, private cursosService: CursosService) {
@@ -174,34 +175,42 @@ export class SalasComponent extends AbstractComponent implements OnInit {
 
   atualizarSala() {
     // removendo todos os espaços em branco
-    let link = this.sala.observacao.replace(/\s+/g, '');
-    let validaLink = this.salasService.validaLinkMoodle(link);
-    if (validaLink['status'].value) {
-      this.sala.estudantes = Estudante.converteEstudantesParaJSON(this.estudantes);
-      if (this.plDisciplinasAcademicosService.plDisciplinasAcademicosNameIndex.get(this.sala.nome_sala.replace(" " + this.sufixoNomeSala, "")))
-        this.salasService.aplicarPlDisciplina(this.sala, this.plDisciplinasAcademicosService.plDisciplinasAcademicosNameIndex.get(this.sala.nome_sala.replace(" " + this.sufixoNomeSala, "")))
-      else
-        this.salasService.aplicarPlDisciplina(this.sala, PlDisciplinasAcademicos.generatePlDisciplinasAcademicos())
-      this.salasService.atualizarSala(this.sala)
-        .then(response => {
-          if (response) {
-            this.erroAviso = true;
-            this.aviso = this.erroHttp(response);
-          }
-          else {
-            this.erroAviso = false;
-            this.aviso = "Sala Atualizada!";
-            jQuery('#dialogSalas').modal('hide');
-          }
-        }).catch(response => {
-          this.erroAviso = true;
-          this.aviso = this.erroHttp(response);
-        })
-    }else {
-      jQuery('#dialogMensagem').modal('hide');
-      this.erroAviso = !validaLink['status'].value;
-      this.aviso = validaLink['msg'] ? validaLink['msg'].value : "";
-    }
+    let link = this.sala.link_backup_moodle ? this.sala.link_backup_moodle.replace(/\s+/g, '') : "";
+    this.salasService.validaLinkMoodle(link)
+      .then(response =>{
+        let validaLink = response;
+        let id = this.salasService.getIdLinkMoodle(link);
+        if (validaLink['status'].value && id['status'].value) {
+          this.sala.estudantes = Estudante.converteEstudantesParaJSON(this.estudantes);
+          if (this.plDisciplinasAcademicosService.plDisciplinasAcademicosNameIndex.get(this.sala.nome_sala.replace(" " + this.sufixoNomeSala, "")))
+            this.salasService.aplicarPlDisciplina(this.sala, this.plDisciplinasAcademicosService.plDisciplinasAcademicosNameIndex.get(this.sala.nome_sala.replace(" " + this.sufixoNomeSala, "")))
+          else
+            this.salasService.aplicarPlDisciplina(this.sala, PlDisciplinasAcademicos.generatePlDisciplinasAcademicos())
+          this.salasService.atualizarSala(this.sala)
+            .then(response => {
+              if (response) {
+                this.erroAviso = true;
+                this.aviso = this.erroHttp(response);
+              }
+              else {
+                this.erroAviso = false;
+                this.aviso = "Sala Atualizada!";
+                jQuery('#dialogSalas').modal('hide');
+              }
+            }).catch(response => {
+              this.erroAviso = true;
+              this.aviso = this.erroHttp(response);
+            })
+        }else {
+          jQuery('#dialogMensagem').modal('hide');
+            this.erroAviso = !validaLink['status'].value || !id['status'].value;
+            this.aviso = validaLink['msg'] ? validaLink['msg'].value : "" ||  id['msg'] ? id['msg'].value : "";
+        }
+      }).catch(response => {
+        this.erroAviso = true;
+        this.aviso = this.erroHttp(response);
+      })
+
 
   }
 
@@ -418,31 +427,43 @@ export class SalasComponent extends AbstractComponent implements OnInit {
     this.aviso = "";
     this.nome_sala_moodle = "";
     this.professor_sala_moodle = "";
+    this.toDisplay = true;
     // removendo todos os espaços em branco
-    let link = this.sala.observacao ? this.sala.observacao.replace(/\s+/g, '') : "";
-    let validaLink = this.salasService.validaLinkMoodle(link);
-    let id = this.salasService.getIdLinkMoodle(link);
-    if (link !== "" && validaLink['status'].value && id['status'].value && this.sala.curso && this.sala.periodo_letivo_id) {
-      this.salasService.getSalaMoodle(id['id'].value, this.sala)
-        .then(r => {
-          var result = r.json()
-          var salas = result.enrolledcourses;
-          if (salas != null)
-            salas.forEach(element => {
-              if (element.id == id['id'].value) {
-                this.nome_sala_moodle = element.fullname;
-              }
-            });
-          this.professor_sala_moodle = result.fullname
-        }).catch(response => {
-          this.erroAviso = true;
-          this.aviso = this.erroHttp(response);
-          this.editavel = true;
-        });
-    } else {
-      this.erroAviso = !validaLink['status'].value || !id['status'].value;
-      this.aviso = validaLink['msg'] ? validaLink['msg'].value : "" ||  id['msg'] ? id['msg'].value : "" ;
-    }
+    let link = this.sala.link_backup_moodle ? this.sala.link_backup_moodle.replace(/\s+/g, '') : "";
+    this.salasService.validaLinkMoodle(link)
+      .then(response =>{
+        let validaLink = response;
+        let id = this.salasService.getIdLinkMoodle(link);
+          if (link !== "" && validaLink['status'].value && id['status'].value && this.sala.curso && this.sala.periodo_letivo_id) {
+            this.salasService.getSalaMoodle(id['id'].value, this.sala)
+              .then(r => {
+                var result = r.json()
+                var salas = result.enrolledcourses;
+                if (salas != null)
+                  salas.forEach(element => {
+                    if (element.id == id['id'].value) {
+                      this.nome_sala_moodle = element.fullname;
+                    }
+                  });
+                this.professor_sala_moodle = result.fullname
+                this.toDisplay = false;
+              }).catch(response => {
+                this.toDisplay = false;
+                this.erroAviso = true;
+                this.aviso = this.erroHttp(response);
+                this.editavel = true;
+              });
+          } else {
+            this.toDisplay = false;
+            this.erroAviso = !validaLink['status'].value || !id['status'].value;
+            this.aviso = validaLink['msg'] ? validaLink['msg'].value : "" ||  id['msg'] ? id['msg'].value : "" ;
+          }
+      }).catch(response => {
+        this.toDisplay = false;
+        this.erroAviso = true;
+        this.aviso = this.erroHttp(response);
+        this.editavel = true;
+      });
 
   }
 

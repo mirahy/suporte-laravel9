@@ -6,6 +6,7 @@ import { CursosService } from './cursos.service';
 import { PlDisciplinasAcademicos } from './pl-disciplinas-academicos/pl-disciplinas-academicos';
 import { PeriodoLetivo } from './periodo-letivos/periodo-letivo';
 import { PeriodoLetivosService } from './periodo-letivos.service';
+import { ServidoresMoodleService } from './servidores-moodle.service';
 
 @Injectable(
   //{ providedIn: 'root'}
@@ -16,7 +17,9 @@ export class SalasService {
   modalidades: Array<any>;
   objetivosSalas: Array<any>;
 
-  constructor(private http: Http, private cursosService: CursosService, private periodoLetivoService: PeriodoLetivosService) { }
+
+  constructor(private http: Http, private cursosService: CursosService, private periodoLetivoService: PeriodoLetivosService,
+              private servidoresMoodleService: ServidoresMoodleService) { }
 
   atualizarSala(sala: Sala): Promise<boolean> {
     return this.http.post('salas/' + sala.id, sala)
@@ -194,6 +197,7 @@ export class SalasService {
     //sala.modalidade = s.modalidade;
     //sala.objetivo_sala = s.objetivo_sala;
     //sala.observacao = s.observacao;
+    //sala.link_backup_moodle = s.link_backup_moodle;
     //sala.senha_aluno = s.senha_aluno;
     //sala.estudantes = s.estudantes;
     //sala.periodo_letivo_id =  this.periodoLetivoService.periodoLetivosKeyIndex.get( s.periodo_letivo_id ).id.toString();
@@ -229,31 +233,42 @@ export class SalasService {
   }
 
   validaLinkMoodle(link: string) {
-    // removendo todos os espaços em branco
-    link = link ? link.replace(/\s+/g, ''): "";
-    let retorno = {};
-    if (link !== "" &&
-      link.indexOf("http") == 0 && (
-        link.includes("https://presencial.ead.ufgd.edu.br/course/view.php?id=") ||
-        link.includes("https://moodle.ead.ufgd.edu.br/course/view.php?id=") ||
-        link.includes("http://host-apache-2/course/view.php?id=")
-      )) {         //link de testes, comentar em servidor da produção
-      //retorna true se o campo não for vazio e igual a um dos links acima  <- implementar para puxar links dos moodle do BD
-      retorno = { status: { value: true } };
-      return retorno;
-    }
-    else if (link !== "") {
-      //retorna false se não o campo não for vazio e o link e diferente dos listados
-      retorno = {
-        status: { value: false },
-        msg: { value: "Link incorreto, favor inserir um link válido, ex.: 'https://moodle.ead.ufgd.edu.br/course/view.php?id=***'" }
-      };
-      return retorno;
-    } else if (link == "") {
-      //retorna true se o campo for vazio
-      retorno = { status: { value: true } };
-      return retorno;
-    }
+    return this.servidoresMoodleService.getLinksServidoresMoodle()
+    .then(results =>{
+      link = link ? link.replace(/\s+/g, ''): "";
+      let retorno = {};
+      let links;
+      let linksValid =  false;
+      let msgLink = "";
+      links = results;
+      links.forEach(element => {
+        if (link.includes(element + '/course/view.php?id=')){
+          linksValid = true;
+        }
+        if (link.includes(element) && !linksValid){
+          msgLink = element + '/course/view.php?id=***';
+        }
+      });
+      if (link !== "" && link.indexOf("http") == 0 && linksValid) {
+        //retorna true se o campo não for vazio e igual a um dos links acima
+        retorno = { status: { value: true } };
+        return retorno;
+      }
+      else if (link !== "") {
+        //retorna false se não o campo não for vazio e o link e diferente dos listados
+        msgLink = msgLink ? msgLink : 'https://moodle.ead.ufgd.edu.br/course/view.php?id=***'
+        retorno = {
+          status: { value: false },
+          msg: { value: "Link incorreto, favor inserir um link válido, ex.: " + msgLink }
+        };
+        return retorno;
+      } else if (link == "") {
+        //retorna true se o campo for vazio
+        retorno = { status: { value: true } };
+        return retorno;
+      }
+    })
+
   }
 
   getIdLinkMoodle(link: string) {

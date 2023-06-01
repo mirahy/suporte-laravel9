@@ -3,7 +3,7 @@ import { Curso } from '../cursos/curso';
 import { ArrayIndexador } from '../array-indexador';
 
 export class Sala {
-    
+
     id: number;
     email: string;
     curso;
@@ -13,6 +13,7 @@ export class Sala {
     modalidade: string;
     objetivo_sala: string;
     observacao: string;
+    link_backup_moodle: string;
     senha_aluno: string;
     status: Status;
     estudantes: string;
@@ -24,7 +25,7 @@ export class Sala {
     avaliacao = "";
     turma_id = "";
     periodo_letivo_key = "";
-    curso_key = ""; 
+    curso_key = "";
     disciplina_key = "";
 
     solicitante_id = "";
@@ -37,8 +38,8 @@ export class Sala {
 
     created_at: Date;
 
-    public constructor (id: number, curso, email: string, mensagem: string, nome_professor: string, nome_sala: string, modalidade: string, objetivo_sala: string, 
-        observacao: string, senha_aluno: string, status: Status, estudantes: string, periodo_letivo_id, macro_id, sala_moodle_id, created_at: Date){
+    public constructor (id: number, curso, email: string, mensagem: string, nome_professor: string, nome_sala: string, modalidade: string, objetivo_sala: string,
+        observacao: string, link_backup_moodle :string, senha_aluno: string, status: Status, estudantes: string, periodo_letivo_id, macro_id, sala_moodle_id, created_at: Date){
 
         this.id = id;
         this.curso = curso;
@@ -49,6 +50,7 @@ export class Sala {
         this.modalidade = modalidade;
         this.objetivo_sala = objetivo_sala;
         this.observacao = observacao;
+        this.link_backup_moodle = link_backup_moodle;
         this.senha_aluno = senha_aluno;
         this.status = status;
         this.estudantes = estudantes;
@@ -85,6 +87,7 @@ export class Sala {
             salaAny.modalidade,
             salaAny.objetivo_sala,
             salaAny.observacao,
+            salaAny.link_backup_moodle,
             salaAny.senha_aluno,
             Status.generateStatus (salaAny.status),
             salaAny.estudantes,
@@ -104,7 +107,7 @@ export class Sala {
     }
 
     public static geraNovaSala() {
-        return new Sala(0,"","","","","","","","","",Status.novoStatus(),"","",0,0,new Date());
+        return new Sala(0,"","","","","","","","","","",Status.novoStatus(),"","",0,0,new Date());
     }
 
     public clone() {

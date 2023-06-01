@@ -220,13 +220,13 @@
                         <label class="style1">Chave de Inscrição para Estudantes acessarem a sala:</label><br>
                         <input class="form-control" type="text" name="senha_aluno" placeholder="" [(ngModel)]="sala.senha_aluno" size="60" [readonly]="!editavel"><p></p>
 
-                        <ng-container *ngIf="!professor_sala_moodle && sala.observacao">
+                        <ng-container *ngIf="toDisplay && !professor_sala_moodle && !nome_sala_moodle && sala.link_backup_moodle">
                           <div class="style1 loadingMoodle" >Buscando dados no moodle  <div class="c-loader"></div></div><br>
                         </ng-container>
 
                         <label class="style1">Caso deseje usar o coteúdo da sala de anos anteriores, cole o link aqui!:</label><br>
-                        <input class="form-control" type="text" name="observacao" placeholder="Ex.: https://presencial.ead.ufgd.edu.br/course/view.php?id=***"
-                        [(ngModel)]="sala.observacao" [readonly]="!editavel" (focusout)="getSalaMoodle()" maxlength="60"><p></p>
+                        <input class="form-control" type="text" name="link_backup_moodle" placeholder="Ex.: https://presencial.ead.ufgd.edu.br/course/view.php?id=***"
+                        [(ngModel)]="sala.link_backup_moodle" [readonly]="!editavel" (focusout)="getSalaMoodle()" maxlength="60"><p></p>
 
                         <ng-container *ngIf="nome_sala_moodle">
                           <label class="style1">Nome da sala moodle:</label><br>
@@ -239,6 +239,9 @@
                           <input class="form-control" type="text" name="professor_sala_moodle" placeholder="Professor da sala no moodle" [(ngModel)]="professor_sala_moodle"
                           disabled><p></p>
                         </ng-container>
+
+                        <label class="style1">Observação:</label><br>
+                        <textarea class="form-control" type="text" name="observacao" placeholder="" [(ngModel)]="sala.observacao" [readonly]="!editavel"></textarea><p></p>
 
                         <button *ngIf="!mostraMais" style="width: 100%;" type="button" (click)="mostraMais = true">
                             <i class="bi bi-arrow-down-short"></i> Mais <i class="bi bi-arrow-down-short"></i>
