@@ -332,6 +332,7 @@ class SalaController extends Controller
             $sala->senha_aluno = $request->input('senha_aluno');
             //$sala->senha_professor = $request->input('senha_professor');
             $sala->observacao = $request->input('observacao');
+            $sala->link_backup_moodle = $request->input('link_backup_moodle');
             $sala->status = Status::where('chave', Status::STATUS_PADRAO_INICIO)->first();
             $sala->periodo_letivo_id = $request->input('periodo_letivo_id');
             $sala->carga_horaria_total_disciplina = $request->input('carga_horaria_total_disciplina');
@@ -586,6 +587,7 @@ class SalaController extends Controller
             $sala->senha_aluno = $request->input('senha_aluno');
             //$sala->senha_professor = $request->input('senha_professor');
             $sala->observacao = $request->input('observacao');
+            $sala->link_backup_moodle = $request->input('link_backup_moodle');
             $sala->estudantes = $request->input('estudantes');
 
             $sala->periodo_letivo_id = $request->input('periodo_letivo_id');

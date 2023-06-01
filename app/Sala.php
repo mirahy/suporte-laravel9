@@ -21,6 +21,7 @@ class Sala extends Model
         'senha_aluno',
         //'senha_professor',
         'observacao',
+        'link_backup_moodle',
         'estudantes',
         'mensagem',
         //'solicitante',
@@ -51,6 +52,7 @@ class Sala extends Model
         'senha_aluno',
         //'senha_professor',
         'observacao',
+        'link_backup_moodle',
         'status',
         'estudantes',
         'mensagem',
@@ -86,7 +88,7 @@ class Sala extends Model
             return 0;
         return $this->macro->periodo_letivo_id;
     }*/
-    
+
     public function macro()
     {
         return $this->belongsTo('App\Macro');
@@ -106,12 +108,12 @@ class Sala extends Model
     {
         return $this->belongsTo('App\PeriodoLetivo','periodo_letivo_id');
     }
-    
+
     public function loteSalas()
-    { 
+    {
         return $this->belongsTo('App\LoteSalas', '');
     }
-    
+
     public function getEstudantesComProfessor()
     {
         $solicitante = $this->solicitante;
@@ -124,7 +126,7 @@ class Sala extends Model
         $ob[] = $professor;
         return json_encode($ob);
     }
-    
+
     public function getCategoriaId() {
         $plc = PeriodoLetivoCategoria::where(['curso_id' => $this->curso_id, 'periodo_letivo_id'=>$this->periodo_letivo_id])->first();
         if ($plc && $plc->categoria_id)

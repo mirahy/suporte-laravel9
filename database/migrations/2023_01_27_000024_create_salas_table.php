@@ -31,6 +31,7 @@ return new class extends Migration
             $table->string('objetivo_sala', 31)->nullable()->default(null);
             $table->string('senha_aluno')->nullable()->default(null);
             $table->text('observacao')->nullable()->default(null);
+            $table->string('link_backup_moodle', 100)->nullable()->default(null);
             $table->text('estudantes')->nullable()->default(null);
             $table->string('mensagem')->nullable()->default(null);
             $table->decimal('carga_horaria_total_disciplina', 5, 2)->nullable()->default(null);
