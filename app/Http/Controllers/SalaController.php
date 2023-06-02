@@ -54,7 +54,13 @@ class SalaController extends Controller
 
     public function listar()
     {
-        return Sala::all();
+        $usuarioLogado = Auth::user();
+        if($usuarioLogado->isAdmin()){
+            return Sala::all();
+        }elseif ($usuarioLogado->isUser()) {
+            return Sala::where('solicitante_id', $usuarioLogado->id)->get();
+        }
+
     }
 
     public function criar()
@@ -104,7 +110,7 @@ class SalaController extends Controller
         $macro = App::make('SuperMacroService')->getMacroEspecializada($request, $sala);
         $sala->macro_id = $macro->id;
 
-        $linkServidorMoodle = $sala->macro->link_servidor_moodle;
+        $linkServidorMoodle = $sala->macro->link_servidor_moodle;  //<--- verificar se link é o mesmo do moodle da sala solicitada
 
         if(str_contains($linkServidorMoodle,'ead'))
             $token = getenv('CHAVE_USER_WEBSERVICE_EAD');

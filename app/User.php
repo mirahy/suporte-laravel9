@@ -43,4 +43,12 @@ class User extends Authenticatable2 implements Authenticatable
     public function isAdmin() {
         return $this->permissao == self::PERMISSAO_ADMINISTRADOR;
     }
+
+    public function isUser() {
+        return $this->permissao == self::PERMISSAO_USUARIO;
+    }
+
+    public function isInative() {
+        return $this->permissao == self::PERMISSAO_INATIVO;
+    }
 }
