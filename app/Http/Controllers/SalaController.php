@@ -123,107 +123,119 @@ class SalaController extends Controller
 
         $login = substr($request->get('email'), 0, strripos($request->get('email'), "@"));
 
-        //Obter id de usuário no moodle
-        $userMoodle = Http::get($linkServidorMoodle . '/webservice/rest/server.php/', [
-            'moodlewsrestformat'    => 'json',
-            'wstoken'               => $token,
-            'wsfunction'            => 'core_user_get_users_by_field',
-            'field'                 => 'username',
-            'values[0]'             => $login
-        ]);
-        if($userMoodle->successful() && !empty($userMoodle->json())){
-            $user = $userMoodle->json();
-        }elseif($userMoodle->failed() || empty($userMoodle->json()) ){
-            App::make('MessagesService')->messagesHttp(404 , null, 'Usuário não encontrado no moodle');
-        }
-
-
-        //obter curso
-        $course = Http::get($linkServidorMoodle . '/webservice/rest/server.php/', [
-            'moodlewsrestformat'    => 'json',
-            'wstoken'               => $token,
-            'wsfunction'            => 'core_course_get_courses',
-            'options[ids][0]'       => $id,
-        ]);
-        if($course->failed() || empty($course->json())){
-            App::make('MessagesService')->messagesHttp(404, null, 'Sala do link informado não encontrada no moodle!');
-        }
-
-
-        //Obter perfis de usuário do curso por id
-        $couserUser = Http::get($linkServidorMoodle . '/webservice/rest/server.php/', [
-            'moodlewsrestformat'    => 'json',
-            'wstoken'               => $token,
-            'wsfunction'            => 'core_user_get_course_user_profiles',
-            'userlist[0][userid]'   => $user[0]['id'],
-            'userlist[0][courseid]' => $id
-        ]);
-        if($couserUser->successful() && !empty($couserUser->json())){
-            $couserUser = $couserUser->json();
-        }elseif($couserUser->failed() || empty($couserUser->json())){
-            App::make('MessagesService')->messagesHttp(404, null, 'Usuário não inscrito na sala!');
-        }
-
-        // verificar se solicitante é professor na sala do link informado
-        $isTeacher = false;
-        if(isset($couserUser[0]['roles']) && !empty($couserUser[0]['roles'])){
-            $roles = $couserUser[0]['roles'];
-            foreach($roles as $role){
-                if($role['roleid'] == 3 || $role['shortname'] == 'editingteacher' ){
-                    $isTeacher = true;
-                }
-            }
-        }
-
-        if(!$isTeacher){
-            // se solicitante não é professor da sala, procura o professor
-            $response = Http::get($linkServidorMoodle . '/webservice/rest/server.php/', [
+        try {
+            //Obter id de usuário no moodle
+            $userMoodle = Http::get($linkServidorMoodle . '/webservice/rest/server.php/', [
                 'moodlewsrestformat'    => 'json',
                 'wstoken'               => $token,
-                'wsfunction'            => 'core_enrol_get_enrolled_users',
-                'courseid'              => $id
+                'wsfunction'            => 'core_user_get_users_by_field',
+                'field'                 => 'username',
+                'values[0]'             => $login
             ]);
-            if($response->successful() && !empty($response->json())){
-                $response = $response->json();
-            }elseif($response->failed() || empty($response->json())){
-                App::make('MessagesService')->messagesHttp(404, null, 'Usuários não encontrados para a sala id '. $id .'!');
+            if($userMoodle->successful() && !empty($userMoodle->json())){
+                $user = $userMoodle->json();
+            }elseif($userMoodle->failed() || empty($userMoodle->json()) ){
+                App::make('MessagesService')->messagesHttp(404 , null, 'Usuário não encontrado no moodle');
             }
 
 
-            if(is_array($response)){
-                foreach($response as $user){
-                    if(isset($user['roles']) && !empty($user['roles'])){
-                        unset($couserUser);
-                        if($user['roles'][0]['roleid'] == 3 || $user['roles'][0]['shortname'] == 'editingteacher' ){
-                            $couserUser = $user;
-                            return $couserUser;
-                        }
+            //obter curso
+            $course = Http::get($linkServidorMoodle . '/webservice/rest/server.php/', [
+                'moodlewsrestformat'    => 'json',
+                'wstoken'               => $token,
+                'wsfunction'            => 'core_course_get_courses',
+                'options[ids][0]'       => $id,
+            ]);
+            if($course->failed() || empty($course->json())){
+                App::make('MessagesService')->messagesHttp(404, null, 'Sala do link informado não encontrada no moodle!');
+            }
+
+
+            //Obter perfis de usuário do curso por id
+            $couserUser = Http::get($linkServidorMoodle . '/webservice/rest/server.php/', [
+                'moodlewsrestformat'    => 'json',
+                'wstoken'               => $token,
+                'wsfunction'            => 'core_user_get_course_user_profiles',
+                'userlist[0][userid]'   => $user[0]['id'],
+                'userlist[0][courseid]' => $id
+            ]);
+            if($couserUser->successful() && !empty($couserUser->json())){
+                $couserUser = $couserUser->json();
+            }elseif($couserUser->failed() || empty($couserUser->json())){
+                App::make('MessagesService')->messagesHttp(404, null, 'Usuário não inscrito na sala!');
+            }
+
+            // verificar se solicitante é professor na sala do link informado
+            $isTeacher = false;
+            if(isset($couserUser[0]['roles']) && !empty($couserUser[0]['roles'])){
+                $roles = $couserUser[0]['roles'];
+                foreach($roles as $role){
+                    if($role['roleid'] == 3 || $role['shortname'] == 'editingteacher' ){
+                        $isTeacher = true;
                     }
                 }
-                if(empty($couserUser)) {
-                    App::make('MessagesService')->messagesHttp(404, null, 'Sala sem professores!');
+            }
+
+            if(!$isTeacher){
+                // se solicitante não é professor da sala, procura o professor
+                $response = Http::get($linkServidorMoodle . '/webservice/rest/server.php/', [
+                    'moodlewsrestformat'    => 'json',
+                    'wstoken'               => $token,
+                    'wsfunction'            => 'core_enrol_get_enrolled_users',
+                    'courseid'              => $id
+                ]);
+                if($response->successful() && !empty($response->json())){
+                    $response = $response->json();
+                }elseif($response->failed() || empty($response->json())){
+                    App::make('MessagesService')->messagesHttp(404, null, 'Usuários não encontrados para a sala id '. $id .'!');
+                }
+
+
+                if(is_array($response)){
+                    foreach($response as $user){
+                        if(isset($user['roles']) && !empty($user['roles'])){
+                            unset($couserUser);
+                            if($user['roles'][0]['roleid'] == 3 || $user['roles'][0]['shortname'] == 'editingteacher' ){
+                                $couserUser = $user;
+                                return $couserUser;
+                            }
+                        }
+                    }
+                    if(empty($couserUser)) {
+                        App::make('MessagesService')->messagesHttp(404, null, 'Sala sem professores!');
+                    }
+                }
+            }else{
+                if(array_key_exists(0, $couserUser)){
+                    return $couserUser[0];
+                }else{
+                    return $couserUser;
                 }
             }
-        }else{
-            if(array_key_exists(0, $couserUser)){
-                return $couserUser[0];
+
+
+            // // verificar se solicitante é professor na sala do link informado <- implementar tambem como informação na função gravar sala para exportação automática *******
+            // $roles = $response[0]['roles'];
+            // $isTeacher = false;
+            // foreach($roles as $role){
+            //     if($role['roleid'] == 3 || $role['shortname'] == 'editingteacher' ){
+            //         $isTeacher = true;
+            //     }
+            // }
+            // if(!$isTeacher){
+            //     abort(400, 'Solicitante não é professor na sala do link informado!');
+            // }
+
+        } catch (\Throwable $th) {
+            if(getenv('APP_DEBUG') == false){
+                $configEmail = Configuracoes::where('nome', Configuracoes::CONFIGURACAO_EMAIL_SUPORTE)->first();
+                App::make('MessagesService')->messagesHttp(500, null, 'Erro do Servidor na consulta de sala no moodle, entrar em contato com o suporte através do email: '. $configEmail->valor);
+            }elseif(getenv('APP_DEBUG') == true){
+                App::make('MessagesService')->messagesHttp(500, null, $th->getMessage());
             }else{
-                return $couserUser;
+                App::make('MessagesService')->messagesHttp(500, null, "");
             }
         }
-
-
-        // // verificar se solicitante é professor na sala do link informado <- implementar tambem como informação na função gravar sala para exportação automática *******
-        // $roles = $response[0]['roles'];
-        // $isTeacher = false;
-        // foreach($roles as $role){
-        //     if($role['roleid'] == 3 || $role['shortname'] == 'editingteacher' ){
-        //         $isTeacher = true;
-        //     }
-        // }
-        // if(!$isTeacher){
-        //     abort(400, 'Solicitante não é professor na sala do link informado!');
-        // }
 
     }
 
