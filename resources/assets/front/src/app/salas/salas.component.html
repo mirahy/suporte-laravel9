@@ -146,18 +146,14 @@
                             <strong *ngIf="erroAviso && sala.status.chave == STATUS_INICIAL_PADRAO">
                                 <span class="span-icon-button"><i class="bi bi-info-circle"></i></span>Falha!
                             </strong>
-                            <ng-container *ngIf="aviso.indexOf('http') > -1 ">
+                            <ng-container *ngIf="sala.status.chave == STATUS_CONCLUIDO_PADRAO">
                               <span class="span-icon-button" style="padding-right: 2px;"><i class="bi bi-link-45deg"></i></span>
                               <a href="{{aviso}}" target="_blank">{{aviso}}</a>
                             </ng-container>
-                            <!-- <ng-container *ngIf="!aviso.indexOf('http') > -1">
+                            <ng-container *ngIf="sala.status.chave == STATUS_REJEITADO_PADRAO">
                               <span class="span-icon-button" style="padding-right: 2px;"></span>
-                              <a href="{{aviso}}" target="_blank">{{aviso}}</a>
-                            </ng-container> -->
-
-
-                            <span class="span-icon-button" style="padding-right: 2px;"><i class="bi bi-link-45deg"></i></span>
-                            <a href="{{aviso}}" target="_blank">{{aviso}}</a>
+                              {{aviso}}
+                            </ng-container>
                         </div>
                         <label class="style1">Nome completo: *</label><br>
                         <input *ngIf="usuarios.length == 0" class="form-control" type="text" name="nome_professor" placeholder="Nome completo" [(ngModel)]="sala.nome_professor" size="60" disabled>
