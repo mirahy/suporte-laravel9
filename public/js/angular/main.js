@@ -10152,9 +10152,6 @@ var SalasComponent = /** @class */ (function (_super) {
             alert(_this_1.aviso);
             _this_1.editavel = sala.status.chave == _this_1.STATUS_INICIAL_PADRAO;
         });
-        console.log("chave: " + sala.status.chave);
-        console.log("Aviso: " + this.aviso);
-        console.log("erroAviso: " + this.erroAviso);
         //window.location.href = ('/salas/' + sala.id + '/' + (sala.status.chave == STATUS_INICIAL_PADRAO ? 'edit' : ''));
     };
     SalasComponent.prototype.preparaSetStatusSala = function (sala, isConcluido) {
@@ -10476,8 +10473,6 @@ var SalasComponent = /** @class */ (function (_super) {
                 _this_1.sala.status.chave == _this_1.STATUS_INICIAL_PADRAO ? _this_1.erroAviso = !validaLink['status'].value || !id['status'].value : '';
                 _this_1.sala.status.chave == _this_1.STATUS_INICIAL_PADRAO ?
                     _this_1.aviso = validaLink['msg'] ? validaLink['msg'].value :  false || id['msg'] ? id['msg'].value : "" : '';
-                console.log("Aviso: " + _this_1.aviso);
-                console.log("erroAviso: " + _this_1.erroAviso);
             }
         }).catch(function (response) {
             _this_1.toDisplay = false;

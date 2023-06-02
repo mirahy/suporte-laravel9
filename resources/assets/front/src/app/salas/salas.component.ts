@@ -136,10 +136,6 @@ export class SalasComponent extends AbstractComponent implements OnInit {
         alert(this.aviso)
         this.editavel = sala.status.chave == this.STATUS_INICIAL_PADRAO;
       });
-
-      console.log("chave: " + sala.status.chave)
-      console.log("Aviso: " + this.aviso)
-      console.log("erroAviso: " + this.erroAviso)
     //window.location.href = ('/salas/' + sala.id + '/' + (sala.status.chave == STATUS_INICIAL_PADRAO ? 'edit' : ''));
   }
 
@@ -464,8 +460,6 @@ export class SalasComponent extends AbstractComponent implements OnInit {
             this.sala.status.chave == this.STATUS_INICIAL_PADRAO ? this.erroAviso = !validaLink['status'].value || !id['status'].value : '';
             this.sala.status.chave == this.STATUS_INICIAL_PADRAO ?
             this.aviso = validaLink['msg'] ? validaLink['msg'].value : "" ||  id['msg'] ? id['msg'].value : "" : '';
-            console.log("Aviso: " + this.aviso)
-            console.log("erroAviso: " + this.erroAviso)
           }
       }).catch(response => {
         this.toDisplay = false;
