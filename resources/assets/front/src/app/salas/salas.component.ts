@@ -136,6 +136,10 @@ export class SalasComponent extends AbstractComponent implements OnInit {
         alert(this.aviso)
         this.editavel = sala.status.chave == this.STATUS_INICIAL_PADRAO;
       });
+
+      console.log("chave: " + sala.status.chave)
+      console.log("Aviso: " + this.aviso)
+      console.log("erroAviso: " + this.erroAviso)
     //window.location.href = ('/salas/' + sala.id + '/' + (sala.status.chave == STATUS_INICIAL_PADRAO ? 'edit' : ''));
   }
 
@@ -164,6 +168,9 @@ export class SalasComponent extends AbstractComponent implements OnInit {
         if (response) {
           alert(this.erroHttp(response))
           return;
+        }
+        if(!response){
+          this.sala.mensagem = this.mensagem
         }
         jQuery('#dialogStatus').modal('hide');
       })
@@ -296,7 +303,7 @@ export class SalasComponent extends AbstractComponent implements OnInit {
     this.editarVisualizar(sala, true);
     this.erroAviso = false;
     jQuery('#saidaRestore').html('<div  style="text-align: center"><b>...</b></div>');
-    let id = this.salasService.getIdLinkMoodle(this.sala.observacao);
+    let id = this.salasService.getIdLinkMoodle(this.sala.link_backup_moodle);
     this.courseImportId = id['id'].value;
     //this.editavel = true;
     this.blockAutoRestore = false;
@@ -388,7 +395,6 @@ export class SalasComponent extends AbstractComponent implements OnInit {
   }
   selecionaUsuario(event) {
     var id = event.substring(0, event.indexOf(' - '));
-    console.log(id);
     this.sala.solicitante_id = id;
     this.nome_professor_temp = event.substring(event.indexOf(' - ') + 3);
   }
@@ -423,8 +429,8 @@ export class SalasComponent extends AbstractComponent implements OnInit {
 
 
   getSalaMoodle() {
-    this.erroAviso = false;
-    this.aviso = "";
+    this.sala.status.chave == this.STATUS_INICIAL_PADRAO ? this.erroAviso = false : '';
+    this.sala.status.chave == this.STATUS_INICIAL_PADRAO ? this.aviso = "" : '';
     this.nome_sala_moodle = "";
     this.professor_sala_moodle = "";
     this.toDisplay = true;
@@ -455,8 +461,11 @@ export class SalasComponent extends AbstractComponent implements OnInit {
               });
           } else {
             this.toDisplay = false;
-            this.erroAviso = !validaLink['status'].value || !id['status'].value;
-            this.aviso = validaLink['msg'] ? validaLink['msg'].value : "" ||  id['msg'] ? id['msg'].value : "" ;
+            this.sala.status.chave == this.STATUS_INICIAL_PADRAO ? this.erroAviso = !validaLink['status'].value || !id['status'].value : '';
+            this.sala.status.chave == this.STATUS_INICIAL_PADRAO ?
+            this.aviso = validaLink['msg'] ? validaLink['msg'].value : "" ||  id['msg'] ? id['msg'].value : "" : '';
+            console.log("Aviso: " + this.aviso)
+            console.log("erroAviso: " + this.erroAviso)
           }
       }).catch(response => {
         this.toDisplay = false;
