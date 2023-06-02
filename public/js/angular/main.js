@@ -10465,7 +10465,7 @@ var SalasComponent = /** @class */ (function (_super) {
                     _this_1.toDisplay = false;
                     _this_1.erroAviso = true;
                     _this_1.aviso = _this_1.erroHttp(response);
-                    _this_1.editavel = true;
+                    _this_1.sala.status.chave == _this_1.STATUS_INICIAL_PADRAO ? _this_1.editavel = true : '';
                 });
             }
             else {
@@ -10478,7 +10478,7 @@ var SalasComponent = /** @class */ (function (_super) {
             _this_1.toDisplay = false;
             _this_1.erroAviso = true;
             _this_1.aviso = _this_1.erroHttp(response);
-            _this_1.editavel = true;
+            _this_1.sala.status.chave == _this_1.STATUS_INICIAL_PADRAO ? _this_1.editavel = true : '';
         });
     };
     SalasComponent.prototype.ngOnInit = function () {

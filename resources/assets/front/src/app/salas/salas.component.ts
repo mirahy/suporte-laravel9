@@ -453,7 +453,7 @@ export class SalasComponent extends AbstractComponent implements OnInit {
                 this.toDisplay = false;
                 this.erroAviso = true;
                 this.aviso = this.erroHttp(response);
-                this.editavel = true;
+                this.sala.status.chave == this.STATUS_INICIAL_PADRAO ? this.editavel = true : '';
               });
           } else {
             this.toDisplay = false;
@@ -465,7 +465,7 @@ export class SalasComponent extends AbstractComponent implements OnInit {
         this.toDisplay = false;
         this.erroAviso = true;
         this.aviso = this.erroHttp(response);
-        this.editavel = true;
+        this.sala.status.chave == this.STATUS_INICIAL_PADRAO ? this.editavel = true : '';
       });
 
   }
