@@ -106,18 +106,24 @@ class SalaController extends Controller
         $sala->curso_id = $request->input('curso');
         $sala->periodo_letivo_id = $request->input('periodo_letivo_id');
         $sala->carga_horaria_total_disciplina = $request->input('carga_horaria_total_disciplina');
+        $link_backup_moodle = $request->input('link_backup_moodle');
 
         $macro = App::make('SuperMacroService')->getMacroEspecializada($request, $sala);
         $sala->macro_id = $macro->id;
 
         $linkServidorMoodle = $sala->macro->link_servidor_moodle;  //<--- verificar se link é o mesmo do moodle da sala solicitada
-
-        if(str_contains($linkServidorMoodle,'ead'))
+        $token = '';
+        if(str_contains($linkServidorMoodle,'ead') && str_contains($sala->link_backup_moodle,'ead'))
             $token = getenv('CHAVE_USER_WEBSERVICE_EAD');
-        if(str_contains($linkServidorMoodle,'presencial'))
+        if(str_contains($linkServidorMoodle,'presencial') && str_contains($sala->link_backup_moodle,'presencial'))
             $token = getenv('CHAVE_USER_WEBSERVICE_PRESENCIAL');
-        if(str_contains($linkServidorMoodle,'host-apache'))
+        if(str_contains($linkServidorMoodle,'host-apache') && str_contains($sala->link_backup_moodle,'host-apache'))
             $token = getenv('CHAVE_USER_WEBSERVICE_LOCAL');
+        if(!$token)
+            App::make('MessagesService')->messagesHttp(404 , null, 'O link do conteúdo para restaurar: ' .
+                                                        substr($link_backup_moodle,0, strpos($link_backup_moodle, 'br') ?
+                                                        strpos($link_backup_moodle, 'br')+2 : 36).', é divergente do
+                                                        link onde irá gerar a sala: '. $linkServidorMoodle );
 
 
 
