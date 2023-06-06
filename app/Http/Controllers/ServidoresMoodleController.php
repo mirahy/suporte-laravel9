@@ -7,15 +7,17 @@ use App\User;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Http;
 
 class ServidoresMoodleController extends Controller
 {
     public function __construct()
     {
         $this->middleware('auth');
-        $this->middleware('permissao:'.User::PERMISSAO_ADMINISTRADOR);
+        $this->middleware('permissao:'.User::PERMISSAO_ADMINISTRADOR)->except(['links']);
     }
-    
+
     public function all()
     {
         return ServidorMoodle::all();
@@ -82,7 +84,7 @@ class ServidoresMoodleController extends Controller
     }
 
     private function executarExportacaoEstudantes(Request $request, $estudantes, $linkServidorMoodle, $courseId, $senhaPadrao, $modo = 'cadastra') {
-        
+
         $categoriaId = null;
 
         $curlFile = null;
@@ -103,7 +105,7 @@ class ServidoresMoodleController extends Controller
                 'chaveWebservice' => base64_encode( env('CHAVE_WEBSERVICE_MOODLE', '') )
             ));
         curl_setopt($cURLConnection, CURLOPT_RETURNTRANSFER, true);
-        
+
         $resposta = curl_exec($cURLConnection);
         curl_close($cURLConnection);
         return $resposta;
@@ -193,7 +195,7 @@ class ServidoresMoodleController extends Controller
     public function destroy($id)
     {
         $servidorMoodle = ServidorMoodle::find($id);
-        if (!$servidorMoodle) 
+        if (!$servidorMoodle)
             abort(404, 'Servidor Moodle não encontrado');
         try{
             $servidorMoodle->delete();
@@ -203,4 +205,91 @@ class ServidoresMoodleController extends Controller
             abort(404, $e->getMessage());
         }
     }
+
+    public function getTokem($sala, $linkServidorMoodle){
+
+        $link_backup_moodle = $sala->link_backup_moodle;
+        $token = '';
+        if(str_contains($linkServidorMoodle,'ead') && str_contains($sala->link_backup_moodle,'ead'))
+            $token = getenv('CHAVE_USER_WEBSERVICE_EAD');
+        if(str_contains($linkServidorMoodle,'presencial') && str_contains($sala->link_backup_moodle,'presencial'))
+            $token = getenv('CHAVE_USER_WEBSERVICE_PRESENCIAL');
+        if(str_contains($linkServidorMoodle,'host-apache') && str_contains($sala->link_backup_moodle,'host-apache'))
+            $token = getenv('CHAVE_USER_WEBSERVICE_LOCAL');
+        if(!$token)
+            App::make('MessagesService')->messagesHttp(404 , null, 'O link do conteúdo para restaurar: ' .
+                                                        substr($link_backup_moodle,0, strpos($link_backup_moodle, 'br') ?
+                                                        strpos($link_backup_moodle, 'br')+2 : 36).', é divergente do link onde irá gerar a sala: '.
+                                                        $linkServidorMoodle );
+
+        return $token;
+
+    }
+
+    public function getUser($login, $linkServidorMoodle, $token){
+        //Obter id de usuário no moodle
+        $userMoodle = Http::get($linkServidorMoodle . '/webservice/rest/server.php/', [
+            'moodlewsrestformat'    => 'json',
+            'wstoken'               => $token,
+            'wsfunction'            => 'core_user_get_users_by_field',
+            'field'                 => 'username',
+            'values[0]'             => $login
+        ]);
+        if($userMoodle->successful() && !empty($userMoodle->json())){
+            $user = $userMoodle->json();
+        }elseif($userMoodle->failed() || empty($userMoodle->json()) ){
+            App::make('MessagesService')->messagesHttp(404 , null, 'Usuário não encontrado no moodle');
+        }
+
+        return $user;
+    }
+
+    public function getCourse($id, $linkServidorMoodle, $token){
+        //obter curso
+        $course = Http::get($linkServidorMoodle . '/webservice/rest/server.php/', [
+            'moodlewsrestformat'    => 'json',
+            'wstoken'               => $token,
+            'wsfunction'            => 'core_course_get_courses',
+            'options[ids][0]'       => $id,
+        ]);
+        if($course->failed() || empty($course->json())){
+            App::make('MessagesService')->messagesHttp(404, null, 'Sala do link informado não encontrada no moodle!');
+        }
+        return $course;
+    }
+
+    public function getCourseUser($id, $userId, $linkServidorMoodle, $token){
+        //Obter perfis de usuário do curso por id
+        $couserUser = Http::get($linkServidorMoodle . '/webservice/rest/server.php/', [
+            'moodlewsrestformat'    => 'json',
+            'wstoken'               => $token,
+            'wsfunction'            => 'core_user_get_course_user_profiles',
+            'userlist[0][userid]'   => $userId,
+            'userlist[0][courseid]' => $id
+        ]);
+        if($couserUser->successful() && !empty($couserUser->json())){
+            $couserUser = $couserUser->json();
+        }elseif($couserUser->failed() || empty($couserUser->json())){
+            App::make('MessagesService')->messagesHttp(404, null, 'Usuário não inscrito na sala!');
+        }
+        return $couserUser;
+    }
+
+    public function getUsersByCourse($id, $linkServidorMoodle, $token){
+        //retorna tosdos os inscritos no curso do id passado
+        $response = Http::get($linkServidorMoodle . '/webservice/rest/server.php/', [
+                    'moodlewsrestformat'    => 'json',
+                    'wstoken'               => $token,
+                    'wsfunction'            => 'core_enrol_get_enrolled_users',
+                    'courseid'              => $id
+                ]);
+                if($response->successful() && !empty($response->json())){
+                    $response = $response->json();
+                }elseif($response->failed() || empty($response->json())){
+                    App::make('MessagesService')->messagesHttp(404, null, 'Não há inscritos na sala id '. $id .'!');
+                }
+        return $response;
+    }
+
+
 }

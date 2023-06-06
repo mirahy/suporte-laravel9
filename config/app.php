@@ -189,6 +189,8 @@ return [
         App\Providers\SalaSimplificadaServiceProvider::class,
         App\Providers\GrupoLotesSimplificadoServiceProvider::class,
         App\Providers\MessagesServiceProvider::class,
+        App\Providers\ServidoresMoodleServiceProvider::class,
+
     ],
 
     /*

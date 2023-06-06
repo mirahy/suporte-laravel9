@@ -106,70 +106,26 @@ class SalaController extends Controller
         $sala->curso_id = $request->input('curso');
         $sala->periodo_letivo_id = $request->input('periodo_letivo_id');
         $sala->carga_horaria_total_disciplina = $request->input('carga_horaria_total_disciplina');
-        $link_backup_moodle = $request->input('link_backup_moodle');
+        $sala->link_backup_moodle = $request->input('link_backup_moodle');
 
         $macro = App::make('SuperMacroService')->getMacroEspecializada($request, $sala);
         $sala->macro_id = $macro->id;
+        $linkServidorMoodle = $sala->macro->link_servidor_moodle;
 
-        $linkServidorMoodle = $sala->macro->link_servidor_moodle;  //<--- verificar se link é o mesmo do moodle da sala solicitada
-        $token = '';
-        if(str_contains($linkServidorMoodle,'ead') && str_contains($sala->link_backup_moodle,'ead'))
-            $token = getenv('CHAVE_USER_WEBSERVICE_EAD');
-        if(str_contains($linkServidorMoodle,'presencial') && str_contains($sala->link_backup_moodle,'presencial'))
-            $token = getenv('CHAVE_USER_WEBSERVICE_PRESENCIAL');
-        if(str_contains($linkServidorMoodle,'host-apache') && str_contains($sala->link_backup_moodle,'host-apache'))
-            $token = getenv('CHAVE_USER_WEBSERVICE_LOCAL');
-        if(!$token)
-            App::make('MessagesService')->messagesHttp(404 , null, 'O link do conteúdo para restaurar: ' .
-                                                        substr($link_backup_moodle,0, strpos($link_backup_moodle, 'br') ?
-                                                        strpos($link_backup_moodle, 'br')+2 : 36).', é divergente do
-                                                        link onde irá gerar a sala: '. $linkServidorMoodle );
-
-
+        //Obter tokem referente ao link informado
+        $token = App::make('ServidoresMoodleService')->getTokem($sala, $linkServidorMoodle );
 
         $login = substr($request->get('email'), 0, strripos($request->get('email'), "@"));
 
         try {
             //Obter id de usuário no moodle
-            $userMoodle = Http::get($linkServidorMoodle . '/webservice/rest/server.php/', [
-                'moodlewsrestformat'    => 'json',
-                'wstoken'               => $token,
-                'wsfunction'            => 'core_user_get_users_by_field',
-                'field'                 => 'username',
-                'values[0]'             => $login
-            ]);
-            if($userMoodle->successful() && !empty($userMoodle->json())){
-                $user = $userMoodle->json();
-            }elseif($userMoodle->failed() || empty($userMoodle->json()) ){
-                App::make('MessagesService')->messagesHttp(404 , null, 'Usuário não encontrado no moodle');
-            }
-
+            $user = App::make('ServidoresMoodleService')->getUser($login, $linkServidorMoodle, $token);
 
             //obter curso
-            $course = Http::get($linkServidorMoodle . '/webservice/rest/server.php/', [
-                'moodlewsrestformat'    => 'json',
-                'wstoken'               => $token,
-                'wsfunction'            => 'core_course_get_courses',
-                'options[ids][0]'       => $id,
-            ]);
-            if($course->failed() || empty($course->json())){
-                App::make('MessagesService')->messagesHttp(404, null, 'Sala do link informado não encontrada no moodle!');
-            }
-
+            $course = App::make('ServidoresMoodleService')->getCourse($id, $linkServidorMoodle, $token);
 
             //Obter perfis de usuário do curso por id
-            $couserUser = Http::get($linkServidorMoodle . '/webservice/rest/server.php/', [
-                'moodlewsrestformat'    => 'json',
-                'wstoken'               => $token,
-                'wsfunction'            => 'core_user_get_course_user_profiles',
-                'userlist[0][userid]'   => $user[0]['id'],
-                'userlist[0][courseid]' => $id
-            ]);
-            if($couserUser->successful() && !empty($couserUser->json())){
-                $couserUser = $couserUser->json();
-            }elseif($couserUser->failed() || empty($couserUser->json())){
-                App::make('MessagesService')->messagesHttp(404, null, 'Usuário não inscrito na sala!');
-            }
+            $couserUser = App::make('ServidoresMoodleService')->getCourseUser($id, $user[0]['id'], $linkServidorMoodle, $token);
 
             // verificar se solicitante é professor na sala do link informado
             $isTeacher = false;
@@ -184,18 +140,7 @@ class SalaController extends Controller
 
             if(!$isTeacher){
                 // se solicitante não é professor da sala, procura o professor
-                $response = Http::get($linkServidorMoodle . '/webservice/rest/server.php/', [
-                    'moodlewsrestformat'    => 'json',
-                    'wstoken'               => $token,
-                    'wsfunction'            => 'core_enrol_get_enrolled_users',
-                    'courseid'              => $id
-                ]);
-                if($response->successful() && !empty($response->json())){
-                    $response = $response->json();
-                }elseif($response->failed() || empty($response->json())){
-                    App::make('MessagesService')->messagesHttp(404, null, 'Usuários não encontrados para a sala id '. $id .'!');
-                }
-
+                $response = App::make('ServidoresMoodleService')->getUsersByCourse($id, $linkServidorMoodle, $token);
 
                 if(is_array($response)){
                     foreach($response as $user){
