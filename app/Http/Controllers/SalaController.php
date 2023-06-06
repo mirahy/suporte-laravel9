@@ -591,6 +591,24 @@ class SalaController extends Controller
         $sala->save();
     }
 
+    public function sendEmail($id, Request $request,){
+        $sala = Sala::find($id);
+        $configEmail = Configuracoes::where('nome', Configuracoes::CONFIGURACAO_EMAIL_SUPORTE)->first();
+        $configSeparadorEmail = Configuracoes::where('nome', Configuracoes::CONFIGURACAO_SEPARADOR_EMAIL)->first();
+        if (config('app.debug')) {
+            return ['sala' => $sala, 'email' => ($configEmail == NULL ? "" : $configEmail->valor ), 'redirect' => ''];
+        }
+        else {
+            Mail::to(array_map('trim', explode($configSeparadorEmail, $sala->email)))
+                ->cc($configEmail != null ? array_map('trim', explode($configSeparadorEmail, $configEmail->valor)) : "")
+                ->send(new SendMailUser($sala));
+            return ['sala' => $sala, 'email' => ($configEmail == NULL ? "" : $configEmail->valor ), 'redirect' => '/salas/success/'];
+            //return Redirect::action('SalaController@success');
+        }
+
+        return false;
+    }
+
     /**
      * Remove the specified resource from storage.
      *

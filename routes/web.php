@@ -61,6 +61,7 @@ Route::post('/salas/autorestore/{salaId}', 'SalaController@executarRestauracaoAu
 Route::post('/salas/autorestore-estudantes/{salaId}', 'SalaController@exportarEstudantesMoodle');
 Route::get('/salas/success/', 'SalaController@success');
 Route::post('/salas/{sala}/', 'SalaController@update');
+Route::post('/salas/sendemail/{salaId}', 'SalaController@sendEmail');
 Route::get('/salas/listar', 'SalaController@listar');
 Route::get('/salas/preparacreate', 'SalaController@preparaCreate');
 Route::get('/salas/modalidades', 'SalaController@getModalidades');

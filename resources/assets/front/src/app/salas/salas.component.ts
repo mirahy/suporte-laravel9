@@ -38,6 +38,9 @@ export class SalasComponent extends AbstractComponent implements OnInit {
   mensagem: string = "";
   mostraMais = false;
 
+  salaResp = Sala.geraNovaSala();
+  emailResp = "";
+
   estudantes: Array<Estudante> = [];
   estudanteTemp: Estudante = new Estudante("", "", "", false);
 
@@ -468,6 +471,21 @@ export class SalasComponent extends AbstractComponent implements OnInit {
         this.sala.status.chave == this.STATUS_INICIAL_PADRAO ? this.editavel = true : '';
       });
 
+  }
+
+  sendEmail(sala: Sala) {
+    this.salasService.sendEmail(sala.id)
+      .then(r => {
+        let sala = r.json()
+        console.log(sala)
+        this.salaResp = sala.sala;
+        this.salaResp.curso = this.cursosService.cursosIndex.get(sala.sala.curso_id);
+        this.emailResp = sala.email;
+        jQuery('#dialogCreate').modal('show');
+      })
+      .catch(response => {
+        alert(this.erroHttp(response));
+      });
   }
 
   ngOnInit() {

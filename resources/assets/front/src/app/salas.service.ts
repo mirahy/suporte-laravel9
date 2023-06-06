@@ -163,6 +163,7 @@ export class SalasService {
     sala.modalidade = s.modalidade;
     sala.objetivo_sala = s.objetivo_sala;
     sala.observacao = s.observacao;
+    sala.link_backup_moodle = s.link_backup_moodle;
     sala.senha_aluno = s.senha_aluno;
     //sala.estudantes = s.estudantes;
     sala.periodo_letivo_id = s.periodo_letivo_id;
@@ -309,6 +310,16 @@ export class SalasService {
       id: { value: id }
     };
     return retorno;
+  }
+
+  sendEmail(id) {
+    return this.http.post('/salas/sendemail/' + id, id).toPromise()
+      .then(response => {
+        return response;
+      })
+      .catch(response => {
+        return response;
+      });
   }
 
 }

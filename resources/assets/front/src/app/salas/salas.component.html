@@ -33,6 +33,7 @@
                         <col width="32px" *ngIf="permissao == 'ADMINISTRADOR'"/>
                         <col width="32px" *ngIf="permissao == 'ADMINISTRADOR'"/>
                         <col width="32px" *ngIf="permissao == 'ADMINISTRADOR'"/>
+                        <col width="32px" *ngIf="permissao == 'ADMINISTRADOR'"/>
                         <col width="32px"/>
                         <col width="36px"/>
                         <col width="15px"/>
@@ -47,7 +48,7 @@
                             <th class="celula-trunca-texto" title="OBSERVACAO">OBSERVACAO</th>
                             <th>DATA/HORA</th>
                             <th style="text-align: center">STATUS</th>
-                            <th colspan="6" style="text-align: center">AÇÕES</th>
+                            <th colspan="7" style="text-align: center">AÇÕES</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -64,6 +65,7 @@
                         <col width="25%"/>
                         <col width="125px"/>
                         <col width="110px"/>
+                        <col width="32px" *ngIf="permissao == 'ADMINISTRADOR'"/>
                         <col width="32px" *ngIf="permissao == 'ADMINISTRADOR'"/>
                         <col width="32px" *ngIf="permissao == 'ADMINISTRADOR'"/>
                         <col width="32px" *ngIf="permissao == 'ADMINISTRADOR'"/>
@@ -103,6 +105,11 @@
                                     <span class="span-icon-button" ><i class="bi bi-person-fill"></i></span>
                                 </button>
                             </td>
+                            <td *ngIf="permissao == 'ADMINISTRADOR'">
+                              <button style="text-align: center; margin-left: -2px;" title="Enviar e-mail" type="button" class="btn btn-success botao-reduzido"  data-toggle="" data-target="" (click)="sendEmail(sala)">
+                                  <span class="span-icon-button" ><i class="bi bi-envelope-at"></i></span>
+                              </button>
+                          </td>
                             <td *ngIf="permissao == 'ADMINISTRADOR'">
                                 <button style="text-align: center; margin-left: -2px;" title="Demanda Concluída" type="button" class="btn btn-success botao-reduzido" data-toggle="modal" data-target="#dialogStatus" (click)="preparaSetStatusSala(sala,true)" [disabled]="sala.status.chave != STATUS_INICIAL_PADRAO">
                                     <span class="span-icon-button" ><i class="bi bi-check2" style="-webkit-text-stroke-width: 0.2rem;"></i></span>
@@ -612,6 +619,53 @@ BeltranoOliveira,BeltranoOliveira@ufgd.edu.br,Beltrano dos Santos Oliveira</pre>
               <div class="alert"  [ngClass]="{'alert-info': !erroAviso, 'alert-danger': erroAviso}">
                   <strong>{{mensagemDialog}}</strong>
               </div>
+          </div>
+      </div>
+  </div>
+</div>
+
+<div class="modal fade" id="dialogCreate" tabindex="-1" role="dialog" aria-labelledby="dialogCreateTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLongTitle">Email enviado!!!</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+              </button>
+          </div>
+          <div class="modal-body" style="width: 700px;">
+              <h2 style="font-weight: normal;">Solicitação de criação de sala: <b>{{ salaResp.nome_sala }}</b></h2>
+              <p></p>
+              <p>Nome: <b>{{ salaResp.nome_professor }}</b></p>
+              <p>Faculdade: <b>{{ salaResp.curso?.faculdade?.sigla }}</b></p>
+              <p>Curso: <b>{{ salaResp.curso?.nome }}</b></p>
+              <p>Senha para Estudantes acessarem a sala: <b *ngIf="salaResp.senha_aluno != null && salaResp.senha_aluno != ''">{{ salaResp.senha_aluno }}</b> <i *ngIf="salaResp.senha_aluno == null || salaResp.senha_aluno == ''" style="color: gray;">sem senha</i></p>
+              <p *ngIf="salaResp.link_backup_moodle != null && salaResp.link_backup_moodle != ''">Link Backup: <b>{{salaResp.link_backup_moodle }}</b></p>
+              <p *ngIf="salaResp.observacao != null && salaResp.observacao != ''">Observação: <b>{{salaResp.observacao }}</b></p>
+              <p>Status: <b><span style=" padding: 3px">{{ salaResp.status.descricao }}</span></b>
+              <ng-container  *ngIf="salaResp.mensagem != null && salaResp.mensagem != ''">
+                  <br/>
+                  <ng-container  *ngIf="salaResp.status.chave == STATUS_CONCLUIDO_PADRAO">
+                      Link da Sala: <b><a href="{{ salaResp.mensagem }}">{{ salaResp.mensagem }}</a></b>
+                  </ng-container>
+                  <ng-container  *ngIf="salaResp.status.chave == STATUS_REJEITADO_PADRAO">
+                      Justificativa: <b><span style="color: red">{{  salaResp.mensagem }}</span></b>
+                  </ng-container>
+              </ng-container>
+              </p>
+              <p></p>
+              <br/>
+              <br/>
+              <p style="color: gray;"><i>Este é um email automático enviado pelo sistema, não responda este email!</i> </p>
+              <p></p>
+              © Equipe EAD <br/>
+              <p>Contato: <a href="mailto:{{emailResp}}">{{emailResp}}</a></p>
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-secondary botao-barra" data-dismiss="modal" title="Fechar">
+                  <span class="glyphicon glyphicon-log-out"></span>
+                  Fechar
+              </button>
           </div>
       </div>
   </div>
