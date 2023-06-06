@@ -29,6 +29,7 @@
     <link href="{{ asset('css/style.css')}}" rel="stylesheet">
 
     @inject('resources', 'App\Services\ResourcesService')
+    @inject('nameUser', 'App\Services\NameUserService')
 </head>
 
 <body>
@@ -225,7 +226,7 @@
                         <li class="dropdown drop-user">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" v-pre>
                             <i class="bi bi-person-circle"></i>
-                                <span class="name-person">{{ Auth::user()->name }}</span>
+                                <span class="name-person">{{ $nameUser->name }}</span>
                             </a>
 
                             <ul class="dropdown-menu">

@@ -42,7 +42,7 @@ class UsuarioController extends Controller
         $logado = $this->usuarioLogado();
         if ($logado->isAdmin())
             return User::all();
-        else 
+        else
             return [];
     }
 
@@ -59,10 +59,10 @@ class UsuarioController extends Controller
                 if ($usuarioLdap != NULL && isset ($usuarioLdap->getAttributes()["mail"]))
                     $email = strtolower ($usuarioLdap->getAttributes()["mail"][0]);
             } catch (Exception $e) {
-                
+
             }
         }
-        
+
         return $email;
     }
 
@@ -79,7 +79,7 @@ class UsuarioController extends Controller
                 for ($i = 0; $i < count($us); $i++) {
                     $brk = true;
                     $listas = [];
-                    if (!isset($us[$i]->getAttributes()["memberof"])) 
+                    if (!isset($us[$i]->getAttributes()["memberof"]))
                         $brk = false;
                     else
                         $listas = $us[$i]->getAttributes()["memberof"];
@@ -95,14 +95,14 @@ class UsuarioController extends Controller
                     }
                 }
             }
-            else 
+            else
                 $u = $us[0];
-            
+
             if (!$u)
-                return null;    
+                return null;
             $usuarioLDAP = [
-                'userId' => 0, 
-                'email' => $u->getAttributes()["mail"][0], 
+                'userId' => 0,
+                'email' => $u->getAttributes()["mail"][0],
                 'username' => $u->getAttributes()["samaccountname"][0],
                 'nome' => $u->getAttributes()["displayname"][0],
             ];
@@ -229,5 +229,15 @@ class UsuarioController extends Controller
         else {
             abort(404, 'Usuário não encontrado');
         }
+    }
+
+    public function getFirstLastNameUser() {
+        $user = Auth::user();
+        $name = explode(" ", $user->name);
+        $firstName = $name[0];
+        $lastname = $name[count($name)-1];
+
+        return $firstName. ' ' . $lastname;
+
     }
 }
