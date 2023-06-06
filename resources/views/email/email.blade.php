@@ -6,6 +6,8 @@
         <p>Faculdade: <b>{{ $sala->curso->faculdade->sigla }}</b></p>
         <p>Curso: <b>{{ $sala->curso->nome }}</b></p>
         <p>Chave de Inscrição para Estudantes acessarem a sala: @if($sala->senha_aluno != NULL && $sala->senha_aluno != '') <b>{{ $sala->senha_aluno }}</b> @else <i style="color: gray;">sem senha</i> @endif</p>
+        @if($sala->link_backup_moodle != NULL && $sala->link_backup_moodle != '')
+        <p>Link Backup: <b>{!! $sala->link_backup_moodle !!}</b></p>
         @if($sala->observacao != NULL && $sala->observacao != '')
         <p>Observação: <b>{!! $sala->observacao !!}</b></p>
         @endif

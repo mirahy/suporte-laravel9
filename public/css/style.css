@@ -120,8 +120,7 @@ html, body {
 #app{
     height: calc(100% - 103px);
     overflow: auto;
-    padding-top: 10px;
-    padding-bottom: 50px;
+    padding: 10px 2px 50px 2px;
     position: relative;
 }
 .form-control:focus {
@@ -299,6 +298,7 @@ div.panel-centered {
 }
 .linha-full-height {
     overflow: auto;
+    padding: 0 2px;
 }
 tr.clickable-row:hover {
     background-color:rgb(247, 252, 247);

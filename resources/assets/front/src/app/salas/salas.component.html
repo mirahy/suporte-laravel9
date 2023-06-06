@@ -222,7 +222,7 @@
 
                         <label class="style1">Caso deseje usar o coteúdo da sala de anos anteriores, cole o link aqui!:</label><br>
                         <input class="form-control" type="text" name="link_backup_moodle" placeholder="Ex.: https://presencial.ead.ufgd.edu.br/course/view.php?id=***"
-                        [(ngModel)]="sala.link_backup_moodle" [readonly]="!editavel" (focusout)="getSalaMoodle()" maxlength="60"><p></p>
+                        [(ngModel)]="sala.link_backup_moodle" [readonly]="!editavel" (focusout)="getSalaMoodle()" maxlength="60" [disabled]="!editavel"><p></p>
 
                         <ng-container *ngIf="nome_sala_moodle">
                           <label class="style1">Nome da sala moodle:</label><br>

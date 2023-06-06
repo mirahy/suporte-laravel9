@@ -1,6 +1,10 @@
 <div class="row">
     <div class="panel panel-default">
-        <div class="panel-heading">Nova Solicitação de Criação de Sala no Moodle</div>
+        <div class="panel-heading">Nova Solicitação de Criação de Sala no Moodle
+          <button data-toggle="modal" data-target="#dialogCriaSala"
+								class="btn btn-info botao-tooltip"><span class="span-icon-button"><i class="bi bi-info-circle"></i></span></button>
+        </div>
+
         <fieldset>
             <div redimensionar="">
                 <form id="salaForm" class="form-group" style="text-align: left; width: 500px; margin: 15px auto;" (submit)="criaSala($event)">
@@ -182,6 +186,7 @@
                 <p>Faculdade: <b>{{ salaResp.curso?.faculdade?.sigla }}</b></p>
                 <p>Curso: <b>{{ salaResp.curso?.nome }}</b></p>
                 <p>Senha para Estudantes acessarem a sala: <b *ngIf="salaResp.senha_aluno != null && salaResp.senha_aluno != ''">{{ salaResp.senha_aluno }}</b> <i *ngIf="salaResp.senha_aluno == null || salaResp.senha_aluno == ''" style="color: gray;">sem senha</i></p>
+                <p *ngIf="salaResp.link_backup_moodle != null && salaResp.link_backup_moodle != ''">Link Backup: <b>{{salaResp.link_backup_moodle }}</b></p>
                 <p *ngIf="salaResp.observacao != null && salaResp.observacao != ''">Observação: <b>{{salaResp.observacao }}</b></p>
                 <p>Status: <b><span style=" padding: 3px">{{ salaResp.status.descricao }}</span></b>
                 <ng-container  *ngIf="salaResp.mensagem != null && salaResp.mensagem != ''">
@@ -226,4 +231,34 @@
             </div>
         </div>
     </div>
+</div>
+
+<div class="modal fade" id="dialogCriaSala" tabindex="-1" role="dialog"
+	aria-labelledby="dialogdialogCriaSalaTitle" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body" style="width: 660px;">
+				<b>Ao informar o link para restauração: </b><br>
+				A sala no moodle será gerada automaticamente caso o solicitante também
+         seja o professor da sala de restauração, do contrário, a solicitação
+          ficará pendente aguardando o envio do email para a TI Ead com a autorização
+           do professor da sala.<br>
+         <b>Ao informar uma observação: </b><br>
+				A solicitação ficará pendente aguardando a TI Ead para gerar a sala conforme
+        orientações solicitadas no campo observação.<br>
+
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary botao-barra" data-dismiss="modal">
+					<span class="span-icon-button"><i class="bi bi-box-arrow-left"></i></span>
+					Fechar
+				</button>
+			</div>
+		</div>
+	</div>
 </div>
