@@ -12,11 +12,13 @@ class NameUserService
     public function __construct()
     {
         $user = Auth::user();
-        $name = explode(" ", $user->name);
-        $firstName = $name[0];
-        $lastname = $name[count($name)-1];
+        if($user != null){
+            $name = explode(" ", $user->name);
+            $firstName = $name[0];
+            $lastname = $name[count($name)-1];
+            $this->name = $firstName. ' ' . $lastname;
+        }
 
-        $this->name = $firstName. ' ' . $lastname;
     }
 
 }
