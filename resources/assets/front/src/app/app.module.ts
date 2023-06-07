@@ -88,6 +88,8 @@ import { FormularioInsercaoUsuariosAdComponent } from './unidade-organizacional/
 import { FormularioAlteracaoUsuarioComponent } from './unidade-organizacional/formulario-alteracao-usuario/formulario-alteracao-usuario.component';
 import { FormularioPessoasEstatusLotacaoComponent } from './usuarios/formulario-pessoas-estatus-lotacao/formulario-pessoas-estatus-lotacao.component';
 import { PessoasEstatusLotacaoService } from './pessoas-estatus-lotacao.service';
+import { RolesComponent } from './roles/roles.component';
+import { RolesService } from './roles.service';
 
 
 const appRoutes: Routes = [
@@ -115,6 +117,7 @@ const appRoutes: Routes = [
     { path: 'formulario-altera-usuario', component: FormularioAlteracaoUsuarioComponent },
     { path: 'formulario-pessoas-estatus-lotacao', component: FormularioPessoasEstatusLotacaoComponent },
     { path: 'logs', component: LogsComponent },
+    { path: 'roles', component: RolesComponent },
     /*{ path: '',
       redirectTo: '/',
       pathMatch: 'full'
@@ -162,6 +165,7 @@ const appRoutes: Routes = [
         FormularioInsercaoUsuariosAdComponent,
         FormularioAlteracaoUsuarioComponent,
         FormularioPessoasEstatusLotacaoComponent,
+        RolesComponent,
     ],
     imports: [
         BrowserModule,
@@ -217,7 +221,8 @@ const appRoutes: Routes = [
         GrupoLotesSimplificadosService,
         UnidadeOrganizacionalService,
         PessoasEstatusLotacaoService,
-        LogsService
+        LogsService,
+        RolesService
     ],
     bootstrap: [
         AppComponent

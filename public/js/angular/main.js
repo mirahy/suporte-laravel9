@@ -959,6 +959,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _unidade_organizacional_formulario_alteracao_usuario_formulario_alteracao_usuario_component__WEBPACK_IMPORTED_MODULE_81__ = __webpack_require__(/*! ./unidade-organizacional/formulario-alteracao-usuario/formulario-alteracao-usuario.component */ "./src/app/unidade-organizacional/formulario-alteracao-usuario/formulario-alteracao-usuario.component.ts");
 /* harmony import */ var _usuarios_formulario_pessoas_estatus_lotacao_formulario_pessoas_estatus_lotacao_component__WEBPACK_IMPORTED_MODULE_82__ = __webpack_require__(/*! ./usuarios/formulario-pessoas-estatus-lotacao/formulario-pessoas-estatus-lotacao.component */ "./src/app/usuarios/formulario-pessoas-estatus-lotacao/formulario-pessoas-estatus-lotacao.component.ts");
 /* harmony import */ var _pessoas_estatus_lotacao_service__WEBPACK_IMPORTED_MODULE_83__ = __webpack_require__(/*! ./pessoas-estatus-lotacao.service */ "./src/app/pessoas-estatus-lotacao.service.ts");
+/* harmony import */ var _roles_roles_component__WEBPACK_IMPORTED_MODULE_84__ = __webpack_require__(/*! ./roles/roles.component */ "./src/app/roles/roles.component.ts");
+/* harmony import */ var _roles_service__WEBPACK_IMPORTED_MODULE_85__ = __webpack_require__(/*! ./roles.service */ "./src/app/roles.service.ts");
 
 
 
@@ -1044,6 +1046,8 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
+
 var appRoutes = [
     { path: 'salas', component: _salas_salas_component__WEBPACK_IMPORTED_MODULE_11__["SalasComponent"] },
     { path: 'salas/create', component: _salas_cria_salas_cria_salas_component__WEBPACK_IMPORTED_MODULE_18__["CriaSalasComponent"] },
@@ -1069,6 +1073,7 @@ var appRoutes = [
     { path: 'formulario-altera-usuario', component: _unidade_organizacional_formulario_alteracao_usuario_formulario_alteracao_usuario_component__WEBPACK_IMPORTED_MODULE_81__["FormularioAlteracaoUsuarioComponent"] },
     { path: 'formulario-pessoas-estatus-lotacao', component: _usuarios_formulario_pessoas_estatus_lotacao_formulario_pessoas_estatus_lotacao_component__WEBPACK_IMPORTED_MODULE_82__["FormularioPessoasEstatusLotacaoComponent"] },
     { path: 'logs', component: _logs_logs_component__WEBPACK_IMPORTED_MODULE_76__["LogsComponent"] },
+    { path: 'roles', component: _roles_roles_component__WEBPACK_IMPORTED_MODULE_84__["RolesComponent"] },
     /*{ path: '',
       redirectTo: '/',
       pathMatch: 'full'
@@ -1119,6 +1124,7 @@ var AppModule = /** @class */ (function () {
                 _unidade_organizacional_formulario_insercao_usuarios_ad_formulario_insercao_usuarios_ad_component__WEBPACK_IMPORTED_MODULE_80__["FormularioInsercaoUsuariosAdComponent"],
                 _unidade_organizacional_formulario_alteracao_usuario_formulario_alteracao_usuario_component__WEBPACK_IMPORTED_MODULE_81__["FormularioAlteracaoUsuarioComponent"],
                 _usuarios_formulario_pessoas_estatus_lotacao_formulario_pessoas_estatus_lotacao_component__WEBPACK_IMPORTED_MODULE_82__["FormularioPessoasEstatusLotacaoComponent"],
+                _roles_roles_component__WEBPACK_IMPORTED_MODULE_84__["RolesComponent"],
             ],
             imports: [
                 _angular_platform_browser__WEBPACK_IMPORTED_MODULE_1__["BrowserModule"],
@@ -1170,7 +1176,8 @@ var AppModule = /** @class */ (function () {
                 _grupo_lotes_simplificados_service__WEBPACK_IMPORTED_MODULE_75__["GrupoLotesSimplificadosService"],
                 _unidade_organizacional_service__WEBPACK_IMPORTED_MODULE_79__["UnidadeOrganizacionalService"],
                 _pessoas_estatus_lotacao_service__WEBPACK_IMPORTED_MODULE_83__["PessoasEstatusLotacaoService"],
-                _logs_service__WEBPACK_IMPORTED_MODULE_77__["LogsService"]
+                _logs_service__WEBPACK_IMPORTED_MODULE_77__["LogsService"],
+                _roles_service__WEBPACK_IMPORTED_MODULE_85__["RolesService"]
             ],
             bootstrap: [
                 _app_component__WEBPACK_IMPORTED_MODULE_10__["AppComponent"]
@@ -8102,6 +8109,92 @@ var ReservasComponent = /** @class */ (function (_super) {
     ], ReservasComponent);
     return ReservasComponent;
 }(_abstract_component__WEBPACK_IMPORTED_MODULE_11__["AbstractComponent"]));
+
+
+
+/***/ }),
+
+/***/ "./src/app/roles.service.ts":
+/*!**********************************!*\
+  !*** ./src/app/roles.service.ts ***!
+  \**********************************/
+/*! exports provided: RolesService */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RolesService", function() { return RolesService; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+
+
+var RolesService = /** @class */ (function () {
+    function RolesService() {
+    }
+    RolesService = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])({
+            providedIn: 'root'
+        }),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [])
+    ], RolesService);
+    return RolesService;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/roles/roles.component.html":
+/*!********************************************!*\
+  !*** ./src/app/roles/roles.component.html ***!
+  \********************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<div class=\"d-flex h-100\"\n  style=\" height: 77rem; display: flex; justify-content: center; align-items: center; \">\n  <div class=\"offset-md-4 col-md-4 offset-sm-3 col-sm-6 my-auto text-center\">\n    <div class=\"shadow-sm rounded border text-dark p-5\" style=\"background: rgba(255,255,255,.4); box-shadow: 4px 4px 5px #00420c\">\n      <img alt=\"em progresso\" src=\"/img/cogs.gif\" style=\"height:150px;\">\n      <h1 class=\"my-4 h3\">PÁGINA EM CONSTRUÇÃO!!!</h1>\n      <div>Volte em breve!</div>\n      <div class=\"text-center mt-3 \" style=\"padding: 4px ;\">\n        <a type=\"button\" name=\"retrun\" class=\"btn btn-secondary botao-barra\" href=\"/\">\n          <span class=\"span-icon-button\"><i class=\"bi bi-box-arrow-left\"></i></span>\n          Voltar\n      </a>\n      </div>\n\n    </div>\n\n  </div>\n</div>\n"
+
+/***/ }),
+
+/***/ "./src/app/roles/roles.component.less":
+/*!********************************************!*\
+  !*** ./src/app/roles/roles.component.less ***!
+  \********************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL3JvbGVzL3JvbGVzLmNvbXBvbmVudC5sZXNzIn0= */"
+
+/***/ }),
+
+/***/ "./src/app/roles/roles.component.ts":
+/*!******************************************!*\
+  !*** ./src/app/roles/roles.component.ts ***!
+  \******************************************/
+/*! exports provided: RolesComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RolesComponent", function() { return RolesComponent; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+
+
+var RolesComponent = /** @class */ (function () {
+    function RolesComponent() {
+    }
+    RolesComponent.prototype.ngOnInit = function () {
+    };
+    RolesComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
+            selector: 'app-roles',
+            template: __webpack_require__(/*! ./roles.component.html */ "./src/app/roles/roles.component.html"),
+            styles: [__webpack_require__(/*! ./roles.component.less */ "./src/app/roles/roles.component.less")]
+        }),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [])
+    ], RolesComponent);
+    return RolesComponent;
+}());
 
 
 
