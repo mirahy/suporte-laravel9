@@ -201,3 +201,5 @@ Route::get('/{param2}', function ($param2) {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::resource('/roles', 'RolesController');

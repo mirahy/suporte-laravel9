@@ -3,10 +3,12 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Permission\Traits\HasRoles;
 
 class Usuario extends Model
 {
-    
+    use HasRoles;
+
     const PERMISSAO_ADMINISTRADOR = "ADMINISTRADOR";
     const PERMISSAO_PRESIDENTE = 'PRESIDENTE';
     const PERMISSAO_PATRIMONIO = 'PATRIMONIO';
@@ -18,16 +20,16 @@ class Usuario extends Model
     //protected $guarded = ['id'];
 
     protected $fillable = [
-        'nome', 
-        'login', 
+        'nome',
+        'login',
         'email',
         'permissao'
     ];
 
     protected $visible =  [
         'id',
-        'nome', 
-        'login', 
+        'nome',
+        'login',
         'email',
         'permissao'
     ];

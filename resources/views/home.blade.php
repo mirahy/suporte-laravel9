@@ -62,6 +62,9 @@
         @include('templates.cards', ['link' => '/usuarios/', 'text' => 'Lista de Usuários', 'classIcon' => 'bi bi-person-lines-fill', 'classLink' => '' ])
         @endif
         @if(isset($resources->permissao) && ($resources->permissao == 'ADMINISTRADOR'))
+        @include('templates.cards', ['link' => '/roles/', 'text' => 'Perfis - Acessos', 'classIcon' => 'bi bi-shield-lock', 'classLink' => '' ])
+        @endif
+        @if(isset($resources->permissao) && ($resources->permissao == 'ADMINISTRADOR'))
         @include('templates.cards', ['link' => '/formulario-pessoas-estatus-lotacao/', 'text' => 'Lista de Pessoas Por Lotação', 'classIcon' => 'bi bi-person-down', 'classLink' => '' ])
         @endif
     </div>

@@ -11,22 +11,22 @@
 
     <title>{{ config('app.name') }}</title>
 
-    <link rel="shortcut icon" href="/favicon.png" />
+    <link rel="shortcut icon" href="/favicon.png?v-{{getenv('VERSION_FILES')}}" />
 
     <!-- Styles -->
-    <link href="{{ asset('css/codigo-barras.css')}}" rel="stylesheet">
-    <link href="{{ asset('css/font/bootstrap-icons.css')}}" rel="stylesheet">
-    <link href="{{ asset('css/app.css')}}" rel="stylesheet">
+    <link href="{{ asset('css/codigo-barras.css?v-')}}{{getenv('VERSION_FILES')}}" rel="stylesheet">
+    <link href="{{ asset('css/font/bootstrap-icons.css?v-')}}{{getenv('VERSION_FILES')}}" rel="stylesheet">
+    <link href="{{ asset('css/app.css?v-')}}{{getenv('VERSION_FILES')}}" rel="stylesheet">
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <!--script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script-->
 
-    <script type="text/javascript" src="{{ asset('js/browser-detect.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('js/browser-detect.js?v-')}}{{getenv('VERSION_FILES')}}"></script>
 
     @yield('innerhead')
 
-    <link href="{{ asset('css/style.css')}}" rel="stylesheet">
+    <link href="{{ asset('css/style.css?v-')}}{{getenv('VERSION_FILES')}}" rel="stylesheet">
 
     @inject('resources', 'App\Services\ResourcesService')
     @inject('nameUser', 'App\Services\NameUserService')
@@ -182,7 +182,7 @@
                         @if(isset($resources->permissao) && ($resources->permissao == 'ADMINISTRADOR'))
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" v-pre>
-                                Formulários Úteis <span class="caret"></span>
+                                Gestão Usuários <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu">
                                 <li>
@@ -203,6 +203,11 @@
                                 <li>
                                     <a href="/usuarios">
                                         Lista de Usuários
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/roles">
+                                        Perfis - Acessos
                                     </a>
                                 </li>
                                 <li>
@@ -261,9 +266,9 @@
     </footer>
 
     <!-- Scripts -->
-    <script src="{{ asset('js/app.js')}}"></script>
+    <script src="{{ asset('js/app.js?v-')}}{{getenv('VERSION_FILES')}}"></script>
     @yield('postscripts')
-    <script src="{{ asset('js/post-scrips.js')}}"></script>
+    <script src="{{ asset('js/post-scrips.js?v-')}}{{getenv('VERSION_FILES')}}"></script>
 </body>
 
 </html>

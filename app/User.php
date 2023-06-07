@@ -5,10 +5,11 @@ namespace App;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable2;
 use Illuminate\Contracts\Auth\Authenticatable;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable2 implements Authenticatable
 {
-    use Notifiable;
+    use Notifiable, HasRoles;
 
     const PERMISSAO_ADMINISTRADOR = "ADMINISTRADOR";
     const PERMISSAO_USUARIO = 'USUARIO';
