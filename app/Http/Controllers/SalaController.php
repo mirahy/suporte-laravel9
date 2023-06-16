@@ -342,7 +342,7 @@ class SalaController extends Controller
     }
 
     public function posCriaSala(Request $request, $sala){
-        if (!$sala->observacao) {
+        if (!$sala->observacao || !$sala->link_backup_moodle) {
             if ($this->executarRestauracaoAutomatica($request, $sala->id, 'cria', true, true)) {
                 $sala = Sala::find($sala->id);
                 $request->session()->put('link', $sala->mensagem);
