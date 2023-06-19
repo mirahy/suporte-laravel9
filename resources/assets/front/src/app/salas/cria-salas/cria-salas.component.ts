@@ -76,12 +76,14 @@ export class CriaSalasComponent extends AbstractComponent implements OnInit {
     var salaForm = jQuery('#salaForm')[0];
     // removendo todos os espaços em branco
     let link = this.sala.link_backup_moodle ? this.sala.link_backup_moodle.replace(/\s+/g, '') : "";
+    this.editavel = false;
      this.salasService.validaLinkMoodle(link)
       .then(response =>{
         let validaLink = response;
         let id = this.salasService.getIdLinkMoodle(link);
         if (salaForm.reportValidity() && validaLink['status'].value && id['status'].value) {
-          this.editavel = false;
+          jQuery('#dialogMensagem').modal('show');
+          this.mensagemDialog = "Criando sala..."
           if (this.plDisciplinasAcademicosService.plDisciplinasAcademicosNameIndex && this.plDisciplinasAcademicosService.plDisciplinasAcademicosNameIndex.get(this.sala.nome_sala))
             this.salasService.aplicarPlDisciplina(this.sala, this.plDisciplinasAcademicosService.plDisciplinasAcademicosNameIndex.get(this.sala.nome_sala))
           this.salasService.create(this.sala)
@@ -94,6 +96,7 @@ export class CriaSalasComponent extends AbstractComponent implements OnInit {
                 window.location.href = this.redirectLink;
               }
               else {
+                jQuery('#dialogMensagem').modal('hide');
                 jQuery('#dialogCreate').modal('show');
                 this.sala = Sala.geraNovaSala();
                 this.sala.nome_professor = this.salaResp.nome_professor;
@@ -110,8 +113,8 @@ export class CriaSalasComponent extends AbstractComponent implements OnInit {
           jQuery('#dialogMensagem').modal('hide');
           this.erroAviso = !validaLink['status'].value || !id['status'].value;
           this.aviso = validaLink['msg'] ? validaLink['msg'].value : "" ||  id['msg'] ? id['msg'].value : "";
+          this.editavel = true;
         }
-        this.editavel = true;
       }).catch(response => {
         this.erroAviso = true;
         this.aviso = this.erroHttp(response);

@@ -9662,12 +9662,14 @@ var CriaSalasComponent = /** @class */ (function (_super) {
         var salaForm = jQuery('#salaForm')[0];
         // removendo todos os espaços em branco
         var link = this.sala.link_backup_moodle ? this.sala.link_backup_moodle.replace(/\s+/g, '') : "";
+        this.editavel = false;
         this.salasService.validaLinkMoodle(link)
             .then(function (response) {
             var validaLink = response;
             var id = _this.salasService.getIdLinkMoodle(link);
             if (salaForm.reportValidity() && validaLink['status'].value && id['status'].value) {
-                _this.editavel = false;
+                jQuery('#dialogMensagem').modal('show');
+                _this.mensagemDialog = "Criando sala...";
                 if (_this.plDisciplinasAcademicosService.plDisciplinasAcademicosNameIndex && _this.plDisciplinasAcademicosService.plDisciplinasAcademicosNameIndex.get(_this.sala.nome_sala))
                     _this.salasService.aplicarPlDisciplina(_this.sala, _this.plDisciplinasAcademicosService.plDisciplinasAcademicosNameIndex.get(_this.sala.nome_sala));
                 _this.salasService.create(_this.sala)
@@ -9680,6 +9682,7 @@ var CriaSalasComponent = /** @class */ (function (_super) {
                         window.location.href = _this.redirectLink;
                     }
                     else {
+                        jQuery('#dialogMensagem').modal('hide');
                         jQuery('#dialogCreate').modal('show');
                         _this.sala = _sala__WEBPACK_IMPORTED_MODULE_4__["Sala"].geraNovaSala();
                         _this.sala.nome_professor = _this.salaResp.nome_professor;
@@ -9697,8 +9700,8 @@ var CriaSalasComponent = /** @class */ (function (_super) {
                 jQuery('#dialogMensagem').modal('hide');
                 _this.erroAviso = !validaLink['status'].value || !id['status'].value;
                 _this.aviso = validaLink['msg'] ? validaLink['msg'].value :  false || id['msg'] ? id['msg'].value : "";
+                _this.editavel = true;
             }
-            _this.editavel = true;
         }).catch(function (response) {
             _this.erroAviso = true;
             _this.aviso = _this.erroHttp(response);
