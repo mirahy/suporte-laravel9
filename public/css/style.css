@@ -708,6 +708,7 @@ body .ui-progressbar .ui-progressbar-value {
     font-weight: 600;
     justify-content: space-between;
     padding-right: 5px;
+    animation: moveTo 2s ease-in-out;
 }
 
 .btn-dropmain:hover{
@@ -724,6 +725,19 @@ body .ui-progressbar .ui-progressbar-value {
     width: 99%;
     margin: 0px 5px 0px 5px;
     box-shadow: 1px 1px 3px 1px #00420c ;
+
 }
+
+@keyframes moveTo {
+    0% {
+       transform: translateY(0px);
+     }
+    50% {
+        transform: translateY(6px);
+      }
+    100% {
+        transform: translateY(0px);
+      }
+   }
 
 
