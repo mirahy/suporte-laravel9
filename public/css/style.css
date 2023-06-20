@@ -698,3 +698,32 @@ body .ui-progressbar .ui-progressbar-value {
     align-items: center;
     font-weight: 600;
 }
+
+.btn-dropmain{
+    display: flex ;
+    margin: 5px 0px;
+    width: 100%;
+    background-color: #025310;
+    font-size: 1.6rem;
+    font-weight: 600;
+    justify-content: space-between;
+    padding-right: 5px;
+}
+
+.btn-dropmain:hover{
+    color: #fff;
+    background-color: #1ea04c;
+}
+
+.btn-dropmain:focus{
+    color: #fff;
+    background-color: #025310;
+}
+
+.card-body{
+    width: 99%;
+    margin: 0px 5px 0px 5px;
+    box-shadow: 1px 1px 3px 1px #00420c ;
+}
+
+
