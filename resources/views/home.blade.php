@@ -4,6 +4,7 @@
 
 @section('content')
     <div class="table-row">
+        @if(isset($resources->permissao) && ($resources->permissao == 'USUARIO' || $resources->permissao == 'ADMINISTRADOR'))
         <button class="btn btn-secondary btn-dropmain" type="button" data-toggle="collapse" data-target="#solicitacoes" aria-expanded="true" aria-controls="multiCollapseExample2">
             Solicitações
             <i class="bi bi-caret-down-fill"></i>
@@ -27,6 +28,8 @@
                 @endif
             </div>
         </div>
+        @endif
+        @if(isset($resources->permissao) && ($resources->permissao == 'ADMINISTRADOR'))
         <button class="btn btn-secondary btn-dropmain" type="button" data-toggle="collapse" data-target="#universidade" aria-expanded="false" aria-controls="multiCollapseExample2">
             Universidade
             <i class="bi bi-caret-down-fill"></i>
@@ -50,6 +53,8 @@
                 @endif
             </div>
         </div>
+        @endif
+        @if(isset($resources->permissao) && ($resources->permissao == 'ADMINISTRADOR'))
         <button class="btn btn-secondary btn-dropmain" type="button" data-toggle="collapse" data-target="#administracao" aria-expanded="false" aria-controls="multiCollapseExample2">
             Adiministração
             <i class="bi bi-caret-down-fill"></i>
@@ -76,6 +81,8 @@
                 @endif
             </div>
         </div>
+        @endif
+        @if(isset($resources->permissao) && ($resources->permissao == 'ADMINISTRADOR'))
         <button class="btn btn-secondary btn-dropmain" type="button" data-toggle="collapse" data-target="#gestaoUsuarios" aria-expanded="false" aria-controls="multiCollapseExample2">
             Gestão Usuários
             <i class="bi bi-caret-down-fill"></i>
@@ -102,6 +109,7 @@
                 @endif
             </div>
         </div>
+        @endif
     </div>
 </div>
 @endsection
