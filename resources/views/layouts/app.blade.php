@@ -172,6 +172,11 @@
                                     </a>
                                 </li>
                                 <li>
+                                    <a href="/server">
+                                        PHP info
+                                    </a>
+                                </li>
+                                <li>
                                     <a href="/logs">
                                         Logs
                                     </a>

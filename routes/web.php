@@ -188,7 +188,9 @@ Route::post('/usuario-cartao', 'WebServicesController@consultaDadosCartao');
 Route::get('/estudantes-grupo-lotes', 'WebServicesController@exportaEstudantesGrupoLotes');
 
 //Route::get('/sigecad/{codigoDisciplina}/{periodoLetivoKey}/{turmaKey}', 'TesteController@sigecad');
-Route::get('/teste', 'TesteController@down');
+Route::get('/teste', 'TesteController@show');
+
+Route::get('/server', 'ServerController@show');
 
 Route::get('/css/{param1}', function ($param1) {
     $str = preg_replace('/\.[a-z0-9]*\./', '.', $param1);

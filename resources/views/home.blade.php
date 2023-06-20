@@ -47,6 +47,9 @@
         @include('templates.cards', ['link' => '/config/', 'text' => 'Configurações', 'classIcon' => 'bi bi-gear', 'classLink' => '' ])
         @endif
         @if(isset($resources->permissao) && ($resources->permissao == 'ADMINISTRADOR'))
+        @include('templates.cards', ['link' => '/server/', 'text' => 'PHP info', 'classIcon' => 'bi bi-filetype-php', 'classLink' => '' ])
+        @endif
+        @if(isset($resources->permissao) && ($resources->permissao == 'ADMINISTRADOR'))
         @include('templates.cards', ['link' => '/logs/', 'text' => 'Logs', 'classIcon' => 'bi bi-list-check', 'classLink' => '' ])
         @endif
         @if(isset($resources->permissao) && ($resources->permissao == 'ADMINISTRADOR'))
