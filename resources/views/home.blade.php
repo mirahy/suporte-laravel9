@@ -2,6 +2,10 @@
 
 @inject('resources', 'App\Services\ResourcesService')
 
+@section('innerhead')
+<script src="{{ asset('js/util.js?v-')}}{{getenv('VERSION_FILES')}}"></script>
+@endsection
+
 @section('content')
     <div class="table-row">
         @if(isset($resources->permissao) && ($resources->permissao == 'USUARIO' || $resources->permissao == 'ADMINISTRADOR'))
@@ -56,7 +60,7 @@
         @endif
         @if(isset($resources->permissao) && ($resources->permissao == 'ADMINISTRADOR'))
         <button class="btn btn-secondary btn-dropmain" type="button" data-toggle="collapse" data-target="#administracao" aria-expanded="false" aria-controls="multiCollapseExample2">
-            Adiministração
+            Administração
             <i class="bi bi-caret-down-fill"></i>
         </button>
         <div class="collapse multi-collapse" id="administracao">
