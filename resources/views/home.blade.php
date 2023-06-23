@@ -2,16 +2,16 @@
 
 @inject('resources', 'App\Services\ResourcesService')
 
-@section('innerhead')
-<script src="{{ asset('js/util.js?v-')}}{{getenv('VERSION_FILES')}}"></script>
+@section('postscripts')
+<script src="{{ asset('js/home.js?v-')}}{{getenv('VERSION_FILES')}}"></script>
 @endsection
 
 @section('content')
     <div class="table-row">
         @if(isset($resources->permissao) && ($resources->permissao == 'USUARIO' || $resources->permissao == 'ADMINISTRADOR'))
-        <button class="btn btn-secondary btn-dropmain" type="button" data-toggle="collapse" data-target="#solicitacoes" aria-expanded="true" aria-controls="multiCollapseExample2">
+        <button class="btn btn-secondary btn-dropmain" type="button" data-toggle="collapse" data-target="#solicitacoes" aria-expanded="true" aria-controls="multiCollapseExample2" >
             Solicitações
-            <i class="bi bi-caret-down-fill"></i>
+            <i class="bi bi-caret-up-fill" id="imgsolicitacoes"></i>
         </button>
         <div class="collapse in multi-collapse" id="solicitacoes">
             <div class="card card-body">
@@ -34,9 +34,9 @@
         </div>
         @endif
         @if(isset($resources->permissao) && ($resources->permissao == 'ADMINISTRADOR'))
-        <button class="btn btn-secondary btn-dropmain" type="button" data-toggle="collapse" data-target="#universidade" aria-expanded="false" aria-controls="multiCollapseExample2">
+        <button class="btn btn-secondary btn-dropmain" type="button" data-toggle="collapse" data-target="#universidade" aria-expanded="false" aria-controls="multiCollapseExample2" >
             Universidade
-            <i class="bi bi-caret-down-fill"></i>
+            <i class="bi bi-caret-down-fill" id="imguniversidade"></i>
         </button>
         <div class="collapse multi-collapse" id="universidade">
             <div class="card card-body">
@@ -59,9 +59,9 @@
         </div>
         @endif
         @if(isset($resources->permissao) && ($resources->permissao == 'ADMINISTRADOR'))
-        <button class="btn btn-secondary btn-dropmain" type="button" data-toggle="collapse" data-target="#administracao" aria-expanded="false" aria-controls="multiCollapseExample2">
+        <button class="btn btn-secondary btn-dropmain" type="button" data-toggle="collapse" data-target="#administracao" aria-expanded="false" aria-controls="multiCollapseExample2" >
             Administração
-            <i class="bi bi-caret-down-fill"></i>
+            <i class="bi bi-caret-down-fill" id="imgadministracao"></i>
         </button>
         <div class="collapse multi-collapse" id="administracao">
             <div class="card card-body">
@@ -87,9 +87,9 @@
         </div>
         @endif
         @if(isset($resources->permissao) && ($resources->permissao == 'ADMINISTRADOR'))
-        <button class="btn btn-secondary btn-dropmain" type="button" data-toggle="collapse" data-target="#gestaoUsuarios" aria-expanded="false" aria-controls="multiCollapseExample2">
+        <button class="btn btn-secondary btn-dropmain" type="button" data-toggle="collapse" data-target="#gestaoUsuarios" aria-expanded="false" aria-controls="multiCollapseExample2" >
             Gestão Usuários
-            <i class="bi bi-caret-down-fill"></i>
+            <i class="bi bi-caret-down-fill" id="imggestaoUsuarios"></i>
         </button>
         <div class="collapse multi-collapse" id="gestaoUsuarios">
             <div class="card card-body">

@@ -274,6 +274,7 @@
     <script src="{{ asset('js/app.js?v-')}}{{getenv('VERSION_FILES')}}"></script>
     @yield('postscripts')
     <script src="{{ asset('js/post-scrips.js?v-')}}{{getenv('VERSION_FILES')}}"></script>
+    <script src="{{ asset('js/util.js?v-')}}{{getenv('VERSION_FILES')}}"></script>
 </body>
 
 </html>
