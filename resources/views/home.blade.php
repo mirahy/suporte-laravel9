@@ -13,8 +13,8 @@
             Solicitações
             <i class="bi bi-caret-up-fill" id="imgsolicitacoes"></i>
         </button>
-        <div class="collapse in multi-collapse" id="solicitacoes">
-            <div class="card card-body">
+        <div class="collapse in multi-collapse delay-1" id="solicitacoes">
+            <div class="card card-body delay-2">
                 @if(isset($resources->permissao) && ($resources->permissao == 'USUARIO' || $resources->permissao == 'ADMINISTRADOR'))
                 @include('templates.cards', ['link' => '/salas/create/', 'text' => 'Nova Solicitação de Sala', 'classIcon' => 'bi bi-file-earmark-plus', 'classLink' => '' ])
                 @endif
@@ -38,8 +38,8 @@
             Universidade
             <i class="bi bi-caret-down-fill" id="imguniversidade"></i>
         </button>
-        <div class="collapse multi-collapse" id="universidade">
-            <div class="card card-body">
+        <div class="collapse multi-collapse delay-1" id="universidade">
+            <div class="card card-body delay-2">
                 @if(isset($resources->permissao) && ($resources->permissao == 'ADMINISTRADOR'))
                 @include('templates.cards', ['link' => '/faculdades/', 'text' => 'Faculdades e Cursos', 'classIcon' => 'bi bi-mortarboard', 'classLink' => '' ])
                 @endif
@@ -63,8 +63,8 @@
             Administração
             <i class="bi bi-caret-down-fill" id="imgadministracao"></i>
         </button>
-        <div class="collapse multi-collapse" id="administracao">
-            <div class="card card-body">
+        <div class="collapse multi-collapse delay-1" id="administracao">
+            <div class="card card-body delay-2">
                 @if(isset($resources->permissao) && ($resources->permissao == 'ADMINISTRADOR'))
                 @include('templates.cards', ['link' => '/macro/', 'text' => 'Macros', 'classIcon' => 'bi bi-diagram-2', 'classLink' => '' ])
                 @endif
@@ -91,8 +91,8 @@
             Gestão Usuários
             <i class="bi bi-caret-down-fill" id="imggestaoUsuarios"></i>
         </button>
-        <div class="collapse multi-collapse" id="gestaoUsuarios">
-            <div class="card card-body">
+        <div class="collapse multi-collapse delay-1" id="gestaoUsuarios">
+            <div class="card card-body delay-2">
                 @if(isset($resources->permissao) && ($resources->permissao == 'ADMINISTRADOR'))
                 @include('templates.cards', ['link' => '/formulario-insere-usuarios/', 'text' => 'Inserir Usuários Moodle', 'classIcon' => 'bi bi-person-add', 'classLink' => '' ])
                 @endif

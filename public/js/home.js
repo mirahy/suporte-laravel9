@@ -11,7 +11,6 @@ $('button').click(function() {
 
 //Alterar seta para cima somente da guia em aberto
 guias.forEach(element => {
-    console.log("#img"+element);
     $("#"+element).on("show.bs.collapse", function(){
         $("#img"+element).removeClass('bi-caret-down-fill');
         $("#img"+element).addClass('bi-caret-up-fill');

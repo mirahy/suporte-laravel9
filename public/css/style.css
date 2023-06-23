@@ -725,7 +725,6 @@ body .ui-progressbar .ui-progressbar-value {
     width: 99%;
     margin: 0px 5px 0px 5px;
     box-shadow: 1px 1px 3px 1px #00420c ;
-
 }
 
 @keyframes moveTo {
@@ -738,6 +737,18 @@ body .ui-progressbar .ui-progressbar-value {
     100% {
         transform: translateY(0px);
       }
-   }
+}
+
+.delay-1 {
+    transition: 500ms linear;
+    transition-delay: 0.5s;
+}
+
+.delay-2 {
+    transition: 500ms linear;
+    transition-delay: 1s;
+}
+
+
 
 
