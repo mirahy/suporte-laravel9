@@ -226,6 +226,7 @@
                         &nbsp;
                     </ul>
 
+
                     <!-- Right Side Of Navbar -->
                     <ul class="nav navbar-nav navbar-right">
                         <!-- Authentication Links -->
@@ -253,8 +254,8 @@
                             </ul>
                         </li>
                         @endguest
-                    </ul>
-                </div>
+                    </ul>         
+                </div> 
         </div>
     </nav>
 
@@ -262,7 +263,11 @@
 
         @yield('content')
 
+        <div id="theme-container" class="theme-container shadow-dark" >
+            <img id="themeIcon"  src="{{ asset('img/moon.svg')}}" alt="Alterar tema">
+        </div>
     </div>
+    
 
     <footer class="footer">
         <div class="container">
