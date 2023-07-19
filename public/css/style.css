@@ -193,7 +193,7 @@ body .ui-autocomplete-panel .ui-autocomplete-items .ui-autocomplete-list-item.ui
     display: block;
 }
 
-form{
+#salaForm{
     width: 500px;
 }
 
