@@ -23,6 +23,7 @@
     <!--script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script-->
 
     <script type="text/javascript" src="{{ asset('js/browser-detect.js?v-')}}{{getenv('VERSION_FILES')}}"></script>
+    <script src="{{ asset('js/pre-scrips.js?v-')}}{{getenv('VERSION_FILES')}}"></script>
 
     @yield('innerhead')
 

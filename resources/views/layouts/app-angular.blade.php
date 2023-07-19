@@ -7,7 +7,16 @@
 
 @section('content')
 <div class="container">
-    <app-root><i style="text-align: center; display: block">Carregando...</i></app-root>
+    <app-root >
+        <div class="loading">
+            <div class="loading-bar"></div>
+            <div class="loading-bar"></div>
+            <div class="loading-bar"></div>
+            <div class="loading-bar"></div>
+            <div class="loading-bar"></div>
+            <div class="loading-bar"></div>
+        </div>
+    </app-root>
 </div>
 @endsection
 
