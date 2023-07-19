@@ -7,7 +7,7 @@
 
         <fieldset>
             <div redimensionar="">
-                <form id="salaForm" class="form-group" style="text-align: left; width: 500px; margin: 15px auto;" (submit)="criaSala($event)">
+                <form id="salaForm" class="form-group" style="text-align: left; margin: 15px auto;" (submit)="criaSala($event)">
                     <div class="alert alert-info" [ngClass]="{'alert-info': !erroAviso, 'alert-danger': erroAviso}" *ngIf="aviso">
                         <strong *ngIf="!erroAviso">Informação!</strong><strong *ngIf="erroAviso">Falha!</strong> {{aviso}}
                     </div>

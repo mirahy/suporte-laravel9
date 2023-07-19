@@ -190,6 +190,20 @@ body .ui-autocomplete-panel .ui-autocomplete-items .ui-autocomplete-list-item.ui
     padding-right: 10px;
     border: 1px solid #ccc;
     background-color: var(--bg-inputs);
+    display: block;
+}
+
+form{
+    width: 500px;
+}
+
+@media (max-width: 510px) {
+    form{
+        width: auto;
+    }
+    .prime-autocomplete input.ui-autocomplete-input {
+        width: max(97.5vw, 6em, 3rem); 
+    }
 }
 
 .prime-autocomplete input.ui-inputtext:enabled:hover:not(.ui-state-error) {
@@ -769,6 +783,57 @@ body .ui-progressbar .ui-progressbar-value {
     border: 1px solid #cccccc;
 }
 
+@media (max-width: 580px) {
+    .card {
+        height: 100px;
+        width: 100%;
+    }
+    .title-card {
+        margin: 10px;
+        width: 100px;
+        height: 100px;
+        margin-bottom: 10px; 
+    }
+    .span-icone {
+        font-size: 4.5rem;
+    }
+    .links-card>span {
+        font-size: 9px;
+        font-weight: 400;
+        padding: 3px;
+    }
+    .links-card {
+        width: 100px;
+        height: 40px;
+        display: table-row;
+    }
+}
+
+@media (max-width: 370px) {
+    .card {
+        height: 80px;
+        width: 100%;
+    }
+    .title-card {
+        margin: 5px;
+        width: 80px;
+        height: 80px;
+        margin-bottom: 5px; 
+    }
+    .span-icone {
+        font-size: 4rem;
+    }
+    .links-card>span {
+        font-size: 8px;
+        font-weight: 200;
+        padding: 1px;
+    }
+    .links-card {
+        width: 80px;
+        height: 30px;
+    }
+}
+
 .title-card>a {
     text-decoration: none;
 }
@@ -910,6 +975,7 @@ body .ui-progressbar .ui-progressbar-value {
 
 
 .theme-container {
+    z-index: 1;
     width: 60px;
     height: 60px;
     border-radius: 50%;
@@ -920,7 +986,7 @@ body .ui-progressbar .ui-progressbar-value {
     justify-content: center;
     align-items: center;
     transition: 0.5s;
-    margin-bottom: 35px;
+    margin-bottom: 25px;
 }
 
 .theme-container:hover {
@@ -929,15 +995,15 @@ body .ui-progressbar .ui-progressbar-value {
 
 .shadow-dark {
     background: linear-gradient(145deg, #23282c, #1e2125);
-    box-shadow: 17px 17px 23px #1a1d20,
-        -17px -17px 23px #282d32, inset 5px 5px 4px #1e2226,
+    box-shadow: 7px 7px 23px #1a1d20,
+        -7px -7px 23px #282d32, inset 5px 5px 4px #1e2226,
         inset -5px -5px 4px #24282c;
 }
 
 .shadow-light {
     box-shadow: 7px 7px 15px -10px #bbcfda, -4px -4px 13px #ffffff,
-        inset 7px 7px 3px rgba(209, 217, 230, 0.35),
-        inset -11px -11px 3px rgba(255, 255, 255, 0.3)
+    inset 4px 4px 16px 6px rgba(209, 217, 230, 0.35), 
+    inset -4px -4px 12px 13px rgba(255, 255, 255, 0.3);
 }
 
 @keyframes change {
@@ -954,6 +1020,21 @@ body .ui-progressbar .ui-progressbar-value {
     animation-name: change;
     animation-duration: 1s;
     animation-direction: alternate;
+}
+
+@media (max-width: 870px) {
+    .theme-container {
+        z-index: 1;
+        width: 45px;
+        height: 45px;
+        margin-bottom: -20px;
+        margin-left: -10px;
+    }
+
+    .theme-container>img{
+        width: 20px;
+        height: 20px;
+    }
 }
 
 .loading {
