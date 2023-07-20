@@ -4,7 +4,7 @@ html, body {
     height: 100vh;
     margin: 0;
     overflow: hidden;
-
+    padding: 0px 1px 40px 1px;
     background-color: #142136;
 }
 
@@ -127,6 +127,7 @@ html, body {
     padding-top: 10px;
     margin-bottom: 0px;
     color: #fafafa !important;
+    border-color: var(--bg-grey-light);
 }
 
 .navbar-default .navbar-nav>li>a {
@@ -159,7 +160,7 @@ html, body {
 #app {
     height: calc(100% - 103px);
     overflow: auto;
-    padding: 10px 2px 50px 2px;
+    padding: 10px 2px 10px 2px;
     position: relative;
     background-color: var(--bg-grey-light);
 }
@@ -198,11 +199,11 @@ body .ui-autocomplete-panel .ui-autocomplete-items .ui-autocomplete-list-item.ui
 }
 
 @media (max-width: 510px) {
-    form{
+    #salaForm{
         width: auto;
     }
     .prime-autocomplete input.ui-autocomplete-input {
-        width: max(97.5vw, 6em, 3rem); 
+        width: max(97vw, 0.1em, 4rem); 
     }
 }
 
@@ -347,8 +348,10 @@ table.table>tbody>tr>th {
 
 @media (max-width: 767.99px) {
     .modal-dialog-centered>.modal-content {
+        width: max(80vw, 0.1em, 4rem);
         margin: auto;
         background-color: var(--bg-grey-light);
+        color: var(--text-dark)
     }
 }
 
@@ -1038,9 +1041,9 @@ body .ui-progressbar .ui-progressbar-value {
 }
 
 .loading {
-    position: absolute;
+    position: fixed;
     top: 50%;
-    left: 50%;
+    left: 40%;
   }
   .loading-bar {
     display: inline-block;
@@ -1085,3 +1088,14 @@ body .ui-progressbar .ui-progressbar-value {
       transform: scale(1);
     }
   }
+
+  .container>.navbar-header{
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: flex-end;
+    /* flex-wrap: nowrap; */
+    justify-content: space-evenly;
+
+  }
+
+  
