@@ -2750,7 +2750,7 @@ var FormatadorDataPipe = /** @class */ (function () {
     }
     FormatadorDataPipe.prototype.transform = function (value, time) {
         var date = new Date(value);
-        return date.toLocaleDateString() + (time ? " " + date.toLocaleTimeString().substring(0, 5) : '');
+        return date.toLocaleDateString() + (time ? " " + date.toLocaleTimeString("pt-BR", { timeZone: "UTC" }).substring(0, 5) : '');
     };
     FormatadorDataPipe = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Pipe"])({
