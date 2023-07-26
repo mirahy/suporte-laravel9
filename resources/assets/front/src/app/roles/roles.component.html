@@ -1,18 +1,154 @@
-<div class="d-flex h-100"
-  style=" height: 77rem; display: flex; justify-content: center; align-items: center; ">
-  <div class="offset-md-4 col-md-4 offset-sm-3 col-sm-6 my-auto text-center">
-    <div class="shadow-sm rounded border text-dark p-5" style="background: rgba(255,255,255,.4); box-shadow: 4px 4px 5px #00420c">
-      <img alt="em progresso" src="/img/cogs.gif" style="height:150px;">
-      <h1 class="my-4 h3">PÁGINA EM CONSTRUÇÃO!!!</h1>
-      <div>Volte em breve!</div>
-      <div class="text-center mt-3 " style="padding: 4px ;">
-        <a type="button" name="retrun" class="btn btn-secondary botao-barra" href="/">
+<div class="panel panel-default">
+  <div class="panel-heading">
+      Perfis - Acessos
+  </div>
+  <div class="row">
+      <div class="col-md-3"  style="padding-right: 0px; border-right: 1px solid #ddd">
+          <div>
+              <table class="table" style="margin-bottom: 0px">
+                  <colgroup>
+                      <col width="40px"/>
+                      <col width="100%"/>
+                      <!--col width="130px"/-->
+                      <col width="15px"/>
+                  </colgroup>
+                  <thead class="thead-light">
+                      <tr>
+                          <th>#</th>
+                          <th class="celula-trunca-texto" title="PERÍODO LETIVO">PERFIS</th>
+                          <!--th class="celula-trunca-texto" title="Referência de Início de IDs de Categorias">Cat. IDs Início</th-->
+                          <th></th>
+                      </tr>
+                  </thead>
+              </table>
+          </div>
+          <div redimensionar="204" style="overflow-y: scroll;">
+              <table class="table">
+                  <colgroup>
+                      <col width="40px"/>
+                      <col width="100%"/>
+                      <!--col width="130px"/-->
+                  </colgroup>
+                  <tbody>
+                      <tr  class="clickable-row" (click)="selecionarPeriodoLetivo(pl)" [ngClass]="">
+                          <td></td>
+                          <td class="celula-trunca-texto" title="{{pl.nome}}"></td>
+                          <!--td class="celula-trunca-texto" title="{{pl.}}">{{pl.}}</td-->
+                      </tr>
+                  </tbody>
+                  <tfoot class="status-tabela">
+                      <tr ><td colspan="3"><i>Carregando  Perfis...</i></td></tr>
+                      <tr ><td colspan="3"><i>Não Há Perfis para serem listados</i></td></tr>
+                      <tr ><td class="erro" colspan="3"><i>Falha na obtenção dos Perfis!</i></td></tr>
+                  </tfoot>
+              </table>
+          </div>
+      </div>
+      <div class="col-md-9" style="padding-left: 0px; ">
+          <div class="barra-titulo">
+              <table class="table">
+                  <tbody>
+                      <tr>
+                          <td colspan="3" class="celula-trunca-texto" style="text-align: center;">
+                              <h4  title=""><i>Selecione Perfil...</i></h4>
+                              <h4  style="display: inline-block" title="">Perfil:</h4>
+                          </td>
+                      </tr>
+                  </tbody>
+              </table>
+          </div>
+          <div>
+              <div>
+                  <table class="table" style="margin-bottom: 0px">
+                      <caption>
+                          <table>
+                              <tr>
+                                  <td class="col-md-1"><label for="filtro" class="col-md-1 control-label">Buscar:</label></td>
+                                  <td class="col-md-7"><input id="filtro" type="text" class="form-control" name="filtro" [(ngModel)]="criteria"></td>
+                              </tr>
+                          </table>
+                      </caption>
+                      <colgroup>
+                          <col width="40px"/>
+                          <col width="20%"/>
+                          <col width="60%"/>
+                          <col width="20%"/>
+                          <col width="39px"/>
+                          <col width="39px"/>
+                          <col width="15px"/>
+                      </colgroup>
+                      <thead class="thead-light">
+                          <tr>
+                              <th style="text-align: center">#</th>
+                              <th class="celula-trunca-texto" title="FACULDADE">ACESSO</th>
+                              <th class="celula-trunca-texto" title="CURSO">DESCRIÇÃO</th>
+                              <th class="celula-trunca-texto" title="Categoria ID">DATA</th>
+                              <th></th>
+                          </tr>
+                      </thead>
+                  </table>
+              </div>
+              <div redimensionar="310" style="overflow-y: scroll;">
+                  <table class="table">
+                      <colgroup>
+                          <col width="40px"/>
+                          <col width="20%"/>
+                          <col width="60%"/>
+                          <col width="20%"/>
+                          <col width="39px"/>
+                          <col width="39px"/>
+                      </colgroup>
+                      <tbody>
+                          <ng-container >
+                              <tr  >
+                                  <td></td>
+                                  <td [ngClass]="" class="celula-trunca-texto" title=""></td>
+                                  <td [ngClass]="" class="celula-trunca-texto" title=""></td>
+                                  <ng-container >
+                                      <td></td>
+                                      <td class="celula-trunca-texto" title="Editar">
+                                          <button style="text-align: center; margin-left: 2px;" title="Editar" type="button" class="btn btn-info botao-reduzido" (click)="selecionarCurso(curso)" [disabled]="!editavel || periodoLetivo.id == 0">
+                                              <span class="span-icon-button"><i class="bi bi-pencil"></i></span>
+                                          </button>
+                                      </td>
+                                      <td class="celula-trunca-texto" title="Anular">
+                                          <button style="text-align: center; margin-left: 2px;" title="Anular" type="button" class="btn btn-danger botao-reduzido" (click)="anularCategoria(curso)" [disabled]="!editavel || periodoLetivo.id == 0">
+                                              <span class="span-icon-button"><i class="bi bi-x-lg"></i></span>
+                                          </button>
+                                      </td>
+                                  </ng-container>
+                                  <ng-container >
+                                      <td>
+                                          <input id="categoriaIdInput" class="form-control form-control-micro" [(ngModel)]="categoriaIdTemp">
+                                      </td>
+                                      <td class="celula-trunca-texto" title="Concluir Edição" style="text-align: center;">
+                                          <button style="text-align: center; margin-left: 2px;" title="Concluir Edição" type="button" class="btn btn-success botao-reduzido" (click)="concluirEdicaoCategoria(curso)" [disabled]="!editavel || periodoLetivo.id == 0">
+                                              <span class="span-icon-button" ><i class="bi bi-check2" style="-webkit-text-stroke-width: 0.2rem;"></i></span>
+                                          </button>
+                                      </td>
+                                      <td class="celula-trunca-texto" title="Cancelar" style="text-align: center;">
+                                          <button style="text-align: center; margin-left: 2px;" title="Cancelar" type="button" class="btn btn-secondary botao-reduzido" (click)="resetCursoSelecionado()" [disabled]="!editavel || periodoLetivo.id == 0">
+                                              <span class="span-icon-button"><i class="bi bi-arrow-repeat"></i></span>
+                                          </button>
+                                      </td>
+                                  </ng-container>
+                              </tr>
+                          </ng-container>
+                      </tbody>
+                      <tfoot class="status-tabela">
+                          <tr ><td colspan="6"><i>Carregando Acessos...</i></td></tr>
+                          <tr ><td colspan="6"><i>Não Há Acessos para serem listados</i></td></tr>
+                          <tr ><td class="erro" colspan="6"><i>Falha na obtenção da lista de Acessos!</i></td></tr>
+                      </tfoot>
+                  </table>
+              </div>
+          </div>
+      </div>
+  </div>
+  <div class="panel-footer">
+      <a type="button" name="retrun" class="btn btn-secondary botao-barra" href="/">
           <span class="span-icon-button"><i class="bi bi-box-arrow-left"></i></span>
           Voltar
       </a>
-      </div>
-
-    </div>
-
   </div>
 </div>
