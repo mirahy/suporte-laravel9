@@ -206,16 +206,26 @@ class ServidoresMoodleController extends Controller
         }
     }
 
-    public function getTokem($sala, $linkServidorMoodle){
+    public function getTokem($sala = null, $linkServidorMoodle){
 
         $link_backup_moodle = $sala->link_backup_moodle;
         $token = '';
-        if(str_contains($linkServidorMoodle,'ead') && str_contains($sala->link_backup_moodle,'ead'))
-            $token = getenv('CHAVE_USER_WEBSERVICE_EAD');
-        if(str_contains($linkServidorMoodle,'presencial') && str_contains($sala->link_backup_moodle,'presencial'))
-            $token = getenv('CHAVE_USER_WEBSERVICE_PRESENCIAL');
-        if(str_contains($linkServidorMoodle,'host-apache') && str_contains($sala->link_backup_moodle,'host-apache'))
-            $token = getenv('CHAVE_USER_WEBSERVICE_LOCAL');
+        if($link_backup_moodle){
+
+            if(str_contains($linkServidorMoodle,'ead') && str_contains($sala->link_backup_moodle,'ead'))
+                $token = getenv('CHAVE_USER_WEBSERVICE_EAD');
+            if(str_contains($linkServidorMoodle,'presencial') && str_contains($sala->link_backup_moodle,'presencial'))
+                $token = getenv('CHAVE_USER_WEBSERVICE_PRESENCIAL');
+            if(str_contains($linkServidorMoodle,'localhost') && str_contains($sala->link_backup_moodle,'localhost'))
+                $token = getenv('CHAVE_USER_WEBSERVICE_LOCAL');
+        }else{
+            if(str_contains($linkServidorMoodle,'ead'))
+                $token = getenv('CHAVE_USER_WEBSERVICE_EAD');
+            if(str_contains($linkServidorMoodle,'presencial'))
+                $token = getenv('CHAVE_USER_WEBSERVICE_PRESENCIAL');
+            if(str_contains($linkServidorMoodle,'localhost'))
+                $token = getenv('CHAVE_USER_WEBSERVICE_LOCAL');
+        }
         if(!$token)
             App::make('MessagesService')->messagesHttp(404 , null, 'O link do conteúdo para restaurar: ' .
                                                         substr($link_backup_moodle,0, strpos($link_backup_moodle, 'br') ?
@@ -242,6 +252,20 @@ class ServidoresMoodleController extends Controller
         }
 
         return $user;
+    }
+
+    public function getIdUrl(Request $request, $url){
+        $id ="";
+        // verifica se existe espaço em branco e retira
+        if(str_contains($url, ""))
+            $id = trim($url);    
+        // verifica se existe mais paremetros e retira
+        if(str_contains($url, "&"))
+            $id = substr($url, 0, stripos($url, "&"));
+        //pega o id
+        $id = substr($id, stripos($id, "id=") +3, strlen($id));
+        
+        return $id;
     }
 
     public function getCourse($id, $linkServidorMoodle, $token){
@@ -287,6 +311,25 @@ class ServidoresMoodleController extends Controller
                     $response = $response->json();
                 }elseif($response->failed() || empty($response->json())){
                     App::make('MessagesService')->messagesHttp(404, null, 'Não há inscritos na sala id '. $id .'!');
+                }
+        return $response;
+    }
+
+    public function duplicateCoursebyNewCourse($id, $fullname, $shortname, $categoryid, $linkServidorMoodle, $token){
+        //duplica curso referente ao id passado
+        $response = Http::get($linkServidorMoodle . '/webservice/rest/server.php/', [
+                    'moodlewsrestformat'    => 'json',
+                    'wstoken'               => $token,
+                    'wsfunction'            => 'core_course_duplicate_course',
+                    'courseid'              => $id,
+                    'fullname'              => $fullname,
+                    'shortname'             => $shortname,
+                    'categoryid'            => $categoryid,
+                ]);
+                if($response->successful() && !empty($response->json())){
+                    $response = $response->json();
+                }elseif($response->failed() || empty($response->json())){
+                    App::make('MessagesService')->messagesHttp(404, null, 'Erro ao duplicar o curso!');
                 }
         return $response;
     }

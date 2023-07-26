@@ -246,7 +246,7 @@
                         <label class="style1">Observação:</label><br>
                         <textarea class="form-control" type="text" name="observacao" placeholder="" [(ngModel)]="sala.observacao" [readonly]="!editavel"></textarea><p></p>
 
-                        <button *ngIf="!mostraMais" style="width: 100%;" type="button" (click)="mostraMais = true">
+                        <button *ngIf="!mostraMais" style="width: 100%;" type="button" (click)="mostraMais = true" class="arrow">
                             <i class="bi bi-arrow-down-short"></i> Mais <i class="bi bi-arrow-down-short"></i>
                          </button>
                         <ng-container *ngIf="mostraMais">
@@ -259,7 +259,7 @@
                             <label class="form-control form-control-read">{{sala.avaliacao}}</label><p></p>
                             <label>Chave da Disciplina: </label><br>
                             <label class="form-control form-control-read">{{sala.disciplina_key}}</label><p></p>
-                            <button type="button"(click)="mostraMais = false" style="width: 100%;">
+                            <button type="button"(click)="mostraMais = false" style="width: 100%;"  class="arrow">
                                 <i class="bi bi-arrow-up-short"></i> Menos <i class="bi bi-arrow-up-short"></i>
                              </button>
                         </ng-container>

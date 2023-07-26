@@ -153,7 +153,7 @@ class SalaController extends Controller
                         }
                     }
                     if(empty($couserUser)) {
-                        App::make('MessagesService')->messagesHttp(404, null, 'Sala sem professores!');
+                        App::make('MessagesService')->messagesHttp(404, null, 'Sala sem professor(es)!');
                     }
                 }
             }else{
@@ -342,7 +342,8 @@ class SalaController extends Controller
     }
 
     public function posCriaSala(Request $request, $sala){
-        if (!($sala->observacao || $sala->link_backup_moodle)) {
+            // se tem observação e link, não cria sala no moodle, não havendo gera sala
+        if (!$sala->observacao && !$sala->link_backup_moodle) {
             if ($this->executarRestauracaoAutomatica($request, $sala->id, 'cria', true, true)) {
                 $sala = Sala::find($sala->id);
                 $request->session()->put('link', $sala->mensagem);
@@ -350,6 +351,81 @@ class SalaController extends Controller
                 $sala->save();
             }
         }
+        // se não tem pobservação e tem link, vai tentar gerar a sala no moodle
+        if($sala->link_backup_moodle && !$sala->observacao){
+            // pega link do moodle
+            $linkServidorMoodle = $sala->macro->link_servidor_moodle;
+            // pega id da sala para restauração
+            $id = App::make('ServidoresMoodleService')->getIdUrl($request, $sala->link_backup_moodle);
+            // pega token referente a moodle específicado no link
+            $token = App::make('ServidoresMoodleService')->getTokem($sala, $linkServidorMoodle );
+            // pega login do ususário
+            $login = substr($request->get('email'), 0, strripos($request->get('email'), "@"));
+    
+            try {
+                //Obter id de usuário no moodle
+                $user = App::make('ServidoresMoodleService')->getUser($login, $linkServidorMoodle, $token);
+                //Obter perfis de usuário do curso por id
+                $couserUser = App::make('ServidoresMoodleService')->getCourseUser($id, $user[0]['id'], $linkServidorMoodle, $token);
+                // verificar se solicitante é professor na sala do link informado
+                $isTeacher = false;
+                if(isset($couserUser[0]['roles']) && !empty($couserUser[0]['roles'])){
+                    $roles = $couserUser[0]['roles'];
+                    foreach($roles as $role){
+                        if($role['roleid'] == 3 || $role['shortname'] == 'editingteacher' ){
+                            $isTeacher = true;
+                        }
+                    }
+                }
+                // se solicitante é professor, cria sala no moodle
+                if($isTeacher){
+                    $request->session()->put('courseImportId', $id);
+
+                    if ($this->executarRestauracaoAutomatica($request, $sala->id, 'cria', true, true)) {
+                        $sala = Sala::find($sala->id);
+                        $request->session()->put('link', $sala->mensagem);
+                        $sala->status = Status::where('chave', Status::STATUS_PADRAO_SUCESSO)->first();
+                        $sala->save();
+                    }
+                // se solicitante não é professor da sala, procura o professor e insere mensagem na observação da sala.
+                }elseif(!$isTeacher) {
+                $response = App::make('ServidoresMoodleService')->getUsersByCourse($id, $linkServidorMoodle, $token);
+                $teacher = "";
+                if(is_array($response)){
+                    foreach($response as $user){
+                        if(isset($user['roles']) && !empty($user['roles'])){
+                            if($user['roles'][0]['roleid'] == 3 || $user['roles'][0]['shortname'] == 'editingteacher' ){
+                                if($teacher){
+                                    $teacher = $teacher. ", ".$user["fullname"]."(".$user["email"].")";
+                                }else{
+                                    $teacher = $user["fullname"] ."(".$user["email"].")";
+                                }
+                            }
+                        }
+                    }
+                }
+
+                    $configEmail = Configuracoes::where('nome', Configuracoes::CONFIGURACAO_EMAIL_SUPORTE)->first();
+                    $sala = Sala::find($sala->id);
+                    $sala->observacao = "Solicitante não é professor na sala do Moodle, por favor encaminhar autorização do(as)
+                    Professores(as): ".$teacher." para o email do suporte: ". $configEmail->valor ." .";
+                    $sala->save();
+                }
+    
+            } catch (\Throwable $th) {
+                if(getenv('APP_DEBUG') == false){
+                    $configEmail = Configuracoes::where('nome', Configuracoes::CONFIGURACAO_EMAIL_SUPORTE)->first();
+                    App::make('MessagesService')->messagesHttp(500, null, 'Erro do Servidor na consulta de sala no moodle, entrar em contato com o suporte através do email: '. $configEmail->valor);
+                }elseif(getenv('APP_DEBUG') == true){
+                    App::make('MessagesService')->messagesHttp(500, null, $th->getMessage());
+                }else{
+                    App::make('MessagesService')->messagesHttp(500, null, "");
+                }
+            }
+            
+
+        }
+
         return $sala;
     }
 
