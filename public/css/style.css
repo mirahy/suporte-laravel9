@@ -11,7 +11,9 @@ html, body {
 .light {
     /* cores de texto */
     --text-white: #ffffff;
+    --text-black: #000000;
     --text-dark: #142136;
+    
 
     /* cores de fundo */
     --bg-grey-light: #f5f5f5;
@@ -27,6 +29,7 @@ html, body {
 .dark {
      /* cores de texto */
     --text-white: #e6e6e6;
+    --text-black: #000000;
     --text-dark: #ffffff;
 
     /* cores de fundo */
@@ -1113,4 +1116,6 @@ body .ui-progressbar .ui-progressbar-value {
 
   }
 
-  
+  .arrow{
+    color: var(--text-black);
+  }
