@@ -389,21 +389,21 @@ class SalaController extends Controller
                     }
                 // se solicitante não é professor da sala, procura o professor e insere mensagem na observação da sala.
                 }elseif(!$isTeacher) {
-                $response = App::make('ServidoresMoodleService')->getUsersByCourse($id, $linkServidorMoodle, $token);
-                $teacher = "";
-                if(is_array($response)){
-                    foreach($response as $user){
-                        if(isset($user['roles']) && !empty($user['roles'])){
-                            if($user['roles'][0]['roleid'] == 3 || $user['roles'][0]['shortname'] == 'editingteacher' ){
-                                if($teacher){
-                                    $teacher = $teacher. ", ".$user["fullname"]."(".$user["email"].")";
-                                }else{
-                                    $teacher = $user["fullname"] ."(".$user["email"].")";
+                    $response = App::make('ServidoresMoodleService')->getUsersByCourse($id, $linkServidorMoodle, $token);
+                    $teacher = "";
+                    if(is_array($response)){
+                        foreach($response as $user){
+                            if(isset($user['roles']) && !empty($user['roles'])){
+                                if($user['roles'][0]['roleid'] == 3 || $user['roles'][0]['shortname'] == 'editingteacher' ){
+                                    if($teacher){
+                                        $teacher = $teacher. ", ".$user["fullname"]."(".$user["email"].")";
+                                    }else{
+                                        $teacher = $user["fullname"] ."(".$user["email"].")";
+                                    }
                                 }
                             }
                         }
                     }
-                }
 
                     $configEmail = Configuracoes::where('nome', Configuracoes::CONFIGURACAO_EMAIL_SUPORTE)->first();
                     $sala = Sala::find($sala->id);
@@ -462,30 +462,36 @@ class SalaController extends Controller
                 abort(400, "ID de Categoria não cadastrada para esta Sala");
         }
 
-        $curlFile = null;
-        if ($modo == 'full' || $modo == 'cria')
-            $curlFile = App::make('MacroService')->makeCurlFile($salaId);
-        $cURLConnection = curl_init();
-        //curl_setopt($cURLConnection, CURLOPT_URL, "http://moodle/ccc.php");
-        curl_setopt($cURLConnection, CURLOPT_URL, $linkServidorMoodle."/".self::ARQUIVO_SCRIPT_RESTAURACAO_AUTOMATICA);
-        curl_setopt($cURLConnection, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($cURLConnection, CURLOPT_POST, true);
-        curl_setopt(
-            $cURLConnection,
-            CURLOPT_POSTFIELDS,
-            array(
-                'backupfile' => $curlFile,
-                'modo' => $modo,
-                'courseid' => $sala->sala_moodle_id,
-                'categoryid' => $categoriaId,
-                'courseImportId' => ($request->has('courseImportId') ? $request->get('courseImportId') : null),
-                'usuarios' => $sala->getEstudantesComProfessor(),
-                'chaveWebservice' => base64_encode( env('CHAVE_WEBSERVICE_MOODLE', '') )
-            ));
-        curl_setopt($cURLConnection, CURLOPT_RETURNTRANSFER, true);
+        // if ($request->has('courseImportId') || $request->input('link_backup_moodle')) {
+        //     # code...
+        // }else {
+            $curlFile = null;
+            if ($modo == 'full' || $modo == 'cria')
+                $curlFile = App::make('MacroService')->makeCurlFile($salaId);
+            $cURLConnection = curl_init();
+            //curl_setopt($cURLConnection, CURLOPT_URL, "http://moodle/ccc.php");
+            curl_setopt($cURLConnection, CURLOPT_URL, $linkServidorMoodle."/".self::ARQUIVO_SCRIPT_RESTAURACAO_AUTOMATICA);
+            curl_setopt($cURLConnection, CURLOPT_SSL_VERIFYPEER, false);
+            curl_setopt($cURLConnection, CURLOPT_POST, true);
+            curl_setopt(
+                $cURLConnection,
+                CURLOPT_POSTFIELDS,
+                array(
+                    'backupfile' => $curlFile,
+                    'modo' => $modo,
+                    'courseid' => $sala->sala_moodle_id,
+                    'pass_aluno' => $sala->senha_aluno,
+                    'categoryid' => $categoriaId,
+                    'courseImportId' => ($request->has('courseImportId') ? $request->get('courseImportId') : null),
+                    'usuarios' => $sala->getEstudantesComProfessor(),
+                    'chaveWebservice' => base64_encode( env('CHAVE_WEBSERVICE_MOODLE', '') )
+                ));
+            curl_setopt($cURLConnection, CURLOPT_RETURNTRANSFER, true);
+    
+            $resposta = curl_exec($cURLConnection);
+            curl_close($cURLConnection);
+        // }
 
-        $resposta = curl_exec($cURLConnection);
-        curl_close($cURLConnection);
 
         if ($comPos)
             $this->posAutoRestore($sala, $resposta, $linkServidorMoodle . "/" . self::SUFIXO_URL_SALAID);
