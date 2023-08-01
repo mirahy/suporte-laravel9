@@ -68,6 +68,7 @@ class UsuarioController extends Controller
 
     public function getInfosLdapServidorByDescription($cpf, $createUser = false) {
         $STRING_BAN = "Aluno";
+        $STRING_BAN2 = "Desativados";
         if (strlen($cpf) != 11 && strlen($cpf) != 14)
             return null;
         if (strlen($cpf) == 11)
@@ -78,16 +79,30 @@ class UsuarioController extends Controller
             if (count($us) > 1) {
                 for ($i = 0; $i < count($us); $i++) {
                     $brk = true;
-                    $listas = [];
+                    $memberof = [];
                     if (!isset($us[$i]->getAttributes()["memberof"]))
                         $brk = false;
                     else
-                        $listas = $us[$i]->getAttributes()["memberof"];
-                    foreach ($listas as $l) {
-                        if (is_int(strpos ($l, $STRING_BAN))){
+                        $memberof = $us[$i]->getAttributes()["memberof"];
+                    foreach ($memberof as $m) {
+                        if (is_int(strpos ($m, $STRING_BAN))){
                             $brk = false;
                             break;
                         }
+
+                    }
+
+                    $distinguishedname = [];
+                    if (!isset($us[$i]->getAttributes()["distinguishedname"]))
+                        $brk = false;
+                    else
+                        $distinguishedname = $us[$i]->getAttributes()["distinguishedname"];
+                    foreach ($distinguishedname as $d) {
+                        if (is_int(strpos ($d, $STRING_BAN2))){
+                            $brk = false;
+                            break;
+                        }
+
                     }
                     if ($brk) {
                         $u = $us[$i];
