@@ -1119,3 +1119,7 @@ body .ui-progressbar .ui-progressbar-value {
   .arrow{
     color: var(--text-black);
   }
+
+  .panel-body{
+    color: var(--text-dark);
+  }
