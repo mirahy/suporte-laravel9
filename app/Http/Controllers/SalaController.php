@@ -351,12 +351,12 @@ class SalaController extends Controller
                 $sala->save();
             }
         }
-        // se não tem pobservação e tem link, vai tentar gerar a sala no moodle
+        // se não tem observação e tem link, vai tentar gerar a sala no moodle
         if($sala->link_backup_moodle && !$sala->observacao){
             // pega link do moodle
             $linkServidorMoodle = $sala->macro->link_servidor_moodle;
             // pega id da sala para restauração
-            $id = App::make('ServidoresMoodleService')->getIdUrl($request, $sala->link_backup_moodle);
+            $idSalaMoodle = App::make('ServidoresMoodleService')->getIdUrl($request, $sala->link_backup_moodle);
             // pega token referente a moodle específicado no link
             $token = App::make('ServidoresMoodleService')->getTokem($sala, $linkServidorMoodle );
             // pega login do ususário
@@ -366,7 +366,7 @@ class SalaController extends Controller
                 //Obter id de usuário no moodle
                 $user = App::make('ServidoresMoodleService')->getUser($login, $linkServidorMoodle, $token);
                 //Obter perfis de usuário do curso por id
-                $couserUser = App::make('ServidoresMoodleService')->getCourseUser($id, $user[0]['id'], $linkServidorMoodle, $token);
+                $couserUser = App::make('ServidoresMoodleService')->getCourseUser($idSalaMoodle, $user[0]['id'], $linkServidorMoodle, $token);
                 // verificar se solicitante é professor na sala do link informado
                 $isTeacher = false;
                 if(isset($couserUser[0]['roles']) && !empty($couserUser[0]['roles'])){
@@ -379,9 +379,7 @@ class SalaController extends Controller
                 }
                 // se solicitante é professor, cria sala no moodle
                 if($isTeacher){
-                    $request->session()->put('courseImportId', $id);
-
-                    if ($this->executarRestauracaoAutomatica($request, $sala->id, 'cria', true, true)) {
+                    if ($this->executarRestauracaoAutomatica($request, $sala->id, 'cria', true, true, $idSalaMoodle)) {
                         $sala = Sala::find($sala->id);
                         $request->session()->put('link', $sala->mensagem);
                         $sala->status = Status::where('chave', Status::STATUS_PADRAO_SUCESSO)->first();
@@ -389,7 +387,7 @@ class SalaController extends Controller
                     }
                 // se solicitante não é professor da sala, procura o professor e insere mensagem na observação da sala.
                 }elseif(!$isTeacher) {
-                    $response = App::make('ServidoresMoodleService')->getUsersByCourse($id, $linkServidorMoodle, $token);
+                    $response = App::make('ServidoresMoodleService')->getUsersByCourse($idSalaMoodle, $linkServidorMoodle, $token);
                     $teacher = "";
                     if(is_array($response)){
                         foreach($response as $user){
@@ -433,7 +431,7 @@ class SalaController extends Controller
         return $this->executarRestauracaoAutomatica($request, $salaId, 'insere', false);
     }
 
-    public function executarRestauracaoAutomatica(Request $request, $salaId, $modo = 'cria', $comPos = true, $naoAbortar = false) {
+    public function executarRestauracaoAutomatica(Request $request, $salaId, $modo = 'cria', $comPos = true, $naoAbortar = false, $idSalaMoodle = null) {
         $sala = Sala::find($salaId);
         if ($sala == NULL) {
             if($naoAbortar)
@@ -482,7 +480,7 @@ class SalaController extends Controller
                     'courseid' => $sala->sala_moodle_id,
                     'pass_aluno' => $sala->senha_aluno,
                     'categoryid' => $categoriaId,
-                    'courseImportId' => ($request->has('courseImportId') ? $request->get('courseImportId') : null),
+                    'courseImportId' => ($request->has('courseImportId') ? $request->get('courseImportId') : $idSalaMoodle),
                     'usuarios' => $sala->getEstudantesComProfessor(),
                     'chaveWebservice' => base64_encode( env('CHAVE_WEBSERVICE_MOODLE', '') )
                 ));
