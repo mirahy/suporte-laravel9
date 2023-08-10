@@ -9590,6 +9590,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+var Swal = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/dist/sweetalert2.all.js");
 var CriaSalasComponent = /** @class */ (function (_super) {
     tslib__WEBPACK_IMPORTED_MODULE_0__["__extends"](CriaSalasComponent, _super);
     function CriaSalasComponent(salasService, faculdadeService, cursosService, periodoLetivoService, usuarioService, plDisciplinasAcademicosService, route) {
@@ -9691,20 +9692,35 @@ var CriaSalasComponent = /** @class */ (function (_super) {
                     }
                     _this.editavel = true;
                 }).catch(function (response) {
-                    _this.erroAviso = true;
-                    _this.aviso = _this.erroHttp(response);
+                    jQuery('#dialogMensagem').modal('hide');
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Erro!',
+                        text: _this.erroHttp(response),
+                        confirmButtonColor: '#025310',
+                    });
                     _this.editavel = true;
                 });
             }
             else {
                 jQuery('#dialogMensagem').modal('hide');
-                _this.erroAviso = !validaLink['status'].value || !id['status'].value;
-                _this.aviso = validaLink['msg'] ? validaLink['msg'].value :  false || id['msg'] ? id['msg'].value : "";
+                if (!validaLink['status'].value || !id['status'].value) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Erro!',
+                        text: validaLink['msg'] ? validaLink['msg'].value :  false || id['msg'] ? id['msg'].value : "",
+                        confirmButtonColor: '#025310',
+                    });
+                }
                 _this.editavel = true;
             }
         }).catch(function (response) {
-            _this.erroAviso = true;
-            _this.aviso = _this.erroHttp(response);
+            Swal.fire({
+                icon: 'error',
+                title: 'Erro!',
+                text: _this.erroHttp(response),
+                confirmButtonColor: '#025310',
+            });
             _this.editavel = true;
         });
     };
@@ -9738,20 +9754,34 @@ var CriaSalasComponent = /** @class */ (function (_super) {
                     _this.professor_sala_moodle = result.fullname;
                     jQuery('#dialogMensagem').modal('hide');
                 }).catch(function (response) {
-                    _this.erroAviso = true;
-                    _this.aviso = _this.erroHttp(response);
-                    _this.editavel = true;
                     jQuery('#dialogMensagem').modal('hide');
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Erro!',
+                        text: _this.erroHttp(response),
+                        confirmButtonColor: '#025310',
+                    });
+                    _this.editavel = true;
                 });
             }
             else {
                 jQuery('#dialogMensagem').modal('hide');
-                _this.erroAviso = !validaLink['status'].value || !id['status'].value;
-                _this.aviso = validaLink['msg'] ? validaLink['msg'].value :  false || id['msg'] ? id['msg'].value : "";
+                if (!validaLink['status'].value || !id['status'].value) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Erro!',
+                        text: validaLink['msg'] ? validaLink['msg'].value :  false || id['msg'] ? id['msg'].value : "",
+                        confirmButtonColor: '#025310',
+                    });
+                }
             }
         }).catch(function (response) {
-            _this.erroAviso = true;
-            _this.aviso = _this.erroHttp(response);
+            Swal.fire({
+                icon: 'error',
+                title: 'Erro!',
+                text: _this.erroHttp(response),
+                confirmButtonColor: '#025310',
+            });
             _this.editavel = true;
         });
     };
@@ -9791,9 +9821,12 @@ var CriaSalasComponent = /** @class */ (function (_super) {
                 }
                 jQuery('#dialogMensagem').modal('hide');
             }).catch(function (response) {
-                _this.erroAviso = true;
-                _this.aviso = _this.erroHttp(response);
-                alert(_this.aviso);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Erro!',
+                    text: _this.erroHttp(response),
+                    confirmButtonColor: '#025310',
+                });
                 _this.editavel = true;
                 jQuery('#dialogMensagem').modal('hide');
             });
@@ -9896,8 +9929,12 @@ var CriaSalasComponent = /** @class */ (function (_super) {
                                             jQuery('#dialogMensagem').modal('hide');
                                         _this.editavel = true;
                                     }).catch(function (response) {
-                                        _this.erroAviso = true;
-                                        _this.aviso = _this.erroHttp(response);
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: 'Erro!',
+                                            text: _this.erroHttp(response),
+                                            confirmButtonColor: '#025310',
+                                        });
                                     });
                                 }
                                 else {
@@ -9906,8 +9943,12 @@ var CriaSalasComponent = /** @class */ (function (_super) {
                                 }
                             }).catch(function (response) {
                                 _this.status = _this.ERROR;
-                                _this.erroAviso = true;
-                                _this.mensagemDialog = _this.erroHttp(response);
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Erro!',
+                                    text: _this.erroHttp(response),
+                                    confirmButtonColor: '#025310',
+                                });
                             });
                         })
                             .catch(function (response) {
