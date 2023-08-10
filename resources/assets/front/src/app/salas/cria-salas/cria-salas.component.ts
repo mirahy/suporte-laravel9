@@ -18,6 +18,8 @@ import { Curso } from 'src/app/cursos/curso';
 import { forEach } from '@angular-devkit/schematics';
 declare var jQuery: any;
 
+const Swal = require('sweetalert2')
+
 @Component({
   selector: 'app-cria-salas',
   templateUrl: './cria-salas.component.html',
@@ -105,19 +107,34 @@ export class CriaSalasComponent extends AbstractComponent implements OnInit {
               }
               this.editavel = true;
             }).catch(response => {
-              this.erroAviso = true;
-              this.aviso = this.erroHttp(response);
+              jQuery('#dialogMensagem').modal('hide');
+              Swal.fire({
+                icon: 'error',
+                title: 'Erro!',
+                text: this.erroHttp(response),
+                confirmButtonColor: '#025310',
+              })
               this.editavel = true;
             });
         }else {
           jQuery('#dialogMensagem').modal('hide');
-          this.erroAviso = !validaLink['status'].value || !id['status'].value;
-          this.aviso = validaLink['msg'] ? validaLink['msg'].value : "" ||  id['msg'] ? id['msg'].value : "";
+          if(!validaLink['status'].value || !id['status'].value){
+            Swal.fire({
+              icon: 'error',
+              title: 'Erro!',
+              text: validaLink['msg'] ? validaLink['msg'].value : "" ||  id['msg'] ? id['msg'].value : "",
+              confirmButtonColor: '#025310',
+            })
+          } 
           this.editavel = true;
         }
       }).catch(response => {
-        this.erroAviso = true;
-        this.aviso = this.erroHttp(response);
+        Swal.fire({
+          icon: 'error',
+          title: 'Erro!',
+          text: this.erroHttp(response),
+          confirmButtonColor: '#025310',
+        })
         this.editavel = true;
       });
 
@@ -154,19 +171,33 @@ export class CriaSalasComponent extends AbstractComponent implements OnInit {
               this.professor_sala_moodle = result.fullname
               jQuery('#dialogMensagem').modal('hide');
             }).catch(response => {
-              this.erroAviso = true;
-              this.aviso = this.erroHttp(response);
-              this.editavel = true;
               jQuery('#dialogMensagem').modal('hide');
+              Swal.fire({
+                icon: 'error',
+                title: 'Erro!',
+                text: this.erroHttp(response),
+                confirmButtonColor: '#025310',
+              })
+              this.editavel = true;
             });
         } else {
           jQuery('#dialogMensagem').modal('hide');
-          this.erroAviso = !validaLink['status'].value || !id['status'].value;
-          this.aviso = validaLink['msg'] ? validaLink['msg'].value : "" ||  id['msg'] ? id['msg'].value : "" ;
+          if(!validaLink['status'].value || !id['status'].value){
+            Swal.fire({
+              icon: 'error',
+              title: 'Erro!',
+              text: validaLink['msg'] ? validaLink['msg'].value : "" ||  id['msg'] ? id['msg'].value : "",
+              confirmButtonColor: '#025310',
+            })
+          }
         }
      }).catch(response => {
-      this.erroAviso = true;
-      this.aviso = this.erroHttp(response);
+      Swal.fire({
+        icon: 'error',
+        title: 'Erro!',
+        text: this.erroHttp(response),
+        confirmButtonColor: '#025310',
+      })
       this.editavel = true;
     });
   }
@@ -210,9 +241,12 @@ export class CriaSalasComponent extends AbstractComponent implements OnInit {
           }
           jQuery('#dialogMensagem').modal('hide');
         }).catch(response => {
-          this.erroAviso = true;
-          this.aviso = this.erroHttp(response);
-          alert(this.aviso)
+          Swal.fire({
+            icon: 'error',
+            title: 'Erro!',
+            text: this.erroHttp(response),
+            confirmButtonColor: '#025310',
+          })
           this.editavel = true;
           jQuery('#dialogMensagem').modal('hide');
         });
@@ -320,8 +354,12 @@ export class CriaSalasComponent extends AbstractComponent implements OnInit {
                                     jQuery('#dialogMensagem').modal('hide');
                                   this.editavel = true;
                                 }).catch(response => {
-                                  this.erroAviso = true;
-                                  this.aviso = this.erroHttp(response);
+                                  Swal.fire({
+                                    icon: 'error',
+                                    title: 'Erro!',
+                                    text: this.erroHttp(response),
+                                    confirmButtonColor: '#025310',
+                                  })
                                 })
                             }
                             else {
@@ -330,8 +368,12 @@ export class CriaSalasComponent extends AbstractComponent implements OnInit {
                             }
                           }).catch(response => {
                             this.status = this.ERROR;
-                            this.erroAviso = true;
-                            this.mensagemDialog = this.erroHttp(response);
+                            Swal.fire({
+                              icon: 'error',
+                              title: 'Erro!',
+                              text: this.erroHttp(response),
+                              confirmButtonColor: '#025310',
+                            })
                           })
                       })
                       .catch(response => {
