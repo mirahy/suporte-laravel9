@@ -9668,52 +9668,64 @@ var CriaSalasComponent = /** @class */ (function (_super) {
             .then(function (response) {
             var validaLink = response;
             var id = _this.salasService.getIdLinkMoodle(link);
-            if (salaForm.reportValidity() && validaLink['status'].value && id['status'].value) {
-                jQuery('#dialogMensagem').modal('show');
-                _this.mensagemDialog = "Criando sala...";
-                if (_this.plDisciplinasAcademicosService.plDisciplinasAcademicosNameIndex && _this.plDisciplinasAcademicosService.plDisciplinasAcademicosNameIndex.get(_this.sala.nome_sala))
-                    _this.salasService.aplicarPlDisciplina(_this.sala, _this.plDisciplinasAcademicosService.plDisciplinasAcademicosNameIndex.get(_this.sala.nome_sala));
-                _this.salasService.create(_this.sala)
-                    .then(function (r) {
-                    _this.salaResp = r.sala;
-                    _this.salaResp.curso = _this.cursosService.cursosIndex.get(r.sala.curso_id);
-                    _this.emailResp = r.email;
-                    _this.redirectLink = r.redirect;
-                    if (_this.redirectLink) {
-                        window.location.href = _this.redirectLink;
-                    }
-                    else {
+            _this.salasService.getSalaMoodle(id['id'].value, _this.sala)
+                .then(function (r) {
+                if (salaForm.reportValidity() && validaLink['status'].value && id['status'].value) {
+                    jQuery('#dialogMensagem').modal('show');
+                    _this.mensagemDialog = "Criando sala...";
+                    if (_this.plDisciplinasAcademicosService.plDisciplinasAcademicosNameIndex && _this.plDisciplinasAcademicosService.plDisciplinasAcademicosNameIndex.get(_this.sala.nome_sala))
+                        _this.salasService.aplicarPlDisciplina(_this.sala, _this.plDisciplinasAcademicosService.plDisciplinasAcademicosNameIndex.get(_this.sala.nome_sala));
+                    _this.salasService.create(_this.sala)
+                        .then(function (r) {
+                        _this.salaResp = r.sala;
+                        _this.salaResp.curso = _this.cursosService.cursosIndex.get(r.sala.curso_id);
+                        _this.emailResp = r.email;
+                        _this.redirectLink = r.redirect;
+                        if (_this.redirectLink) {
+                            window.location.href = _this.redirectLink;
+                        }
+                        else {
+                            jQuery('#dialogMensagem').modal('hide');
+                            jQuery('#dialogCreate').modal('show');
+                            _this.sala = _sala__WEBPACK_IMPORTED_MODULE_4__["Sala"].geraNovaSala();
+                            _this.sala.nome_professor = _this.salaResp.nome_professor;
+                            _this.sala.email = _this.salaResp.email;
+                            _this.faculdadeSelecionadaId = "";
+                        }
+                        _this.editavel = true;
+                    }).catch(function (response) {
                         jQuery('#dialogMensagem').modal('hide');
-                        jQuery('#dialogCreate').modal('show');
-                        _this.sala = _sala__WEBPACK_IMPORTED_MODULE_4__["Sala"].geraNovaSala();
-                        _this.sala.nome_professor = _this.salaResp.nome_professor;
-                        _this.sala.email = _this.salaResp.email;
-                        _this.faculdadeSelecionadaId = "";
-                    }
-                    _this.editavel = true;
-                }).catch(function (response) {
-                    jQuery('#dialogMensagem').modal('hide');
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Erro!',
-                        text: _this.erroHttp(response),
-                        confirmButtonColor: '#025310',
-                    });
-                    _this.editavel = true;
-                });
-            }
-            else {
-                jQuery('#dialogMensagem').modal('hide');
-                if (!validaLink['status'].value || !id['status'].value) {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Erro!',
-                        text: validaLink['msg'] ? validaLink['msg'].value :  false || id['msg'] ? id['msg'].value : "",
-                        confirmButtonColor: '#025310',
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Erro!',
+                            text: _this.erroHttp(response),
+                            confirmButtonColor: '#025310',
+                        });
+                        _this.editavel = true;
                     });
                 }
+                else {
+                    jQuery('#dialogMensagem').modal('hide');
+                    if (!validaLink['status'].value || !id['status'].value) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Erro!',
+                            text: validaLink['msg'] ? validaLink['msg'].value :  false || id['msg'] ? id['msg'].value : "",
+                            confirmButtonColor: '#025310',
+                        });
+                    }
+                    _this.editavel = true;
+                }
+            }).catch(function (response) {
+                jQuery('#dialogMensagem').modal('hide');
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Erro!',
+                    text: _this.erroHttp(response),
+                    confirmButtonColor: '#025310',
+                });
                 _this.editavel = true;
-            }
+            });
         }).catch(function (response) {
             Swal.fire({
                 icon: 'error',
