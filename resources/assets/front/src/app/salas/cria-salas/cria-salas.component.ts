@@ -40,6 +40,7 @@ export class CriaSalasComponent extends AbstractComponent implements OnInit {
   salaResp = Sala.geraNovaSala();
   emailResp = "";
   redirectLink = "";
+  salaMoodle = true;
 
   mensagemDialog = "Carregando dados...";
 
@@ -83,63 +84,56 @@ export class CriaSalasComponent extends AbstractComponent implements OnInit {
       .then(response => {
         let validaLink = response;
         let id = this.salasService.getIdLinkMoodle(link);
-        this.salasService.getSalaMoodle(id['id'].value, this.sala)
-          .then(r => {
-            if (salaForm.reportValidity() && validaLink['status'].value && id['status'].value) {
-              jQuery('#dialogMensagem').modal('show');
-              this.mensagemDialog = "Criando sala..."
-              if (this.plDisciplinasAcademicosService.plDisciplinasAcademicosNameIndex && this.plDisciplinasAcademicosService.plDisciplinasAcademicosNameIndex.get(this.sala.nome_sala))
-                this.salasService.aplicarPlDisciplina(this.sala, this.plDisciplinasAcademicosService.plDisciplinasAcademicosNameIndex.get(this.sala.nome_sala))
-              this.salasService.create(this.sala)
-                .then(r => {
-                  this.salaResp = r.sala;
-                  this.salaResp.curso = this.cursosService.cursosIndex.get(r.sala.curso_id);
-                  this.emailResp = r.email;
-                  this.redirectLink = r.redirect;
-                  if (this.redirectLink) {
-                    window.location.href = this.redirectLink;
-                  }
-                  else {
-                    jQuery('#dialogMensagem').modal('hide');
-                    jQuery('#dialogCreate').modal('show');
-                    this.sala = Sala.geraNovaSala();
-                    this.sala.nome_professor = this.salaResp.nome_professor;
-                    this.sala.email = this.salaResp.email;
-                    this.faculdadeSelecionadaId = "";
-                  }
-                  this.editavel = true;
-                }).catch(response => {
-                  jQuery('#dialogMensagem').modal('hide');
-                  Swal.fire({
-                    icon: 'error',
-                    title: 'Erro!',
-                    text: this.erroHttp(response),
-                    confirmButtonColor: '#025310',
-                  })
-                  this.editavel = true;
-                });
-            } else {
-              jQuery('#dialogMensagem').modal('hide');
-              if (!validaLink['status'].value || !id['status'].value) {
-                Swal.fire({
-                  icon: 'error',
-                  title: 'Erro!',
-                  text: validaLink['msg'] ? validaLink['msg'].value : "" || id['msg'] ? id['msg'].value : "",
-                  confirmButtonColor: '#025310',
-                })
+        if (link && !this.salaMoodle) {
+          this.getSalaMoodle()
+        }
+        if (salaForm.reportValidity() && validaLink['status'].value && id['status'].value && this.salaMoodle) {
+          jQuery('#dialogMensagem').modal('show');
+          this.mensagemDialog = "Criando sala..."
+          if (this.plDisciplinasAcademicosService.plDisciplinasAcademicosNameIndex && this.plDisciplinasAcademicosService.plDisciplinasAcademicosNameIndex.get(this.sala.nome_sala))
+            this.salasService.aplicarPlDisciplina(this.sala, this.plDisciplinasAcademicosService.plDisciplinasAcademicosNameIndex.get(this.sala.nome_sala))
+          this.salasService.create(this.sala)
+            .then(r => {
+              this.salaResp = r.sala;
+              this.salaResp.curso = this.cursosService.cursosIndex.get(r.sala.curso_id);
+              this.emailResp = r.email;
+              this.redirectLink = r.redirect;
+              if (this.redirectLink) {
+                window.location.href = this.redirectLink;
               }
+              else {
+                jQuery('#dialogMensagem').modal('hide');
+                jQuery('#dialogCreate').modal('show');
+                this.sala = Sala.geraNovaSala();
+                this.sala.nome_professor = this.salaResp.nome_professor;
+                this.sala.email = this.salaResp.email;
+                this.faculdadeSelecionadaId = "";
+              }
+              this.nome_sala_moodle = "";
+              this.professor_sala_moodle = "";
               this.editavel = true;
-            }
-          }).catch(response => {
-            jQuery('#dialogMensagem').modal('hide');
+            }).catch(response => {
+              jQuery('#dialogMensagem').modal('hide');
+              Swal.fire({
+                icon: 'error',
+                title: 'Erro!',
+                text: this.erroHttp(response),
+                confirmButtonColor: '#025310',
+              })
+              this.editavel = true;
+            });
+        } else {
+          jQuery('#dialogMensagem').modal('hide');
+          if (!validaLink['status'].value || !id['status'].value) {
             Swal.fire({
               icon: 'error',
               title: 'Erro!',
-              text: this.erroHttp(response),
+              text: validaLink['msg'] ? validaLink['msg'].value : "" || id['msg'] ? id['msg'].value : "",
               confirmButtonColor: '#025310',
             })
-            this.editavel = true;
-          });
+          }
+          this.editavel = true;
+        }
       }).catch(response => {
         Swal.fire({
           icon: 'error',
@@ -181,9 +175,11 @@ export class CriaSalasComponent extends AbstractComponent implements OnInit {
                   }
                 });
               this.professor_sala_moodle = result.fullname
+              this.salaMoodle = true;
               jQuery('#dialogMensagem').modal('hide');
             }).catch(response => {
               jQuery('#dialogMensagem').modal('hide');
+              this.salaMoodle = false;
               Swal.fire({
                 icon: 'error',
                 title: 'Erro!',
