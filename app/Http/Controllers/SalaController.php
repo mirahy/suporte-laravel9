@@ -125,7 +125,8 @@ class SalaController extends Controller
             $course = App::make('ServidoresMoodleService')->getCourse($id, $linkServidorMoodle, $token);
 
             //Obter perfis de usuário do curso por id
-            $couserUser = App::make('ServidoresMoodleService')->getCourseUser($id, $user[0]['id'], $linkServidorMoodle, $token);
+            if(isset($user[0]['id']) && !empty($user[0]['id']))
+                $couserUser = App::make('ServidoresMoodleService')->getCourseUser($id, $user[0]['id'], $linkServidorMoodle, $token);
 
             // verificar se solicitante é professor na sala do link informado
             $isTeacher = false;
