@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Http;
 
+# lista funções do serviço webservice
+
 class ServidoresMoodleController extends Controller
 {
     public function __construct()
@@ -212,19 +214,23 @@ class ServidoresMoodleController extends Controller
         $token = '';
         if($link_backup_moodle){
 
-            if(str_contains($linkServidorMoodle,'ead') && str_contains($sala->link_backup_moodle,'ead'))
+            if(str_contains($linkServidorMoodle,'moodle.ead') && str_contains($sala->link_backup_moodle,'moodle.ead'))
                 $token = getenv('CHAVE_USER_WEBSERVICE_EAD');
-            if(str_contains($linkServidorMoodle,'presencial') && str_contains($sala->link_backup_moodle,'presencial'))
+            if(str_contains($linkServidorMoodle,'presencial.ead') && str_contains($sala->link_backup_moodle,'presencial.ead'))
                 $token = getenv('CHAVE_USER_WEBSERVICE_PRESENCIAL');
-            if(str_contains($linkServidorMoodle,'localhost') && str_contains($sala->link_backup_moodle,'localhost'))
+            if(str_contains($linkServidorMoodle,'localhost:8082') && str_contains($sala->link_backup_moodle,'localhost'))
                 $token = getenv('CHAVE_USER_WEBSERVICE_LOCAL');
+            if(str_contains($linkServidorMoodle,'localhost:8084') && str_contains($sala->link_backup_moodle,'localhost'))
+                $token = getenv('CHAVE_USER_WEBSERVICE_LOCAL2');
         }else{
-            if(str_contains($linkServidorMoodle,'ead'))
+            if(str_contains($linkServidorMoodle,'moodle.ead'))
                 $token = getenv('CHAVE_USER_WEBSERVICE_EAD');
-            if(str_contains($linkServidorMoodle,'presencial'))
+            if(str_contains($linkServidorMoodle,'presencial.ead'))
                 $token = getenv('CHAVE_USER_WEBSERVICE_PRESENCIAL');
-            if(str_contains($linkServidorMoodle,'localhost'))
+            if(str_contains($linkServidorMoodle,'localhost:8082'))
                 $token = getenv('CHAVE_USER_WEBSERVICE_LOCAL');
+            if(str_contains($linkServidorMoodle,'localhost:8084'))
+                $token = getenv('CHAVE_USER_WEBSERVICE_LOCAL2');
         }
         if(!$token)
             App::make('MessagesService')->messagesHttp(404 , null, 'O link do conteúdo para restaurar: ' .
@@ -315,6 +321,24 @@ class ServidoresMoodleController extends Controller
         return $response;
     }
 
+    public function createCourse($fullname, $shortname, $categoryid, $linkServidorMoodle, $token){
+        //duplica curso referente ao id passado
+        $response = Http::get($linkServidorMoodle . '/webservice/rest/server.php/', [
+                    'moodlewsrestformat'    => 'json',
+                    'wstoken'               => $token,
+                    'wsfunction'            => 'core_course_create_courses',
+                    'fullname'              => $fullname,
+                    'shortname'             => $shortname,
+                    'categoryid'            => $categoryid,
+                ]);
+                if($response->successful() && !empty($response->json())){
+                    $response = $response->json();
+                }elseif($response->failed() || empty($response->json())){
+                    App::make('MessagesService')->messagesHttp(404, null, 'Erro ao duplicar o curso!');
+                }
+        return $response;
+    }
+
     public function duplicateCoursebyNewCourse($id, $fullname, $shortname, $categoryid, $linkServidorMoodle, $token){
         //duplica curso referente ao id passado
         $response = Http::get($linkServidorMoodle . '/webservice/rest/server.php/', [
@@ -330,6 +354,24 @@ class ServidoresMoodleController extends Controller
                     $response = $response->json();
                 }elseif($response->failed() || empty($response->json())){
                     App::make('MessagesService')->messagesHttp(404, null, 'Erro ao duplicar o curso!');
+                }
+        return $response;
+    }
+
+    public function importCoursebyNewCourse($importfrom, $importto, $linkServidorMoodle, $token){
+        //duplica curso referente ao id passado
+        $response = Http::get($linkServidorMoodle . '/webservice/rest/server.php/', [
+                    'moodlewsrestformat'    => 'json',
+                    'wstoken'               => $token,
+                    'wsfunction'            => 'core_course_import_course',
+                    'importfrom'            => $importfrom,
+                    'importto'              => $importto,
+
+                ]);
+                if($response->successful() && !empty($response->json())){
+                    $response = $response->json();
+                }elseif($response->failed() || empty($response->json())){
+                    App::make('MessagesService')->messagesHttp(404, null, 'Erro ao importar o curso!');
                 }
         return $response;
     }
