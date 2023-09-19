@@ -13,6 +13,7 @@ class User extends Authenticatable2 implements Authenticatable
     use Notifiable, HasRoles, HasApiTokens;
 
     const PERMISSAO_ADMINISTRADOR = "ADMINISTRADOR";
+    const PERMISSAO_SERVIDOR = 'SERVIDOR';
     const PERMISSAO_USUARIO = 'USUARIO';
     const PERMISSAO_INATIVO = 'INATIVO';
 
