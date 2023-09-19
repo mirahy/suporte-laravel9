@@ -1,0 +1,84 @@
+<div class="container">
+  <div class="row">
+    <div class="col-xs-12 col-md-12">
+    <!--	<?php if( ! empty($moodles2) ): ?>
+        <?php $suspenso = 0; ?>
+        <?php foreach($moodles2 as $moodle2): ?>
+        <?php foreach($moodle2['cursos'] as $curso2): ?>
+          <?php  if($curso2['suspended']==1){ $suspenso = 1; $nome = $curso2['firstname'];}?>
+        <?php endforeach; ?>
+        <?php endforeach; ?>
+        -->
+        <!-- <?php // if($suspenso==1){  echo '<h3><font color="red">Prezado(a) '.$nome.', sua situação acadêmica no curso está <strong>irregular</strong>, seu acesso ao Ambiente Virtual está suspenso.<br><br>Entre em contato com a Coordenação do seu curso.</h3> <a href="https://portalead.ufgd.edu.br/coordenacoes/" target="_blank">Clique para acessar os Contatos das Coordenações</a></font>'; }else { ?> -->
+    </div>
+    
+
+    <!--<div class="col-xs-12 col-md-12">
+
+       Eleicões abertas para o usuário
+      < ?php get_template_part('eleicoes'); ?>
+    </div>-->
+
+
+<!-- <?php //get_template_part('cursos-dp'); ?> -->
+
+
+
+      <h1>Meus Cursos</h1>
+      <hr>
+      <div class="col-xs-12 col-md-12">
+      <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+      <!-- <?php if( ! empty($moodles) ): ?> -->
+
+      <!-- <?php // percorre a array de moodles ?> -->
+      <div class="panel panel-default">
+        <div class="panel-heading" style="padding: 0;" role="tab" id="heading<?php echo $i;?>">
+            <a type="button" class="btn btn-defaut btn-block" style="text-align: left; font-size: large;"  href="#collapse<?php echo $i;?>" data-toggle="collapse" data-target="#curso<?php echo $i;?>">
+              Cursos em andamento
+              <span class="glyphicon glyphicon-chevron-up" style="float: right;"></span>
+            </a>
+          </div>
+          <div id="curso<?php echo $i;?>" class="collapse">
+        <!-- <?php foreach($moodles as $moodle): ?> -->
+          <!-- <?php // faz a listagem dos cursos ?> -->
+            <!-- <?php foreach($moodle['cursos'] as $curso): ?> -->
+                  <div class="panel-body">
+                <!-- <a type="button" class="btn btn-primary btn-group-justified" role="group" href="<?php echo linkCurso($moodle['id'], $curso['id']); ?>" target="_blank">
+                  <?php echo $curso['fullname']; ?>
+                </a> -->
+
+              </div>
+            <!-- <?php $i++; -->
+            <!-- endforeach;
+        endforeach; ?> -->
+        </div>
+      </div>
+      <!-- <?php else: ?> -->
+        <p>Nenhum curso a ser exibido.</p>
+      <!-- <?php endif; ?> -->
+      </div>
+    </div>
+
+<!--
+    <div class="col-md-6 hidden-xs hidden-sm">
+
+      <h1>Links importantes:</h1><br>
+      < ?php get_template_part('webconferencias'); ?>
+
+      <br>
+      < ?php get_template_part('webgravadas'); ?>
+
+
+
+      <h1>Novidades do Portal e AVA</h1>
+      <hr>
+      <iframe width="440" height="315" src="https://www.youtube.com/embed/WyXToN19mxA" frameborder="0" allowfullscreen></iframe>
+
+
+
+    </div>-->
+            <!-- <?php //} ?> -->
+
+      <!-- <?php endif; ?> -->
+  </div>
+</div>

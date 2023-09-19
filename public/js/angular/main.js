@@ -961,6 +961,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _pessoas_estatus_lotacao_service__WEBPACK_IMPORTED_MODULE_83__ = __webpack_require__(/*! ./pessoas-estatus-lotacao.service */ "./src/app/pessoas-estatus-lotacao.service.ts");
 /* harmony import */ var _roles_roles_component__WEBPACK_IMPORTED_MODULE_84__ = __webpack_require__(/*! ./roles/roles.component */ "./src/app/roles/roles.component.ts");
 /* harmony import */ var _roles_service__WEBPACK_IMPORTED_MODULE_85__ = __webpack_require__(/*! ./roles.service */ "./src/app/roles.service.ts");
+/* harmony import */ var _meus_cursos_meus_cursos_component__WEBPACK_IMPORTED_MODULE_86__ = __webpack_require__(/*! ./meus-cursos/meus-cursos.component */ "./src/app/meus-cursos/meus-cursos.component.ts");
+/* harmony import */ var _td_cursos_td_cursos_component__WEBPACK_IMPORTED_MODULE_87__ = __webpack_require__(/*! ./td-cursos/td-cursos.component */ "./src/app/td-cursos/td-cursos.component.ts");
 
 
 
@@ -1048,6 +1050,8 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
+
 var appRoutes = [
     { path: 'salas', component: _salas_salas_component__WEBPACK_IMPORTED_MODULE_11__["SalasComponent"] },
     { path: 'salas/create', component: _salas_cria_salas_cria_salas_component__WEBPACK_IMPORTED_MODULE_18__["CriaSalasComponent"] },
@@ -1074,6 +1078,8 @@ var appRoutes = [
     { path: 'formulario-pessoas-estatus-lotacao', component: _usuarios_formulario_pessoas_estatus_lotacao_formulario_pessoas_estatus_lotacao_component__WEBPACK_IMPORTED_MODULE_82__["FormularioPessoasEstatusLotacaoComponent"] },
     { path: 'logs', component: _logs_logs_component__WEBPACK_IMPORTED_MODULE_76__["LogsComponent"] },
     { path: 'roles', component: _roles_roles_component__WEBPACK_IMPORTED_MODULE_84__["RolesComponent"] },
+    { path: 'meus-cursos', component: _meus_cursos_meus_cursos_component__WEBPACK_IMPORTED_MODULE_86__["MeusCursosComponent"] },
+    { path: 'td-cursos', component: _td_cursos_td_cursos_component__WEBPACK_IMPORTED_MODULE_87__["TdCursosComponent"] },
     /*{ path: '',
       redirectTo: '/',
       pathMatch: 'full'
@@ -1125,6 +1131,8 @@ var AppModule = /** @class */ (function () {
                 _unidade_organizacional_formulario_alteracao_usuario_formulario_alteracao_usuario_component__WEBPACK_IMPORTED_MODULE_81__["FormularioAlteracaoUsuarioComponent"],
                 _usuarios_formulario_pessoas_estatus_lotacao_formulario_pessoas_estatus_lotacao_component__WEBPACK_IMPORTED_MODULE_82__["FormularioPessoasEstatusLotacaoComponent"],
                 _roles_roles_component__WEBPACK_IMPORTED_MODULE_84__["RolesComponent"],
+                _meus_cursos_meus_cursos_component__WEBPACK_IMPORTED_MODULE_86__["MeusCursosComponent"],
+                _td_cursos_td_cursos_component__WEBPACK_IMPORTED_MODULE_87__["TdCursosComponent"],
             ],
             imports: [
                 _angular_platform_browser__WEBPACK_IMPORTED_MODULE_1__["BrowserModule"],
@@ -5146,6 +5154,62 @@ var Macro = /** @class */ (function () {
         return new Macro(this.id, this.nome, this.arquivo, this.periodo_letivo, this.link_servidor_moodle, this.buscadores);
     };
     return Macro;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/meus-cursos/meus-cursos.component.html":
+/*!********************************************************!*\
+  !*** ./src/app/meus-cursos/meus-cursos.component.html ***!
+  \********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<div class=\"container\">\n  <div class=\"row\">\n    <div class=\"col-xs-12 col-md-12\">\n    <!--\t<?php if( ! empty($moodles2) ): ?>\n        <?php $suspenso = 0; ?>\n        <?php foreach($moodles2 as $moodle2): ?>\n        <?php foreach($moodle2['cursos'] as $curso2): ?>\n          <?php  if($curso2['suspended']==1){ $suspenso = 1; $nome = $curso2['firstname'];}?>\n        <?php endforeach; ?>\n        <?php endforeach; ?>\n        -->\n        <!-- <?php // if($suspenso==1){  echo '<h3><font color=\"red\">Prezado(a) '.$nome.', sua situação acadêmica no curso está <strong>irregular</strong>, seu acesso ao Ambiente Virtual está suspenso.<br><br>Entre em contato com a Coordenação do seu curso.</h3> <a href=\"https://portalead.ufgd.edu.br/coordenacoes/\" target=\"_blank\">Clique para acessar os Contatos das Coordenações</a></font>'; }else { ?> -->\n    </div>\n    \n\n    <!--<div class=\"col-xs-12 col-md-12\">\n\n       Eleicões abertas para o usuário\n      < ?php get_template_part('eleicoes'); ?>\n    </div>-->\n\n\n<!-- <?php //get_template_part('cursos-dp'); ?> -->\n\n\n\n      <h1>Meus Cursos</h1>\n      <hr>\n      <div class=\"col-xs-12 col-md-12\">\n      <div class=\"panel-group\" id=\"accordion\" role=\"tablist\" aria-multiselectable=\"true\">\n      <!-- <?php if( ! empty($moodles) ): ?> -->\n\n      <!-- <?php // percorre a array de moodles ?> -->\n      <div class=\"panel panel-default\">\n        <div class=\"panel-heading\" style=\"padding: 0;\" role=\"tab\" id=\"heading<?php echo $i;?>\">\n            <a type=\"button\" class=\"btn btn-defaut btn-block\" style=\"text-align: left; font-size: large;\"  href=\"#collapse<?php echo $i;?>\" data-toggle=\"collapse\" data-target=\"#curso<?php echo $i;?>\">\n              Cursos em andamento\n              <span class=\"glyphicon glyphicon-chevron-up\" style=\"float: right;\"></span>\n            </a>\n          </div>\n          <div id=\"curso<?php echo $i;?>\" class=\"collapse\">\n        <!-- <?php foreach($moodles as $moodle): ?> -->\n          <!-- <?php // faz a listagem dos cursos ?> -->\n            <!-- <?php foreach($moodle['cursos'] as $curso): ?> -->\n                  <div class=\"panel-body\">\n                <!-- <a type=\"button\" class=\"btn btn-primary btn-group-justified\" role=\"group\" href=\"<?php echo linkCurso($moodle['id'], $curso['id']); ?>\" target=\"_blank\">\n                  <?php echo $curso['fullname']; ?>\n                </a> -->\n\n              </div>\n            <!-- <?php $i++; -->\n            <!-- endforeach;\n        endforeach; ?> -->\n        </div>\n      </div>\n      <!-- <?php else: ?> -->\n        <p>Nenhum curso a ser exibido.</p>\n      <!-- <?php endif; ?> -->\n      </div>\n    </div>\n\n<!--\n    <div class=\"col-md-6 hidden-xs hidden-sm\">\n\n      <h1>Links importantes:</h1><br>\n      < ?php get_template_part('webconferencias'); ?>\n\n      <br>\n      < ?php get_template_part('webgravadas'); ?>\n\n\n\n      <h1>Novidades do Portal e AVA</h1>\n      <hr>\n      <iframe width=\"440\" height=\"315\" src=\"https://www.youtube.com/embed/WyXToN19mxA\" frameborder=\"0\" allowfullscreen></iframe>\n\n\n\n    </div>-->\n            <!-- <?php //} ?> -->\n\n      <!-- <?php endif; ?> -->\n  </div>\n</div>"
+
+/***/ }),
+
+/***/ "./src/app/meus-cursos/meus-cursos.component.less":
+/*!********************************************************!*\
+  !*** ./src/app/meus-cursos/meus-cursos.component.less ***!
+  \********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL21ldXMtY3Vyc29zL21ldXMtY3Vyc29zLmNvbXBvbmVudC5sZXNzIn0= */"
+
+/***/ }),
+
+/***/ "./src/app/meus-cursos/meus-cursos.component.ts":
+/*!******************************************************!*\
+  !*** ./src/app/meus-cursos/meus-cursos.component.ts ***!
+  \******************************************************/
+/*! exports provided: MeusCursosComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MeusCursosComponent", function() { return MeusCursosComponent; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+
+
+var MeusCursosComponent = /** @class */ (function () {
+    function MeusCursosComponent() {
+    }
+    MeusCursosComponent.prototype.ngOnInit = function () {
+    };
+    MeusCursosComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
+            selector: 'app-meus-cursos',
+            template: __webpack_require__(/*! ./meus-cursos.component.html */ "./src/app/meus-cursos/meus-cursos.component.html"),
+            styles: [__webpack_require__(/*! ./meus-cursos.component.less */ "./src/app/meus-cursos/meus-cursos.component.less")]
+        }),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [])
+    ], MeusCursosComponent);
+    return MeusCursosComponent;
 }());
 
 
@@ -11976,6 +12040,62 @@ var SuperMacro = /** @class */ (function () {
         return new SuperMacro(this.id, this.descricao, this.macro_padrao);
     };
     return SuperMacro;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/td-cursos/td-cursos.component.html":
+/*!****************************************************!*\
+  !*** ./src/app/td-cursos/td-cursos.component.html ***!
+  \****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<div class=\"container\">\n  <div class=\"row\">\n    <div class=\"col-xs-12 col-md-12\">\n      \n        <h1>Todos os Cursos</h1>\n    \n        <hr>\n        <div class=\"panel-group\" id=\"accordion\" role=\"tablist\" aria-multiselectable=\"true\">\n        <!-- <?php $i=0;\n           $j=1;\n           $abriu = false;\n               // percorre a array de moodles ?>\n        <?php foreach($moodles as $moodle): $i++; \n          if ($j == 4)\n            $j = 1;\n          if ($j == 1) {\t\n            $abriu = true;?> -->\n          <div class=\"row\">\n        <!-- <?php \t} \t?> -->\n          <div class=\"col-md-4\">\n          <div class=\"panel panel-default\">\n          <!-- <?php // imprime um link para o moodle ?> -->\n          <div class=\"panel-heading\" style=\"padding: 0;\" role=\"tab\" id=\"heading<?php echo $i;?>\">\n              <h4 class=\"panel-title\">\n                    <!-- <a role=\"button\" class=\"btn btn-<?php \n                switch ($moodle['nome']) {\n                  case \"Graduações EaD\":\n                  case \"Pós-Graduações 2017\":\n                  case \"Graduações Presenciais\":\n                  case \"Capacitação PROGESP\":\n                    echo \"success\";\n                    break;\n                  default:\n                    echo \"default\";\n                    break;\n                }\n                \n                ?> btn-block\" style=\"text-align: left; font-size: large; color: black;\" href=\"#collapse<?php echo $i;?>\" data-toggle=\"collapse\" data-target=\"#curso<?php echo $i;?>\">\n                  <?php echo $moodle['nome']; ?>\n                  <span class=\"glyphicon glyphicon-chevron-down\" id=\"btnCurso\" style=\"float: right;\"></span>\n                  </a> -->\n                  \n                  </h4>\n              </div>\n              <div id=\"curso<?php echo $i;?>\" class=\"collapse\">\n                <div class=\"panel-body\">\n            <a type=\"button\" class=\"btn btn-success btn-group-justified\" href=\"<?php echo linkMoodle($moodle['id']); ?>\" target=\"_blank\">\n              <!-- <?php echo $moodle['nome']; ?> -->\n            </a>\n            </div>\n            <!-- <?php // faz a listagem dos cursos ?>\n            <?php foreach($moodle['cursos'] as $curso): $i++;?> -->\n              <div class=\"panel-body\">\n                <a type=\"button\" class=\"btn btn-primary btn-group-justified\"  href=\"<?php echo linkCurso($moodle['id'], $curso['id']); ?>\" target=\"_blank\">\n                  <!-- <?php echo $curso['fullname']; ?> -->\n                </a>\n              </div>\n              \n            <!-- <?php endforeach; ?> -->\n          </div>\n        \n          </div>\n        <!-- <?php \n          if ($j == 3) {\t\n            $abriu = false;?> -->\n          </div>\n        <!-- <?php \t} \n        ?> -->\n        </div>\n        <!-- <?php \n        $j++; endforeach; \n        \n         // moodles inseridos manualmente \n        $i++;?> -->\n\n      <div class=\"col-md-4\">\n          <div class=\"panel panel-default\">\n          <div class=\"panel-heading\" style=\"padding: 0;\" role=\"tab\" id=\"heading<?php echo $i;?>\">\n              <h4 class=\"panel-title\">\n                    <a role=\"button\" class=\"btn btn-defaut btn-block\" style=\"text-align: left; font-size: large; color: black;\" href=\"#collapse<?php echo $i;?>\" data-toggle=\"collapse\" data-target=\"#curso<?php echo $i;?>\">\n                  Outros Moodles\n                  <span class=\"glyphicon glyphicon-chevron-down\" id=\"btnCurso\" style=\"float: right;\"></span>\n                  </a>\n                  \n                  </h4>\n              </div>\n              <div id=\"curso<?php echo $i;?>\" class=\"collapse\">\n                <div class=\"panel-body\">\n                  Acesso pela rede interna UFGD ou VPN\n            </div>\n                <div class=\"panel-body\">\n                <a type=\"button\" class=\"btn btn-primary btn-group-justified\"  href=\"http://200.129.215.36/computacao/login/index.php\" target=\"_blank\">\n                  Moodle Licenciatura em Computação (2016)\n            </a>\n            </div>\n            <div class=\"panel-body\">\n                <a type=\"button\" class=\"btn btn-primary btn-group-justified\"  href=\"http://200.129.215.36/admpublica/login/index.php\" target=\"_blank\">\n                  Moodle Bacharelado em Administração Pública (2016)\n            </a>\n            </div>\n\n            <div class=\"panel-body\">\n                <a type=\"button\" class=\"btn btn-primary btn-group-justified\"  href=\"http://200.129.215.36/fisica/login/index.php\" target=\"_blank\">\n                  Moodle Licenciatura em Física (2016)\n            </a>\n            </div>\n            <div class=\"panel-body\">\n                <a type=\"button\" class=\"btn btn-primary btn-group-justified\"  href=\"http://200.129.215.36/pedagogia/login/index.php\" target=\"_blank\">\n                  Moodle Licenciatura em Pedagogia (2016)\n            </a>\n            </div>\n            <div class=\"panel-body\">\n                <a type=\"button\" class=\"btn btn-primary btn-group-justified\"  href=\"http://200.129.215.36/posgrad/login/index.php\" target=\"_blank\">\n                  Moodle Pós-Graduações EaD (2015)\n            </a>\n            </div>\n          </div>\n        </div>\n      </div>\n      \n        \n       <!-- <?php\n      if ($abriu == true) {\n          ?> -->\n          </div>\n        <!-- <?php \t}  ?> -->\n\n    </div>\n</div>\n    <div class=\"col-md-6 hidden-xs hidden-sm\">\n      <!--\n      <h1>Novidades do Portal e AVA</h1>\n      <hr>\n      <iframe width=\"440\" height=\"315\" src=\"https://www.youtube.com/embed/WyXToN19mxA\" frameborder=\"0\" allowfullscreen></iframe>\n      -->\n    </div>\n\n</div>\n"
+
+/***/ }),
+
+/***/ "./src/app/td-cursos/td-cursos.component.less":
+/*!****************************************************!*\
+  !*** ./src/app/td-cursos/td-cursos.component.less ***!
+  \****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL3RkLWN1cnNvcy90ZC1jdXJzb3MuY29tcG9uZW50Lmxlc3MifQ== */"
+
+/***/ }),
+
+/***/ "./src/app/td-cursos/td-cursos.component.ts":
+/*!**************************************************!*\
+  !*** ./src/app/td-cursos/td-cursos.component.ts ***!
+  \**************************************************/
+/*! exports provided: TdCursosComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TdCursosComponent", function() { return TdCursosComponent; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+
+
+var TdCursosComponent = /** @class */ (function () {
+    function TdCursosComponent() {
+    }
+    TdCursosComponent.prototype.ngOnInit = function () {
+    };
+    TdCursosComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
+            selector: 'app-td-cursos',
+            template: __webpack_require__(/*! ./td-cursos.component.html */ "./src/app/td-cursos/td-cursos.component.html"),
+            styles: [__webpack_require__(/*! ./td-cursos.component.less */ "./src/app/td-cursos/td-cursos.component.less")]
+        }),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [])
+    ], TdCursosComponent);
+    return TdCursosComponent;
 }());
 
 

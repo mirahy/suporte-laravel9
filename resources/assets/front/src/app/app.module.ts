@@ -90,6 +90,8 @@ import { FormularioPessoasEstatusLotacaoComponent } from './usuarios/formulario-
 import { PessoasEstatusLotacaoService } from './pessoas-estatus-lotacao.service';
 import { RolesComponent } from './roles/roles.component';
 import { RolesService } from './roles.service';
+import { MeusCursosComponent } from './meus-cursos/meus-cursos.component';
+import { TdCursosComponent } from './td-cursos/td-cursos.component';
 
 
 const appRoutes: Routes = [
@@ -118,6 +120,8 @@ const appRoutes: Routes = [
     { path: 'formulario-pessoas-estatus-lotacao', component: FormularioPessoasEstatusLotacaoComponent },
     { path: 'logs', component: LogsComponent },
     { path: 'roles', component: RolesComponent },
+    { path: 'meus-cursos', component: MeusCursosComponent },
+    { path: 'td-cursos', component: TdCursosComponent },
     /*{ path: '',
       redirectTo: '/',
       pathMatch: 'full'
@@ -166,6 +170,8 @@ const appRoutes: Routes = [
         FormularioAlteracaoUsuarioComponent,
         FormularioPessoasEstatusLotacaoComponent,
         RolesComponent,
+        MeusCursosComponent,
+        TdCursosComponent,
     ],
     imports: [
         BrowserModule,

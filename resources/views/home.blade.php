@@ -126,9 +126,9 @@
         @endif
             <div class="card card-body delay-2">
                 
-                @include('templates.cards', ['link' => '#', 'text' => 'Meus Cursos', 'title' => 'Acesse aqui os cursos que você está matriculado!!', 'classIcon' => 'bi bi-journal', 'classLink' => '' ])
+                @include('templates.cards', ['link' => '/meus-cursos', 'text' => 'Meus Cursos', 'title' => 'Acesse aqui os cursos que você está matriculado!!', 'classIcon' => 'bi bi-journal', 'classLink' => '' ])
                 
-                @include('templates.cards', ['link' => '#', 'text' => 'Todos os Cursos', 'title' => 'Lista todos os cursos da UFGD.', 'classIcon' => 'bi bi-journals', 'classLink' => '' ])
+                @include('templates.cards', ['link' => '/td-cursos', 'text' => 'Todos os Cursos', 'title' => 'Lista todos os cursos da UFGD.', 'classIcon' => 'bi bi-journals', 'classLink' => '' ])
                 
                 @include('templates.cards', ['link' => 'http://webmail.academico.ufgd.edu.br/', 'text' => 'Webmail UFGD Acadêmico', 'title' => 'Acesse seu e-mail acadêmico.', 'classIcon' => 'bi bi-envelope-at', 'classLink' => '' ])
                 

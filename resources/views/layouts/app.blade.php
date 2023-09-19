@@ -232,12 +232,12 @@
                             </a>
                             <ul class="dropdown-menu">
                                 <li>
-                                    <a href="#">
+                                    <a href="/meus-cursos">
                                         Meus Cursos
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="#">
+                                    <a href="/td-cursos">
                                         Todos os Cursos
                                     </a>
                                 </li>

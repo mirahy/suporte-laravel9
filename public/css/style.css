@@ -493,8 +493,8 @@ a.botao-reduzido span {
     background-color: var(--bg-grey-light);
 }
 
-label {
-    color: var(--text-dark)
+label, h1, a, p {
+    color: var(--text-dark) !important
 }
 
 @media (max-width: 767.99px) {

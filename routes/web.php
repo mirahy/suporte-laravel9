@@ -184,6 +184,9 @@ Route::resource('usuarios', 'UsuarioController');
 Route::get('/logs/exportacao-estudantes/{arquivo?}', 'LogsController@exportacaoEstudantes');
 Route::get('/logs', 'LogsController@index');
 
+Route::get('/meus-cursos', 'CursosMoodleController@meusCursos');
+Route::get('/td-cursos', 'CursosMoodleController@todosCursos');
+
 Route::post('/usuario-cartao', 'WebServicesController@consultaDadosCartao');
 Route::get('/estudantes-grupo-lotes', 'WebServicesController@exportaEstudantesGrupoLotes');
 
