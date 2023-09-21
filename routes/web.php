@@ -186,6 +186,9 @@ Route::get('/logs', 'LogsController@index');
 
 Route::get('/meus-cursos', 'CursosMoodleController@meusCursos');
 Route::get('/td-cursos', 'CursosMoodleController@todosCursos');
+Route::post('/get-meus-cursos', 'CursosMoodleController@getMoodlesComCursos');
+Route::post('/get-moodles', 'CursosMoodleController@getMoodles');
+Route::post('/go-moodle', 'CursosMoodleController@goMoodle');
 
 Route::post('/usuario-cartao', 'WebServicesController@consultaDadosCartao');
 Route::get('/estudantes-grupo-lotes', 'WebServicesController@exportaEstudantesGrupoLotes');

@@ -68,7 +68,7 @@
                 <div class="collapse navbar-collapse" id="app-navbar-collapse">
                     <!-- Left Side Of Navbar -->
                     <ul class="nav navbar-nav">
-                        @if(isset($resources->permissao) && ($resources->permissao != 'USUARIO'))
+                        @if(isset($resources->permissao) && ($resources->permissao != 'USUARIO' && $resources->permissao != 'INATIVO'))
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" v-pre>
                                 Solicitações <span class="caret"></span>

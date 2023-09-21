@@ -27,6 +27,11 @@ return new class extends Migration
             $table->bigIncrements('id');
             $table->string('nome', 63);
             $table->string('url', 63);
+            $table->string('nome_banco', 50);
+            $table->string('ip_banco', 50);
+            $table->string('ip_server', 50)->require();
+            $table->string('prefixo', 10);
+            $table->enum('status', ['ON', 'OFF'])->require()->default('OFF');
             $table->tinyInteger('ativo');
             $table->nullableTimestamps();
             $table->softDeletes();

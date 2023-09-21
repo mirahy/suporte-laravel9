@@ -92,6 +92,8 @@ import { RolesComponent } from './roles/roles.component';
 import { RolesService } from './roles.service';
 import { MeusCursosComponent } from './meus-cursos/meus-cursos.component';
 import { TdCursosComponent } from './td-cursos/td-cursos.component';
+import { CursosMoodleService } from './cursos-moodle.service';
+import { CommonModule } from '@angular/common';
 
 
 const appRoutes: Routes = [
@@ -201,7 +203,8 @@ const appRoutes: Routes = [
         FullCalendarModule,
         RadioButtonModule,
         FileUploadModule,
-        ScrollingModule
+        ScrollingModule,
+        CommonModule,
     ],
     providers: [
         SalasService,
@@ -228,7 +231,8 @@ const appRoutes: Routes = [
         UnidadeOrganizacionalService,
         PessoasEstatusLotacaoService,
         LogsService,
-        RolesService
+        RolesService,
+        CursosMoodleService
     ],
     bootstrap: [
         AppComponent

@@ -963,6 +963,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _roles_service__WEBPACK_IMPORTED_MODULE_85__ = __webpack_require__(/*! ./roles.service */ "./src/app/roles.service.ts");
 /* harmony import */ var _meus_cursos_meus_cursos_component__WEBPACK_IMPORTED_MODULE_86__ = __webpack_require__(/*! ./meus-cursos/meus-cursos.component */ "./src/app/meus-cursos/meus-cursos.component.ts");
 /* harmony import */ var _td_cursos_td_cursos_component__WEBPACK_IMPORTED_MODULE_87__ = __webpack_require__(/*! ./td-cursos/td-cursos.component */ "./src/app/td-cursos/td-cursos.component.ts");
+/* harmony import */ var _cursos_moodle_service__WEBPACK_IMPORTED_MODULE_88__ = __webpack_require__(/*! ./cursos-moodle.service */ "./src/app/cursos-moodle.service.ts");
+/* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_89__ = __webpack_require__(/*! @angular/common */ "./node_modules/@angular/common/fesm5/common.js");
 
 
 
@@ -1018,6 +1020,8 @@ __webpack_require__.r(__webpack_exports__);
 
 
 //import { ThemeService } from './theme.service';
+
+
 
 
 
@@ -1158,7 +1162,8 @@ var AppModule = /** @class */ (function () {
                 primeng_fullcalendar__WEBPACK_IMPORTED_MODULE_36__["FullCalendarModule"],
                 primeng_radiobutton__WEBPACK_IMPORTED_MODULE_38__["RadioButtonModule"],
                 primeng_fileupload__WEBPACK_IMPORTED_MODULE_39__["FileUploadModule"],
-                _angular_cdk_scrolling__WEBPACK_IMPORTED_MODULE_8__["ScrollingModule"]
+                _angular_cdk_scrolling__WEBPACK_IMPORTED_MODULE_8__["ScrollingModule"],
+                _angular_common__WEBPACK_IMPORTED_MODULE_89__["CommonModule"],
             ],
             providers: [
                 _salas_service__WEBPACK_IMPORTED_MODULE_41__["SalasService"],
@@ -1185,7 +1190,8 @@ var AppModule = /** @class */ (function () {
                 _unidade_organizacional_service__WEBPACK_IMPORTED_MODULE_79__["UnidadeOrganizacionalService"],
                 _pessoas_estatus_lotacao_service__WEBPACK_IMPORTED_MODULE_83__["PessoasEstatusLotacaoService"],
                 _logs_service__WEBPACK_IMPORTED_MODULE_77__["LogsService"],
-                _roles_service__WEBPACK_IMPORTED_MODULE_85__["RolesService"]
+                _roles_service__WEBPACK_IMPORTED_MODULE_85__["RolesService"],
+                _cursos_moodle_service__WEBPACK_IMPORTED_MODULE_88__["CursosMoodleService"]
             ],
             bootstrap: [
                 _app_component__WEBPACK_IMPORTED_MODULE_10__["AppComponent"]
@@ -1870,6 +1876,98 @@ var CalendarioComponent = /** @class */ (function (_super) {
     ], CalendarioComponent);
     return CalendarioComponent;
 }(_abstract_component__WEBPACK_IMPORTED_MODULE_11__["AbstractComponent"]));
+
+
+
+/***/ }),
+
+/***/ "./src/app/cursos-moodle.service.ts":
+/*!******************************************!*\
+  !*** ./src/app/cursos-moodle.service.ts ***!
+  \******************************************/
+/*! exports provided: CursosMoodleService */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CursosMoodleService", function() { return CursosMoodleService; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _angular_http__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/http */ "./node_modules/@angular/http/fesm5/http.js");
+
+
+
+var CursosMoodleService = /** @class */ (function () {
+    function CursosMoodleService(http) {
+        this.http = http;
+    }
+    CursosMoodleService.prototype.getMoodles = function (idArray) {
+        if (idArray === void 0) { idArray = [1, 2]; }
+        return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0, function () {
+            var idMoodles;
+            return tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"](this, function (_a) {
+                idMoodles = { 'idMoodles': idArray };
+                return [2 /*return*/, this.http
+                        .post("/get-moodles", idMoodles)
+                        .toPromise()
+                        .then(function (response) {
+                        return response.json();
+                    })];
+            });
+        });
+    };
+    CursosMoodleService.prototype.getMoodlesComCursos = function (paramMeses) {
+        if (paramMeses === void 0) { paramMeses = 6; }
+        return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0, function () {
+            var meses;
+            return tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"](this, function (_a) {
+                meses = { 'ultimosMeses': paramMeses };
+                return [2 /*return*/, this.http
+                        .post("/get-meus-cursos", meses)
+                        .toPromise()
+                        .then(function (response) {
+                        return response.json();
+                    })];
+            });
+        });
+    };
+    CursosMoodleService.prototype.goMoodle = function (idMoodle, IdCurso) {
+        return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0, function () {
+            var params;
+            return tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"](this, function (_a) {
+                params = { 'idMoodles': [idMoodle], 'idCurso': IdCurso };
+                return [2 /*return*/, this.http
+                        .post("/go-moodle", params)
+                        .toPromise()
+                        .then(function (response) {
+                        return response;
+                    })];
+            });
+        });
+    };
+    CursosMoodleService.prototype.functionCollapse = function () {
+        jQuery('.collapse')
+            .on('shown.bs.collapse', function () {
+            jQuery(this)
+                .parent()
+                .find(".glyphicon-chevron-down")
+                .removeClass("glyphicon-chevron-down")
+                .addClass("glyphicon-chevron-up");
+        })
+            .on('hidden.bs.collapse', function () {
+            jQuery(this)
+                .parent()
+                .find(".glyphicon-chevron-up")
+                .removeClass("glyphicon-chevron-up")
+                .addClass("glyphicon-chevron-down");
+        });
+    };
+    CursosMoodleService = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])(),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_angular_http__WEBPACK_IMPORTED_MODULE_2__["Http"]])
+    ], CursosMoodleService);
+    return CursosMoodleService;
+}());
 
 
 
@@ -5167,7 +5265,7 @@ var Macro = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"container\">\n  <div class=\"row\">\n    <div class=\"col-xs-12 col-md-12\">\n    <!--\t<?php if( ! empty($moodles2) ): ?>\n        <?php $suspenso = 0; ?>\n        <?php foreach($moodles2 as $moodle2): ?>\n        <?php foreach($moodle2['cursos'] as $curso2): ?>\n          <?php  if($curso2['suspended']==1){ $suspenso = 1; $nome = $curso2['firstname'];}?>\n        <?php endforeach; ?>\n        <?php endforeach; ?>\n        -->\n        <!-- <?php // if($suspenso==1){  echo '<h3><font color=\"red\">Prezado(a) '.$nome.', sua situação acadêmica no curso está <strong>irregular</strong>, seu acesso ao Ambiente Virtual está suspenso.<br><br>Entre em contato com a Coordenação do seu curso.</h3> <a href=\"https://portalead.ufgd.edu.br/coordenacoes/\" target=\"_blank\">Clique para acessar os Contatos das Coordenações</a></font>'; }else { ?> -->\n    </div>\n    \n\n    <!--<div class=\"col-xs-12 col-md-12\">\n\n       Eleicões abertas para o usuário\n      < ?php get_template_part('eleicoes'); ?>\n    </div>-->\n\n\n<!-- <?php //get_template_part('cursos-dp'); ?> -->\n\n\n\n      <h1>Meus Cursos</h1>\n      <hr>\n      <div class=\"col-xs-12 col-md-12\">\n      <div class=\"panel-group\" id=\"accordion\" role=\"tablist\" aria-multiselectable=\"true\">\n      <!-- <?php if( ! empty($moodles) ): ?> -->\n\n      <!-- <?php // percorre a array de moodles ?> -->\n      <div class=\"panel panel-default\">\n        <div class=\"panel-heading\" style=\"padding: 0;\" role=\"tab\" id=\"heading<?php echo $i;?>\">\n            <a type=\"button\" class=\"btn btn-defaut btn-block\" style=\"text-align: left; font-size: large;\"  href=\"#collapse<?php echo $i;?>\" data-toggle=\"collapse\" data-target=\"#curso<?php echo $i;?>\">\n              Cursos em andamento\n              <span class=\"glyphicon glyphicon-chevron-up\" style=\"float: right;\"></span>\n            </a>\n          </div>\n          <div id=\"curso<?php echo $i;?>\" class=\"collapse\">\n        <!-- <?php foreach($moodles as $moodle): ?> -->\n          <!-- <?php // faz a listagem dos cursos ?> -->\n            <!-- <?php foreach($moodle['cursos'] as $curso): ?> -->\n                  <div class=\"panel-body\">\n                <!-- <a type=\"button\" class=\"btn btn-primary btn-group-justified\" role=\"group\" href=\"<?php echo linkCurso($moodle['id'], $curso['id']); ?>\" target=\"_blank\">\n                  <?php echo $curso['fullname']; ?>\n                </a> -->\n\n              </div>\n            <!-- <?php $i++; -->\n            <!-- endforeach;\n        endforeach; ?> -->\n        </div>\n      </div>\n      <!-- <?php else: ?> -->\n        <p>Nenhum curso a ser exibido.</p>\n      <!-- <?php endif; ?> -->\n      </div>\n    </div>\n\n<!--\n    <div class=\"col-md-6 hidden-xs hidden-sm\">\n\n      <h1>Links importantes:</h1><br>\n      < ?php get_template_part('webconferencias'); ?>\n\n      <br>\n      < ?php get_template_part('webgravadas'); ?>\n\n\n\n      <h1>Novidades do Portal e AVA</h1>\n      <hr>\n      <iframe width=\"440\" height=\"315\" src=\"https://www.youtube.com/embed/WyXToN19mxA\" frameborder=\"0\" allowfullscreen></iframe>\n\n\n\n    </div>-->\n            <!-- <?php //} ?> -->\n\n      <!-- <?php endif; ?> -->\n  </div>\n</div>"
+module.exports = "<div class=\"container\">\n  <div class=\"row\">\n    <div class=\"col-xs-12 col-md-12\">\n    </div>\n      <h1>Meus Cursos</h1>\n      <hr>\n      <div class=\"col-xs-12 col-md-12\">\n      <div class=\"panel-group\" id=\"accordion\" role=\"tablist\" aria-multiselectable=\"true\">\n      <div class=\"panel panel-default\" *ngIf=\"moodles\">\n        <div class=\"panel-heading\" style=\"padding: 0;\" role=\"tab\" id=\"heading\">\n            <a type=\"button\" class=\"btn btn-defaut btn-block\" style=\"text-align: left; font-size: large;\"  data-toggle=\"collapse\" data-target=\"#curso\">\n              Cursos em andamento\n              <span class=\"glyphicon glyphicon-chevron-up\" style=\"float: right;\"></span>\n            </a>\n          </div>\n          <div id=\"curso\" class=\"collapse in\">\n            <ng-container *ngFor=\"let moodle of moodles\">\n               <!-- faz a listagem dos cursos -->\n               <ng-container *ngFor=\"let curso of moodle.cursos\">\n                <div class=\"panel-body\">\n                 \n                  <a type=\"button\" id=\"curso{{ curso.id + moodle.id }}\" class=\"btn btn-primary btn-group-justified\" role=\"group\" href=\"{{ curso.href }}\" target=\"_blank\">\n                    {{ curso.fullname }}\n                  </a>\n                </div>\n               </ng-container>\n            </ng-container>\n        </div>\n      </div>\n        <p *ngIf=\"!moodles\">Nenhum curso a ser exibido.</p>\n      </div>\n    </div>\n  </div>\n</div>"
 
 /***/ }),
 
@@ -5194,23 +5292,46 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MeusCursosComponent", function() { return MeusCursosComponent; });
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _cursos_moodle_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../cursos-moodle.service */ "./src/app/cursos-moodle.service.ts");
+/* harmony import */ var _abstract_component__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../abstract-component */ "./src/app/abstract-component.ts");
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
 
 
-var MeusCursosComponent = /** @class */ (function () {
-    function MeusCursosComponent() {
+
+
+
+var MeusCursosComponent = /** @class */ (function (_super) {
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__extends"](MeusCursosComponent, _super);
+    function MeusCursosComponent(cursosMoodleService, router) {
+        var _this = _super.call(this) || this;
+        _this.cursosMoodleService = cursosMoodleService;
+        _this.router = router;
+        _this.moodles = '';
+        return _this;
     }
+    MeusCursosComponent.prototype.goMoodle = function (idMoodle, IdCurso) {
+        this.cursosMoodleService.goMoodle(idMoodle, IdCurso).then(function (response) {
+            console.log(response);
+            jQuery('#curso' + IdCurso + idMoodle).attr('href', response.text());
+        });
+    };
     MeusCursosComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        this.cursosMoodleService.getMoodlesComCursos().then(function (response) {
+            _this.moodles = response;
+            _this.cursosMoodleService.functionCollapse();
+        });
     };
     MeusCursosComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
-            selector: 'app-meus-cursos',
+            selector: "app-meus-cursos",
             template: __webpack_require__(/*! ./meus-cursos.component.html */ "./src/app/meus-cursos/meus-cursos.component.html"),
             styles: [__webpack_require__(/*! ./meus-cursos.component.less */ "./src/app/meus-cursos/meus-cursos.component.less")]
         }),
-        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [])
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_cursos_moodle_service__WEBPACK_IMPORTED_MODULE_2__["CursosMoodleService"], _angular_router__WEBPACK_IMPORTED_MODULE_4__["Router"]])
     ], MeusCursosComponent);
     return MeusCursosComponent;
-}());
+}(_abstract_component__WEBPACK_IMPORTED_MODULE_3__["AbstractComponent"]));
 
 
 
