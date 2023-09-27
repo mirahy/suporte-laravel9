@@ -23,11 +23,14 @@ export class MeusCursosComponent extends AbstractComponent implements OnInit {
     });
   }
 
+  collapse(id){
+    this.cursosMoodleService.functionCollapse(id);
+  }
+
 
   ngOnInit() {
     this.cursosMoodleService.getMoodlesComCursos().then((response) => {
       this.moodles = response ;
-      this.cursosMoodleService.functionCollapse();
     });
   }
 }

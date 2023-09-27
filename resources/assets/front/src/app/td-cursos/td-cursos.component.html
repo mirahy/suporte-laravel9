@@ -1,138 +1,128 @@
 <div class="container">
   <div class="row">
     <div class="col-xs-12 col-md-12">
+      <h1>Todos os Cursos</h1>
+
+      <hr />
+
+      <ng-container *ngIf="row === moodles.length">
+        <div class="loading">
+          <div class="loading-bar"></div>
+          <div class="loading-bar"></div>
+          <div class="loading-bar"></div>
+          <div class="loading-bar"></div>
+          <div class="loading-bar"></div>
+          <div class="loading-bar"></div>
+      </div>
+      </ng-container>
       
-        <h1>Todos os Cursos</h1>
-    
-        <hr>
-        <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-        <!-- <?php $i=0;
-           $j=1;
-           $abriu = false;
-               // percorre a array de moodles ?>
-        <?php foreach($moodles as $moodle): $i++; 
-          if ($j == 4)
-            $j = 1;
-          if ($j == 1) {	
-            $abriu = true;?> -->
-          <div class="row">
-        <!-- <?php 	} 	?> -->
-          <div class="col-md-4">
-          <div class="panel panel-default">
-          <!-- <?php // imprime um link para o moodle ?> -->
-          <div class="panel-heading" style="padding: 0;" role="tab" id="heading<?php echo $i;?>">
-              <h4 class="panel-title">
-                    <!-- <a role="button" class="btn btn-<?php 
-                switch ($moodle['nome']) {
-                  case "Graduações EaD":
-                  case "Pós-Graduações 2017":
-                  case "Graduações Presenciais":
-                  case "Capacitação PROGESP":
-                    echo "success";
-                    break;
-                  default:
-                    echo "default";
-                    break;
-                }
-                
-                ?> btn-block" style="text-align: left; font-size: large; color: black;" href="#collapse<?php echo $i;?>" data-toggle="collapse" data-target="#curso<?php echo $i;?>">
-                  <?php echo $moodle['nome']; ?>
-                  <span class="glyphicon glyphicon-chevron-down" id="btnCurso" style="float: right;"></span>
-                  </a> -->
-                  
-                  </h4>
-              </div>
-              <div id="curso<?php echo $i;?>" class="collapse">
-                <div class="panel-body">
-            <a type="button" class="btn btn-success btn-group-justified" href="<?php echo linkMoodle($moodle['id']); ?>" target="_blank">
-              <!-- <?php echo $moodle['nome']; ?> -->
-            </a>
-            </div>
-            <!-- <?php // faz a listagem dos cursos ?>
-            <?php foreach($moodle['cursos'] as $curso): $i++;?> -->
-              <div class="panel-body">
-                <a type="button" class="btn btn-primary btn-group-justified"  href="<?php echo linkCurso($moodle['id'], $curso['id']); ?>" target="_blank">
-                  <!-- <?php echo $curso['fullname']; ?> -->
+      <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+        <div class="table-row">
+          <ng-container *ngFor="let moodle of moodles">
+            {{ count() }}
+              <div class="panel panel-default col-md-4 {{ row === 1 ? 'rowinit' : '' }}{{ row === 3 ? 'rowfinal' : '' }}">
+                <a class="btn btn-success btn-block btnMoodleclass celula-trunca-texto collapsed" data-toggle="collapse" href="#moodle{{ moodle.id }}" role="button" aria-expanded="false"
+                 aria-controls="multiCollapseExample1" id="btnMoodlecollapse{{ moodle.id }}"  title="{{ moodle.nome }}" (click)="collapse(moodle.id)">
+                 {{ moodle.nome }}
+                 <i class="bi bi-caret-down-fill caretMoodleclass" id="caretMoodlecollapse{{ moodle.id }}"></i>
                 </a>
+                    <div id="moodle{{ moodle.id }}" class="collapse multi-collapse delay-2">
+                      <div class="panel-body">
+                        <a type="button" class="btn btn-success btn-group-justified" title="{{ moodle.nome }}" href="{{ moodle.href }}" target="_blank">
+                          {{ moodle.nome }}
+                        </a>
+                      </div>
+                      <ng-container *ngFor="let curso of moodle.cursos">
+                        <div class="panel-body">
+                          <a type="button" class="btn btn-primary btn-group-justified celula-trunca-texto" title="{{ curso.fullname }}" href="{{ curso.href }}" target="_blank">
+                            {{ curso.fullname }}
+                          </a>
+                        </div>
+                      </ng-container>
+                    </div>
               </div>
-              
-            <!-- <?php endforeach; ?> -->
-          </div>
+              <ng-container *ngIf="moodle.id === moodles.length"> 
+                <div class="panel panel-default col-md-4 rowinit">
+                  <div class="panel-heading" style="padding: 0" role="tab" id="headingcursomanual">
+                    <h4 class="panel-title">
+                      <a role="button" class="btn btn-defaut btn-block collapsed" id="btnMoodlecollapse1000" style="text-align: left; font-size: large; color: black" data-toggle="collapse" data-target="#cursomanual" (click)="collapse(1000)">
+                        Outros Moodles
+                        <span
+                          class="bi bi-caret-down-fill"
+                          id="caretMoodlecollapse1000"
+                          style="float: right"
+                        ></span>
+                      </a>
+                    </h4>
+                  </div>
+                  <div id="cursomanual" class="collapse">
+                    <div class="panel-body">Acesso pela rede interna UFGD ou VPN</div>
+                    <div class="panel-body">
+                      <a
+                        type="button"
+                        class="btn btn-primary btn-group-justified celula-trunca-texto"
+                        href="http://200.129.215.36/computacao/login/index.php"
+                        target="_blank"
+                        title="Moodle Licenciatura em Computação (2016)"
+                      >
+                        Moodle Licenciatura em Computação (2016)
+                      </a>
+                    </div>
+                    <div class="panel-body">
+                      <a
+                        type="button"
+                        class="btn btn-primary btn-group-justified celula-trunca-texto"
+                        href="http://200.129.215.36/admpublica/login/index.php"
+                        target="_blank"
+                        title="Moodle Bacharelado em Administração Pública (2016)"
+                      >
+                        Moodle Bacharelado em Administração Pública (2016)
+                      </a>
+                    </div>
         
-          </div>
-        <!-- <?php 
-          if ($j == 3) {	
-            $abriu = false;?> -->
-          </div>
-        <!-- <?php 	} 
-        ?> -->
-        </div>
-        <!-- <?php 
-        $j++; endforeach; 
-        
-         // moodles inseridos manualmente 
-        $i++;?> -->
-
-      <div class="col-md-4">
-          <div class="panel panel-default">
-          <div class="panel-heading" style="padding: 0;" role="tab" id="heading<?php echo $i;?>">
-              <h4 class="panel-title">
-                    <a role="button" class="btn btn-defaut btn-block" style="text-align: left; font-size: large; color: black;" href="#collapse<?php echo $i;?>" data-toggle="collapse" data-target="#curso<?php echo $i;?>">
-                  Outros Moodles
-                  <span class="glyphicon glyphicon-chevron-down" id="btnCurso" style="float: right;"></span>
-                  </a>
-                  
-                  </h4>
-              </div>
-              <div id="curso<?php echo $i;?>" class="collapse">
-                <div class="panel-body">
-                  Acesso pela rede interna UFGD ou VPN
-            </div>
-                <div class="panel-body">
-                <a type="button" class="btn btn-primary btn-group-justified"  href="http://200.129.215.36/computacao/login/index.php" target="_blank">
-                  Moodle Licenciatura em Computação (2016)
-            </a>
-            </div>
-            <div class="panel-body">
-                <a type="button" class="btn btn-primary btn-group-justified"  href="http://200.129.215.36/admpublica/login/index.php" target="_blank">
-                  Moodle Bacharelado em Administração Pública (2016)
-            </a>
-            </div>
-
-            <div class="panel-body">
-                <a type="button" class="btn btn-primary btn-group-justified"  href="http://200.129.215.36/fisica/login/index.php" target="_blank">
-                  Moodle Licenciatura em Física (2016)
-            </a>
-            </div>
-            <div class="panel-body">
-                <a type="button" class="btn btn-primary btn-group-justified"  href="http://200.129.215.36/pedagogia/login/index.php" target="_blank">
-                  Moodle Licenciatura em Pedagogia (2016)
-            </a>
-            </div>
-            <div class="panel-body">
-                <a type="button" class="btn btn-primary btn-group-justified"  href="http://200.129.215.36/posgrad/login/index.php" target="_blank">
-                  Moodle Pós-Graduações EaD (2015)
-            </a>
-            </div>
-          </div>
+                    <div class="panel-body">
+                      <a
+                        type="button"
+                        class="btn btn-primary btn-group-justified celula-trunca-texto"
+                        href="http://200.129.215.36/fisica/login/index.php"
+                        target="_blank"
+                        title="Moodle Licenciatura em Física (2016)"
+                      >
+                        Moodle Licenciatura em Física (2016)
+                      </a>
+                    </div>
+                    <div class="panel-body">
+                      <a
+                        type="button"
+                        class="btn btn-primary btn-group-justified celula-trunca-texto"
+                        href="http://200.129.215.36/pedagogia/login/index.php"
+                        target="_blank"
+                        title="Moodle Licenciatura em Pedagogia (2016)"
+                      >
+                        Moodle Licenciatura em Pedagogia (2016)
+                      </a>
+                    </div>
+                    <div class="panel-body">
+                      <a
+                        type="button"
+                        class="btn btn-primary btn-group-justified celula-trunca-texto"
+                        href="http://200.129.215.36/posgrad/login/index.php"
+                        target="_blank"
+                        title="Moodle Pós-Graduações EaD (2015)"
+                      >
+                        Moodle Pós-Graduações EaD (2015)
+                      </a>
+                    </div>
+                  </div>
+                </div>
+                <div class="panel rowfinal" ></div>
+              </ng-container>
+          </ng-container >
+          
         </div>
       </div>
-      
-        
-       <!-- <?php
-      if ($abriu == true) {
-          ?> -->
-          </div>
-        <!-- <?php 	}  ?> -->
-
     </div>
-</div>
-    <div class="col-md-6 hidden-xs hidden-sm">
-      <!--
-      <h1>Novidades do Portal e AVA</h1>
-      <hr>
-      <iframe width="440" height="315" src="https://www.youtube.com/embed/WyXToN19mxA" frameborder="0" allowfullscreen></iframe>
-      -->
-    </div>
-
+  </div>
+  <div class="col-md-6 hidden-xs hidden-sm">
+  </div>
 </div>
