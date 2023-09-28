@@ -43,7 +43,7 @@ export class TdCursosComponent extends AbstractComponent implements OnInit, Afte
 
   ngOnInit() {
 
-      this.cursosMoodleService.getMoodlesComCursos().then((response) => {
+      this.cursosMoodleService.getMoodlesComCursos(0).then((response) => {
       this.moodles = response ;
       this.countMoodles = this.moodles.length
     });

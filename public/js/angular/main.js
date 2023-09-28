@@ -5315,7 +5315,7 @@ var MeusCursosComponent = /** @class */ (function (_super) {
     };
     MeusCursosComponent.prototype.ngOnInit = function () {
         var _this = this;
-        this.cursosMoodleService.getMoodlesComCursos().then(function (response) {
+        this.cursosMoodleService.getMoodlesComCursos(6).then(function (response) {
             _this.moodles = response;
         });
     };
@@ -12234,7 +12234,7 @@ var TdCursosComponent = /** @class */ (function (_super) {
     };
     TdCursosComponent.prototype.ngOnInit = function () {
         var _this = this;
-        this.cursosMoodleService.getMoodlesComCursos().then(function (response) {
+        this.cursosMoodleService.getMoodlesComCursos(0).then(function (response) {
             _this.moodles = response;
             _this.countMoodles = _this.moodles.length;
         });
