@@ -25,7 +25,7 @@ class SalasOldController extends Controller
     {
         $this->middleware('auth');
         //$this->middleware('authdev:RubensMarcon');
-        $this->middleware('permissao:'.User::PERMISSAO_ADMINISTRADOR.','.User::PERMISSAO_USUARIO);
+        $this->middleware('permissao:'.User::PERMISSAO_ADMINISTRADOR.','.User::PERMISSAO_SERVIDOR);
         $this->middleware('permissao:'.User::PERMISSAO_ADMINISTRADOR)->except(['create', 'store', 'success']);
     }
     /**

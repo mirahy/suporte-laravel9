@@ -14,7 +14,7 @@ class RolesController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        $this->middleware('permissao:'.User::PERMISSAO_ADMINISTRADOR.','.User::PERMISSAO_USUARIO);
+        $this->middleware('permissao:'.User::PERMISSAO_ADMINISTRADOR.','.User::PERMISSAO_SERVIDOR);
         $this->middleware('permissao:'.User::PERMISSAO_ADMINISTRADOR)->except(['all']);
     }
 
