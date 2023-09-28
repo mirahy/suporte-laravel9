@@ -4,8 +4,6 @@
       <h1>Todos os Cursos</h1>
 
       <hr />
-
-      <ng-container *ngIf="row === moodles.length">
         <div class="loading">
           <div class="loading-bar"></div>
           <div class="loading-bar"></div>
@@ -13,8 +11,8 @@
           <div class="loading-bar"></div>
           <div class="loading-bar"></div>
           <div class="loading-bar"></div>
-      </div>
-      </ng-container>      
+        </div>
+            
       <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
         <div class="table-row">
           <ng-container *ngFor="let moodle of moodles">
@@ -116,6 +114,7 @@
                   </div>
                 </div>
                 <div class="panel rowfinal" ></div>
+                {{ removeLoading() }}
               </ng-container>
           </ng-container >
           

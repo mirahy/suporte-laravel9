@@ -1060,6 +1060,7 @@ body .ui-progressbar .ui-progressbar-value {
     position: fixed;
     top: 50%;
     left: 50%;
+    display: flex;
   }
   @media (max-width: 500px) {
     .loading {
@@ -1073,6 +1074,7 @@ body .ui-progressbar .ui-progressbar-value {
     height: 36px;
     border-radius: 4px;
     animation: loading 1s ease-in-out infinite;
+    margin: 1px;
   }
   .loading-bar:nth-child(1) {
     background-color: #27ae60;

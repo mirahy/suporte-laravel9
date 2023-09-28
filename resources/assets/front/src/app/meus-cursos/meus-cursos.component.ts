@@ -2,6 +2,8 @@ import { Component, OnInit } from "@angular/core";
 import { CursosMoodleService } from "../cursos-moodle.service";
 import { AbstractComponent } from "../abstract-component";
 import { Router } from "@angular/router";
+import { forEach } from "@angular/router/src/utils/collection";
+import { empty } from "@angular-devkit/schematics";
 
 declare var jQuery: any;
 
@@ -11,7 +13,8 @@ declare var jQuery: any;
   styleUrls: ["./meus-cursos.component.less"],
 })
 export class MeusCursosComponent extends AbstractComponent implements OnInit {
-  moodles = '';
+  moodles = [];
+  emptyCursos = false;
   constructor(private cursosMoodleService: CursosMoodleService, private router: Router) {
     super();
   }
@@ -27,10 +30,25 @@ export class MeusCursosComponent extends AbstractComponent implements OnInit {
     this.cursosMoodleService.functionCollapse(id);
   }
 
+  removeLoading(){
+    jQuery('.loading')
+      .remove()
+  }
+
 
   ngOnInit() {
     this.cursosMoodleService.getMoodlesComCursos(6).then((response) => {
       this.moodles = response ;
+      let i = 0;
+      this.moodles.forEach(element => {
+        
+          if(element.cursos.length !== 0){
+            i++
+          }
+      });
+      if(!i){
+        this.emptyCursos = true
+      } 
     });
   }
 }
