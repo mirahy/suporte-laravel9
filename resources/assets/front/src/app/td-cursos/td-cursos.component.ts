@@ -11,25 +11,12 @@ declare var jQuery: any;
 })
 export class TdCursosComponent extends AbstractComponent implements OnInit, AfterViewChecked{
   moodles = ''
-  row = 0
-  show = true
   countMoodles: Number = 0
   constructor(private cursosMoodleService: CursosMoodleService) 
   { 
     super()
   }
   
-  
-  count(){
-    if(this.row < 3){
-      this.row++
-      this.show = false
-    }else{
-      this.row = 1
-      this.show = true
-    }
-    
-  }
 
   initrow(){
     jQuery('.rowinit')

@@ -19,8 +19,9 @@
       <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
         <div class="table-row">
           <ng-container *ngFor="let moodle of moodles">
-            {{ count() }}
-              <div class="panel panel-default col-md-4 {{ row === 1 ? 'rowinit' : '' }}{{ row === 3 ? 'rowfinal' : '' }}">
+              <div class="panel panel-default col-md-4 
+              {{ moodle.id === 1 || (moodle.id - 1) % 3 === 0 ? 'rowinit' : '' }}
+              {{ moodle.id % 3 === 0 ? 'rowfinal' : '' }}">
                 <a class="btn btn-success btn-block btnMoodleclass celula-trunca-texto collapsed" data-toggle="collapse" href="#moodle{{ moodle.id }}" role="button" aria-expanded="false"
                  aria-controls="multiCollapseExample1" id="btnMoodlecollapse{{ moodle.id }}"  title="{{ moodle.nome }}" (click)="collapse(moodle.id)">
                  {{ moodle.nome }}
@@ -42,7 +43,7 @@
                     </div>
               </div>
               <ng-container *ngIf="moodle.id === moodles.length"> 
-                <div class="panel panel-default col-md-4 rowinit">
+                <div class="panel panel-default col-md-4 {{ moodles.length % 3 === 0 ? 'rowinit' : '' }}">
                   <div class="panel-heading" style="padding: 0" role="tab" id="headingcursomanual">
                     <h4 class="panel-title">
                       <a role="button" class="btn btn-defaut btn-block collapsed" id="btnMoodlecollapse1000" style="text-align: left; font-size: large; color: black" data-toggle="collapse" data-target="#cursomanual" (click)="collapse(1000)">
