@@ -14,14 +14,13 @@
           <div class="loading-bar"></div>
           <div class="loading-bar"></div>
       </div>
-      </ng-container>
-      
+      </ng-container>      
       <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
         <div class="table-row">
           <ng-container *ngFor="let moodle of moodles">
               <div class="panel panel-default col-md-4 
-              {{ moodle.id === 1 || (moodle.id - 1) % 3 === 0 ? 'rowinit' : '' }}
-              {{ moodle.id % 3 === 0 ? 'rowfinal' : '' }}">
+              {{ moodle.pos === 1 || (moodle.pos - 1) % 3 === 0 ? 'rowinit' : '' }}
+              {{ moodle.pos % 3 === 0 ? 'rowfinal' : '' }}">
                 <a class="btn btn-success btn-block btnMoodleclass celula-trunca-texto collapsed" data-toggle="collapse" href="#moodle{{ moodle.id }}" role="button" aria-expanded="false"
                  aria-controls="multiCollapseExample1" id="btnMoodlecollapse{{ moodle.id }}"  title="{{ moodle.nome }}" (click)="collapse(moodle.id)">
                  {{ moodle.nome }}
@@ -42,7 +41,7 @@
                       </ng-container>
                     </div>
               </div>
-              <ng-container *ngIf="moodle.id === moodles.length"> 
+              <ng-container *ngIf="moodle.pos === moodles.length"> 
                 <div class="panel panel-default col-md-4 {{ moodles.length % 3 === 0 ? 'rowinit' : '' }}">
                   <div class="panel-heading" style="padding: 0" role="tab" id="headingcursomanual">
                     <h4 class="panel-title">

@@ -76,6 +76,7 @@ class CursosMoodleController extends Controller
         foreach ($moodles as $chave => $moodle) {
             $request->merge(['idMoodles' => [$moodles[$chave]['id']], 'idCurso' => 0 ]);
             $moodles[$chave]['href'] = $this->goMoodle($request);
+            $moodles[$chave]['pos'] = $chave + 1;
             // adiciona os dados dos cursos junto com os dados do moodle
             $moodles[$chave]['cursos'] = $this->getCursosParaOMoodle($moodle, $usuario, $ultimosMeses);
             if(!empty($moodles[$chave]['cursos'])){
