@@ -1917,7 +1917,6 @@ var CursosMoodleService = /** @class */ (function () {
         });
     };
     CursosMoodleService.prototype.getMoodlesComCursos = function (paramMeses) {
-        if (paramMeses === void 0) { paramMeses = 6; }
         return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0, function () {
             var meses;
             return tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"](this, function (_a) {
