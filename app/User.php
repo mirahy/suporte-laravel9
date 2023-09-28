@@ -48,7 +48,7 @@ class User extends Authenticatable2 implements Authenticatable
     }
 
     public function isUser() {
-        return $this->permissao == self::PERMISSAO_USUARIO;
+        return $this->permissao == self::PERMISSAO_SERVIDOR;
     }
 
     public function isInative() {
