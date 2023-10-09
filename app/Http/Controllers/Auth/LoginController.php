@@ -21,6 +21,26 @@ class LoginController extends Controller
     use AuthenticatesUsers;
 
     /**
+     * Attempt to log the user into the application.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return bool
+     */
+    protected function attemptLogin(\Illuminate\Http\Request $request)
+    {
+        $credentials = [
+            'samaccountname' => $request->email,
+            'password' => $request->password,
+        ];
+
+        // dd($credentials);
+
+        return $this->guard()->attempt(
+            $credentials, $request->boolean('remember')
+        );
+    }
+
+    /**
      * Validate the user login request.
      *
      * @param  \Illuminate\Http\Request  $request

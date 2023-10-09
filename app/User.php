@@ -7,10 +7,14 @@ use Illuminate\Foundation\Auth\User as Authenticatable2;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
+use LdapRecord\Laravel\Auth\LdapAuthenticatable;
+use LdapRecord\Laravel\Auth\AuthenticatesWithLdap;
 
-class User extends Authenticatable2 implements Authenticatable
+
+
+class User extends Authenticatable2 implements LdapAuthenticatable
 {
-    use Notifiable, HasRoles, HasApiTokens;
+    use Notifiable, HasRoles, HasApiTokens, AuthenticatesWithLdap;
 
     const PERMISSAO_ADMINISTRADOR = "ADMINISTRADOR";
     const PERMISSAO_SERVIDOR = 'SERVIDOR';
