@@ -14,6 +14,7 @@ class PessoasEstatusLotacaoController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+        $this->middleware('authhost');
         $this->middleware('permissao:' . User::PERMISSAO_ADMINISTRADOR );
     }
     /**
