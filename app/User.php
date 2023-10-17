@@ -5,13 +5,19 @@ namespace App;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable2;
 use Illuminate\Contracts\Auth\Authenticatable;
+use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
+use LdapRecord\Laravel\Auth\LdapAuthenticatable;
+use LdapRecord\Laravel\Auth\AuthenticatesWithLdap;
 
-class User extends Authenticatable2 implements Authenticatable
+
+
+class User extends Authenticatable2 implements LdapAuthenticatable
 {
-    use Notifiable, HasRoles;
+    use Notifiable, HasRoles, HasApiTokens, AuthenticatesWithLdap;
 
     const PERMISSAO_ADMINISTRADOR = "ADMINISTRADOR";
+    const PERMISSAO_SERVIDOR = 'SERVIDOR';
     const PERMISSAO_USUARIO = 'USUARIO';
     const PERMISSAO_INATIVO = 'INATIVO';
 
@@ -46,7 +52,7 @@ class User extends Authenticatable2 implements Authenticatable
     }
 
     public function isUser() {
-        return $this->permissao == self::PERMISSAO_USUARIO;
+        return $this->permissao == self::PERMISSAO_SERVIDOR;
     }
 
     public function isInative() {

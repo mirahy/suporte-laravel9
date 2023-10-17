@@ -1,0 +1,50 @@
+<div class="container">
+  <div class="row">
+    <div class="col-xs-12 col-md-12">
+    </div>
+      <h1>Meus Cursos</h1>
+      <hr>
+
+      <div class="loading">
+        <div class="loading-bar"></div>
+        <div class="loading-bar"></div>
+        <div class="loading-bar"></div>
+        <div class="loading-bar"></div>
+        <div class="loading-bar"></div>
+        <div class="loading-bar"></div>
+      </div>
+
+      <div class="col-xs-12 col-md-12">
+      <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+      <div class="panel panel-default" *ngIf="moodles && !emptyCursos">
+        <div class="panel-heading" style="padding: 0;" role="tab" id="heading" >
+            <a type="button" class="btn btn-defaut btn-block" style="text-align: left; font-size: large;"  data-toggle="collapse" data-target="#curso" id="btnMoodlecollapse1000" (click)="collapse(1000)">
+              Cursos em andamento
+              <span class="bi bi-caret-up-fill caretMoodleclass " id="caretMoodlecollapse1000" ></span>
+            </a>
+          </div>
+          <div id="curso" class="collapse in">
+            <ng-container *ngFor="let moodle of moodles">
+               <!-- faz a listagem dos cursos -->
+               <ng-container *ngFor="let curso of moodle.cursos">
+                <div class="panel-body">
+                 
+                  <a type="button" id="curso{{ curso.id + moodle.id }}" title="{{ curso.fullname }}"class="btn btn-primary btn-group-justified celula-trunca-texto" role="group" href="{{ curso.href }}" target="_blank">
+                    <span class="text-truncate" style="display: block;" title="{{ curso.fullname }}">{{ curso.fullname }}</span>
+                  </a>
+                </div>
+               </ng-container>
+               <ng-container *ngIf="moodle.pos === moodles.length">
+                {{ removeLoading() }}
+               </ng-container>
+            </ng-container>
+        </div>
+      </div>
+        <p *ngIf="emptyCursos">
+          {{ removeLoading() }}
+          Nenhum curso a ser exibido.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

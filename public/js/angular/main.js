@@ -961,6 +961,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _pessoas_estatus_lotacao_service__WEBPACK_IMPORTED_MODULE_83__ = __webpack_require__(/*! ./pessoas-estatus-lotacao.service */ "./src/app/pessoas-estatus-lotacao.service.ts");
 /* harmony import */ var _roles_roles_component__WEBPACK_IMPORTED_MODULE_84__ = __webpack_require__(/*! ./roles/roles.component */ "./src/app/roles/roles.component.ts");
 /* harmony import */ var _roles_service__WEBPACK_IMPORTED_MODULE_85__ = __webpack_require__(/*! ./roles.service */ "./src/app/roles.service.ts");
+/* harmony import */ var _meus_cursos_meus_cursos_component__WEBPACK_IMPORTED_MODULE_86__ = __webpack_require__(/*! ./meus-cursos/meus-cursos.component */ "./src/app/meus-cursos/meus-cursos.component.ts");
+/* harmony import */ var _td_cursos_td_cursos_component__WEBPACK_IMPORTED_MODULE_87__ = __webpack_require__(/*! ./td-cursos/td-cursos.component */ "./src/app/td-cursos/td-cursos.component.ts");
+/* harmony import */ var _cursos_moodle_service__WEBPACK_IMPORTED_MODULE_88__ = __webpack_require__(/*! ./cursos-moodle.service */ "./src/app/cursos-moodle.service.ts");
+/* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_89__ = __webpack_require__(/*! @angular/common */ "./node_modules/@angular/common/fesm5/common.js");
 
 
 
@@ -1048,6 +1052,10 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
+
+
+
 var appRoutes = [
     { path: 'salas', component: _salas_salas_component__WEBPACK_IMPORTED_MODULE_11__["SalasComponent"] },
     { path: 'salas/create', component: _salas_cria_salas_cria_salas_component__WEBPACK_IMPORTED_MODULE_18__["CriaSalasComponent"] },
@@ -1074,6 +1082,8 @@ var appRoutes = [
     { path: 'formulario-pessoas-estatus-lotacao', component: _usuarios_formulario_pessoas_estatus_lotacao_formulario_pessoas_estatus_lotacao_component__WEBPACK_IMPORTED_MODULE_82__["FormularioPessoasEstatusLotacaoComponent"] },
     { path: 'logs', component: _logs_logs_component__WEBPACK_IMPORTED_MODULE_76__["LogsComponent"] },
     { path: 'roles', component: _roles_roles_component__WEBPACK_IMPORTED_MODULE_84__["RolesComponent"] },
+    { path: 'meus-cursos', component: _meus_cursos_meus_cursos_component__WEBPACK_IMPORTED_MODULE_86__["MeusCursosComponent"] },
+    { path: 'td-cursos', component: _td_cursos_td_cursos_component__WEBPACK_IMPORTED_MODULE_87__["TdCursosComponent"] },
     /*{ path: '',
       redirectTo: '/',
       pathMatch: 'full'
@@ -1125,6 +1135,8 @@ var AppModule = /** @class */ (function () {
                 _unidade_organizacional_formulario_alteracao_usuario_formulario_alteracao_usuario_component__WEBPACK_IMPORTED_MODULE_81__["FormularioAlteracaoUsuarioComponent"],
                 _usuarios_formulario_pessoas_estatus_lotacao_formulario_pessoas_estatus_lotacao_component__WEBPACK_IMPORTED_MODULE_82__["FormularioPessoasEstatusLotacaoComponent"],
                 _roles_roles_component__WEBPACK_IMPORTED_MODULE_84__["RolesComponent"],
+                _meus_cursos_meus_cursos_component__WEBPACK_IMPORTED_MODULE_86__["MeusCursosComponent"],
+                _td_cursos_td_cursos_component__WEBPACK_IMPORTED_MODULE_87__["TdCursosComponent"],
             ],
             imports: [
                 _angular_platform_browser__WEBPACK_IMPORTED_MODULE_1__["BrowserModule"],
@@ -1150,7 +1162,8 @@ var AppModule = /** @class */ (function () {
                 primeng_fullcalendar__WEBPACK_IMPORTED_MODULE_36__["FullCalendarModule"],
                 primeng_radiobutton__WEBPACK_IMPORTED_MODULE_38__["RadioButtonModule"],
                 primeng_fileupload__WEBPACK_IMPORTED_MODULE_39__["FileUploadModule"],
-                _angular_cdk_scrolling__WEBPACK_IMPORTED_MODULE_8__["ScrollingModule"]
+                _angular_cdk_scrolling__WEBPACK_IMPORTED_MODULE_8__["ScrollingModule"],
+                _angular_common__WEBPACK_IMPORTED_MODULE_89__["CommonModule"],
             ],
             providers: [
                 _salas_service__WEBPACK_IMPORTED_MODULE_41__["SalasService"],
@@ -1177,7 +1190,8 @@ var AppModule = /** @class */ (function () {
                 _unidade_organizacional_service__WEBPACK_IMPORTED_MODULE_79__["UnidadeOrganizacionalService"],
                 _pessoas_estatus_lotacao_service__WEBPACK_IMPORTED_MODULE_83__["PessoasEstatusLotacaoService"],
                 _logs_service__WEBPACK_IMPORTED_MODULE_77__["LogsService"],
-                _roles_service__WEBPACK_IMPORTED_MODULE_85__["RolesService"]
+                _roles_service__WEBPACK_IMPORTED_MODULE_85__["RolesService"],
+                _cursos_moodle_service__WEBPACK_IMPORTED_MODULE_88__["CursosMoodleService"]
             ],
             bootstrap: [
                 _app_component__WEBPACK_IMPORTED_MODULE_10__["AppComponent"]
@@ -1862,6 +1876,92 @@ var CalendarioComponent = /** @class */ (function (_super) {
     ], CalendarioComponent);
     return CalendarioComponent;
 }(_abstract_component__WEBPACK_IMPORTED_MODULE_11__["AbstractComponent"]));
+
+
+
+/***/ }),
+
+/***/ "./src/app/cursos-moodle.service.ts":
+/*!******************************************!*\
+  !*** ./src/app/cursos-moodle.service.ts ***!
+  \******************************************/
+/*! exports provided: CursosMoodleService */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CursosMoodleService", function() { return CursosMoodleService; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _angular_http__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/http */ "./node_modules/@angular/http/fesm5/http.js");
+
+
+
+var CursosMoodleService = /** @class */ (function () {
+    function CursosMoodleService(http) {
+        this.http = http;
+    }
+    CursosMoodleService.prototype.getMoodles = function (idArray) {
+        if (idArray === void 0) { idArray = [1, 2]; }
+        return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0, function () {
+            var idMoodles;
+            return tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"](this, function (_a) {
+                idMoodles = { idMoodles: idArray };
+                return [2 /*return*/, this.http
+                        .post("/get-moodles", idMoodles)
+                        .toPromise()
+                        .then(function (response) {
+                        return response.json();
+                    })];
+            });
+        });
+    };
+    CursosMoodleService.prototype.getMoodlesComCursos = function (paramMeses) {
+        return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0, function () {
+            var meses;
+            return tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"](this, function (_a) {
+                meses = { ultimosMeses: paramMeses };
+                return [2 /*return*/, this.http
+                        .post("/get-meus-cursos", meses)
+                        .toPromise()
+                        .then(function (response) {
+                        return response.json();
+                    })];
+            });
+        });
+    };
+    CursosMoodleService.prototype.goMoodle = function (idMoodle, IdCurso) {
+        return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0, function () {
+            var params;
+            return tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"](this, function (_a) {
+                params = { idMoodles: [idMoodle], idCurso: IdCurso };
+                return [2 /*return*/, this.http
+                        .post("/go-moodle", params)
+                        .toPromise()
+                        .then(function (response) {
+                        return response;
+                    })];
+            });
+        });
+    };
+    CursosMoodleService.prototype.functionCollapse = function (id) {
+        if (jQuery('#btnMoodlecollapse' + id).hasClass('collapsed')) {
+            //Alterar seta para cima somente da guia em aberto
+            jQuery('#caretMoodlecollapse' + id).removeClass('bi-caret-down-fill');
+            jQuery('#caretMoodlecollapse' + id).addClass('bi-caret-up-fill');
+        }
+        else {
+            //Alterar seta para baixo  da guia fechada
+            jQuery('#caretMoodlecollapse' + id).removeClass('bi-caret-up-fill');
+            jQuery('#caretMoodlecollapse' + id).addClass('bi-caret-down-fill');
+        }
+    };
+    CursosMoodleService = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])(),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_angular_http__WEBPACK_IMPORTED_MODULE_2__["Http"]])
+    ], CursosMoodleService);
+    return CursosMoodleService;
+}());
 
 
 
@@ -5147,6 +5247,101 @@ var Macro = /** @class */ (function () {
     };
     return Macro;
 }());
+
+
+
+/***/ }),
+
+/***/ "./src/app/meus-cursos/meus-cursos.component.html":
+/*!********************************************************!*\
+  !*** ./src/app/meus-cursos/meus-cursos.component.html ***!
+  \********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<div class=\"container\">\n  <div class=\"row\">\n    <div class=\"col-xs-12 col-md-12\">\n    </div>\n      <h1>Meus Cursos</h1>\n      <hr>\n\n      <div class=\"loading\">\n        <div class=\"loading-bar\"></div>\n        <div class=\"loading-bar\"></div>\n        <div class=\"loading-bar\"></div>\n        <div class=\"loading-bar\"></div>\n        <div class=\"loading-bar\"></div>\n        <div class=\"loading-bar\"></div>\n      </div>\n\n      <div class=\"col-xs-12 col-md-12\">\n      <div class=\"panel-group\" id=\"accordion\" role=\"tablist\" aria-multiselectable=\"true\">\n      <div class=\"panel panel-default\" *ngIf=\"moodles && !emptyCursos\">\n        <div class=\"panel-heading\" style=\"padding: 0;\" role=\"tab\" id=\"heading\" >\n            <a type=\"button\" class=\"btn btn-defaut btn-block\" style=\"text-align: left; font-size: large;\"  data-toggle=\"collapse\" data-target=\"#curso\" id=\"btnMoodlecollapse1000\" (click)=\"collapse(1000)\">\n              Cursos em andamento\n              <span class=\"bi bi-caret-up-fill caretMoodleclass \" id=\"caretMoodlecollapse1000\" ></span>\n            </a>\n          </div>\n          <div id=\"curso\" class=\"collapse in\">\n            <ng-container *ngFor=\"let moodle of moodles\">\n               <!-- faz a listagem dos cursos -->\n               <ng-container *ngFor=\"let curso of moodle.cursos\">\n                <div class=\"panel-body\">\n                 \n                  <a type=\"button\" id=\"curso{{ curso.id + moodle.id }}\" title=\"{{ curso.fullname }}\"class=\"btn btn-primary btn-group-justified celula-trunca-texto\" role=\"group\" href=\"{{ curso.href }}\" target=\"_blank\">\n                    <span class=\"text-truncate\" style=\"display: block;\" title=\"{{ curso.fullname }}\">{{ curso.fullname }}</span>\n                  </a>\n                </div>\n               </ng-container>\n               <ng-container *ngIf=\"moodle.pos === moodles.length\">\n                {{ removeLoading() }}\n               </ng-container>\n            </ng-container>\n        </div>\n      </div>\n        <p *ngIf=\"emptyCursos\">\n          {{ removeLoading() }}\n          Nenhum curso a ser exibido.\n        </p>\n      </div>\n    </div>\n  </div>\n</div>"
+
+/***/ }),
+
+/***/ "./src/app/meus-cursos/meus-cursos.component.less":
+/*!********************************************************!*\
+  !*** ./src/app/meus-cursos/meus-cursos.component.less ***!
+  \********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL21ldXMtY3Vyc29zL21ldXMtY3Vyc29zLmNvbXBvbmVudC5sZXNzIn0= */"
+
+/***/ }),
+
+/***/ "./src/app/meus-cursos/meus-cursos.component.ts":
+/*!******************************************************!*\
+  !*** ./src/app/meus-cursos/meus-cursos.component.ts ***!
+  \******************************************************/
+/*! exports provided: MeusCursosComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MeusCursosComponent", function() { return MeusCursosComponent; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _cursos_moodle_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../cursos-moodle.service */ "./src/app/cursos-moodle.service.ts");
+/* harmony import */ var _abstract_component__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../abstract-component */ "./src/app/abstract-component.ts");
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
+
+
+
+
+
+var MeusCursosComponent = /** @class */ (function (_super) {
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__extends"](MeusCursosComponent, _super);
+    function MeusCursosComponent(cursosMoodleService, router) {
+        var _this = _super.call(this) || this;
+        _this.cursosMoodleService = cursosMoodleService;
+        _this.router = router;
+        _this.moodles = [];
+        _this.emptyCursos = false;
+        return _this;
+    }
+    MeusCursosComponent.prototype.goMoodle = function (idMoodle, IdCurso) {
+        this.cursosMoodleService.goMoodle(idMoodle, IdCurso).then(function (response) {
+            console.log(response);
+            jQuery('#curso' + IdCurso + idMoodle).attr('href', response.text());
+        });
+    };
+    MeusCursosComponent.prototype.collapse = function (id) {
+        this.cursosMoodleService.functionCollapse(id);
+    };
+    MeusCursosComponent.prototype.removeLoading = function () {
+        jQuery('.loading')
+            .remove();
+    };
+    MeusCursosComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        this.cursosMoodleService.getMoodlesComCursos(6).then(function (response) {
+            _this.moodles = response;
+            var i = 0;
+            _this.moodles.forEach(function (element) {
+                if (element.cursos.length !== 0) {
+                    i++;
+                }
+            });
+            if (!i) {
+                _this.emptyCursos = true;
+            }
+        });
+    };
+    MeusCursosComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
+            selector: "app-meus-cursos",
+            template: __webpack_require__(/*! ./meus-cursos.component.html */ "./src/app/meus-cursos/meus-cursos.component.html"),
+            styles: [__webpack_require__(/*! ./meus-cursos.component.less */ "./src/app/meus-cursos/meus-cursos.component.less")]
+        }),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_cursos_moodle_service__WEBPACK_IMPORTED_MODULE_2__["CursosMoodleService"], _angular_router__WEBPACK_IMPORTED_MODULE_4__["Router"]])
+    ], MeusCursosComponent);
+    return MeusCursosComponent;
+}(_abstract_component__WEBPACK_IMPORTED_MODULE_3__["AbstractComponent"]));
 
 
 
@@ -11982,6 +12177,103 @@ var SuperMacro = /** @class */ (function () {
 
 /***/ }),
 
+/***/ "./src/app/td-cursos/td-cursos.component.html":
+/*!****************************************************!*\
+  !*** ./src/app/td-cursos/td-cursos.component.html ***!
+  \****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<div class=\"container\">\n  <div class=\"row\">\n    <div class=\"col-xs-12 col-md-12\">\n      <h1>Todos os Cursos</h1>\n\n      <hr />\n        <div class=\"loading\">\n          <div class=\"loading-bar\"></div>\n          <div class=\"loading-bar\"></div>\n          <div class=\"loading-bar\"></div>\n          <div class=\"loading-bar\"></div>\n          <div class=\"loading-bar\"></div>\n          <div class=\"loading-bar\"></div>\n        </div>\n            \n      <div class=\"panel-group\" id=\"accordion\" role=\"tablist\" aria-multiselectable=\"true\">\n        <div class=\"table-row\">\n          <ng-container *ngFor=\"let moodle of moodles\">\n              <div class=\"panel panel-default col-md-4 \n              {{ moodle.pos === 1 || (moodle.pos - 1) % 3 === 0 ? 'rowinit' : '' }}\n              {{ moodle.pos % 3 === 0 ? 'rowfinal' : '' }}\">\n                <a class=\"btn btn-success btn-block btnMoodleclass celula-trunca-texto collapsed\" data-toggle=\"collapse\" href=\"#moodle{{ moodle.id }}\" role=\"button\" aria-expanded=\"false\"\n                 aria-controls=\"multiCollapseExample1\" id=\"btnMoodlecollapse{{ moodle.id }}\"  title=\"{{ moodle.nome }}\" (click)=\"collapse(moodle.id)\">\n                 {{ moodle.nome }}\n                 <i class=\"bi bi-caret-down-fill caretMoodleclass\" id=\"caretMoodlecollapse{{ moodle.id }}\"></i>\n                </a>\n                    <div id=\"moodle{{ moodle.id }}\" class=\"collapse multi-collapse delay-2\">\n                      <div class=\"panel-body\">\n                        <a type=\"button\" class=\"btn btn-success btn-group-justified\" title=\"{{ moodle.nome }}\" href=\"{{ moodle.href }}\" target=\"_blank\">\n                          {{ moodle.nome }}\n                        </a>\n                      </div>\n                      <ng-container *ngFor=\"let curso of moodle.cursos\">\n                        <div class=\"panel-body\">\n                          <a type=\"button\" class=\"btn btn-primary btn-group-justified celula-trunca-texto\" title=\"{{ curso.fullname }}\" href=\"{{ curso.href }}\" target=\"_blank\">\n                            {{ curso.fullname }}\n                          </a>\n                        </div>\n                      </ng-container>\n                    </div>\n              </div>\n              <ng-container *ngIf=\"moodle.pos === moodles.length\"> \n                <div class=\"panel panel-default col-md-4 {{ moodles.length % 3 === 0 ? 'rowinit' : '' }}\">\n                  <div class=\"panel-heading\" style=\"padding: 0\" role=\"tab\" id=\"headingcursomanual\">\n                    <h4 class=\"panel-title\">\n                      <a role=\"button\" class=\"btn btn-defaut btn-block collapsed\" id=\"btnMoodlecollapse1000\" style=\"text-align: left; font-size: large; color: black\" data-toggle=\"collapse\" data-target=\"#cursomanual\" (click)=\"collapse(1000)\">\n                        Outros Moodles\n                        <span\n                          class=\"bi bi-caret-down-fill\"\n                          id=\"caretMoodlecollapse1000\"\n                          style=\"float: right\"\n                        ></span>\n                      </a>\n                    </h4>\n                  </div>\n                  <div id=\"cursomanual\" class=\"collapse\">\n                    <div class=\"panel-body\">Acesso pela rede interna UFGD ou VPN</div>\n                    <div class=\"panel-body\">\n                      <a\n                        type=\"button\"\n                        class=\"btn btn-primary btn-group-justified celula-trunca-texto\"\n                        href=\"http://200.129.215.36/computacao/login/index.php\"\n                        target=\"_blank\"\n                        title=\"Moodle Licenciatura em Computação (2016)\"\n                      >\n                        Moodle Licenciatura em Computação (2016)\n                      </a>\n                    </div>\n                    <div class=\"panel-body\">\n                      <a\n                        type=\"button\"\n                        class=\"btn btn-primary btn-group-justified celula-trunca-texto\"\n                        href=\"http://200.129.215.36/admpublica/login/index.php\"\n                        target=\"_blank\"\n                        title=\"Moodle Bacharelado em Administração Pública (2016)\"\n                      >\n                        Moodle Bacharelado em Administração Pública (2016)\n                      </a>\n                    </div>\n        \n                    <div class=\"panel-body\">\n                      <a\n                        type=\"button\"\n                        class=\"btn btn-primary btn-group-justified celula-trunca-texto\"\n                        href=\"http://200.129.215.36/fisica/login/index.php\"\n                        target=\"_blank\"\n                        title=\"Moodle Licenciatura em Física (2016)\"\n                      >\n                        Moodle Licenciatura em Física (2016)\n                      </a>\n                    </div>\n                    <div class=\"panel-body\">\n                      <a\n                        type=\"button\"\n                        class=\"btn btn-primary btn-group-justified celula-trunca-texto\"\n                        href=\"http://200.129.215.36/pedagogia/login/index.php\"\n                        target=\"_blank\"\n                        title=\"Moodle Licenciatura em Pedagogia (2016)\"\n                      >\n                        Moodle Licenciatura em Pedagogia (2016)\n                      </a>\n                    </div>\n                    <div class=\"panel-body\">\n                      <a\n                        type=\"button\"\n                        class=\"btn btn-primary btn-group-justified celula-trunca-texto\"\n                        href=\"http://200.129.215.36/posgrad/login/index.php\"\n                        target=\"_blank\"\n                        title=\"Moodle Pós-Graduações EaD (2015)\"\n                      >\n                        Moodle Pós-Graduações EaD (2015)\n                      </a>\n                    </div>\n                  </div>\n                </div>\n                <div class=\"panel rowfinal\" ></div>\n                {{ removeLoading() }}\n              </ng-container>\n          </ng-container >\n          \n        </div>\n      </div>\n    </div>\n  </div>\n  <div class=\"col-md-6 hidden-xs hidden-sm\">\n  </div>\n</div>"
+
+/***/ }),
+
+/***/ "./src/app/td-cursos/td-cursos.component.less":
+/*!****************************************************!*\
+  !*** ./src/app/td-cursos/td-cursos.component.less ***!
+  \****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL3RkLWN1cnNvcy90ZC1jdXJzb3MuY29tcG9uZW50Lmxlc3MifQ== */"
+
+/***/ }),
+
+/***/ "./src/app/td-cursos/td-cursos.component.ts":
+/*!**************************************************!*\
+  !*** ./src/app/td-cursos/td-cursos.component.ts ***!
+  \**************************************************/
+/*! exports provided: TdCursosComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TdCursosComponent", function() { return TdCursosComponent; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _cursos_moodle_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../cursos-moodle.service */ "./src/app/cursos-moodle.service.ts");
+/* harmony import */ var _abstract_component__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../abstract-component */ "./src/app/abstract-component.ts");
+
+
+
+
+var TdCursosComponent = /** @class */ (function (_super) {
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__extends"](TdCursosComponent, _super);
+    function TdCursosComponent(cursosMoodleService) {
+        var _this = _super.call(this) || this;
+        _this.cursosMoodleService = cursosMoodleService;
+        _this.moodles = '';
+        _this.countMoodles = 0;
+        return _this;
+    }
+    TdCursosComponent.prototype.initrow = function () {
+        jQuery('.rowinit')
+            .before("<div class=row>");
+        jQuery('.rowfinal')
+            .after('</div>');
+        jQuery('.panel')
+            .removeClass('rowinit');
+        jQuery('.panel')
+            .removeClass('rowfinal');
+    };
+    TdCursosComponent.prototype.removeLoading = function () {
+        jQuery('.loading')
+            .remove();
+    };
+    TdCursosComponent.prototype.goMoodle = function (idMoodle, IdCurso) {
+        this.cursosMoodleService.goMoodle(idMoodle, IdCurso).then(function (response) {
+            console.log(response);
+            jQuery('#curso' + IdCurso + idMoodle).attr('href', response.text());
+        });
+    };
+    TdCursosComponent.prototype.collapse = function (id) {
+        this.cursosMoodleService.functionCollapse(id);
+    };
+    TdCursosComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        this.cursosMoodleService.getMoodlesComCursos(0).then(function (response) {
+            _this.moodles = response;
+            _this.countMoodles = _this.moodles.length;
+        });
+    };
+    TdCursosComponent.prototype.ngAfterViewChecked = function () {
+        this.initrow();
+    };
+    TdCursosComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
+            selector: 'app-td-cursos',
+            template: __webpack_require__(/*! ./td-cursos.component.html */ "./src/app/td-cursos/td-cursos.component.html"),
+            styles: [__webpack_require__(/*! ./td-cursos.component.less */ "./src/app/td-cursos/td-cursos.component.less")]
+        }),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_cursos_moodle_service__WEBPACK_IMPORTED_MODULE_2__["CursosMoodleService"]])
+    ], TdCursosComponent);
+    return TdCursosComponent;
+}(_abstract_component__WEBPACK_IMPORTED_MODULE_3__["AbstractComponent"]));
+
+
+
+/***/ }),
+
 /***/ "./src/app/theme.service.ts":
 /*!**********************************!*\
   !*** ./src/app/theme.service.ts ***!
@@ -13401,7 +13693,7 @@ var Usuario = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "\n<div class=\"row\">\n    <div class=\"col-md-10 col-md-offset-1\">\n        <div class=\"panel panel-default\">\n            <div class=\"panel-heading\">Usuários</div>\n            <table class=\"table\">\n                <caption>\n                    <table>\n                        <tr>\n                            <td class=\"col-md-1\"><label for=\"filtro\" class=\"col-md-1 control-label\">Buscar:</label></td>\n                            <td class=\"col-md-8\"><input id=\"filtro\" type=\"text\" class=\"form-control\" name=\"filtro\" [(ngModel)]=\"criteria\" autofocus></td>\n                        </tr>\n                    </table>\n                </caption>\n                <colgroup>\n                    <col width=\"50px\"/>\n                    <col width=\"100%\"/>\n                    <col width=\"170px\"/>\n                    <col width=\"135px\"/>\n                    <col width=\"54px\"/>\n                </colgroup>\n                <thead class=\"thead-light\">\n                    <tr>\n                        <th scope=\"col\">#</th>\n                        <th scope=\"col\">Nome</th>\n                        <th scope=\"col\">Login</th>\n                        <th scope=\"col\">Permissão</th>\n                        <th scope=\"col\"></th>\n                    </tr>\n                </thead>\n            </table>\n            <div redimensionar=\"310\" style=\"overflow-y:scroll\">\n                <table class=\"table\">\n                    <colgroup>\n                        <col width=\"50px\"/>\n                        <col width=\"100%\"/>\n                        <col width=\"170px\"/>\n                        <col width=\"135px\"/>\n                        <col width=\"39px\"/>\n                    </colgroup>\n                    <tbody>\n                        <tr *ngFor=\"let u of (usuarios | filtroUsuario:criteria)\">\n                            <td>{{u.id}}</td>\n                            <td>{{u.name}}</td>\n                            <td>{{u.email}}</td>\n                            <td *ngIf=\"usuarioTemp.id != u.id\">{{u.permissao}}</td>\n                            <td *ngIf=\"usuarioTemp.id != u.id\">\n                                <button type=\"button\" class=\"btn btn-primary botao-reduzido\" (click)=\"habilitarEdicao(u.clone())\">\n                                    <span class=\"span-icon-button\"><i class=\"bi bi-pencil\"></i></span>\n                                </button>\n                            </td>\n                            <td colspan=\"2\" *ngIf=\"usuarioTemp.id == u.id\">\n                                <select id=\"selectPermissao\" class=\"form-control form-control-micro\" (change)=\"altararPermissao()\" (blur)=\"resetEdit()\" [(ngModel)]=\"usuarioTemp.permissao\">\n                                    <option value=\"ADMINISTRADOR\">ADMINISTRADOR</option>\n                                    <option value=\"USUARIO\">USUARIO</option>\n                                    <option value=\"INATIVO\">INATIVO</option>\n                                </select>\n                            </td>\n                        </tr>\n                    </tbody>\n                    <tfoot class=\"status-tabela\">\n                        <tr *ngIf=\"status == LOADING\"><td colspan=\"6\"><i>Carregando Usuários...</i></td></tr>\n                        <tr *ngIf=\"salas != null && (usuarios).length == 0 && status == COMPLETE\"><td colspan=\"6\"><i>Não Há Usuários para serem listadas</i></td></tr>\n                        <tr *ngIf=\"status == ERROR\"><td class=\"erro\" colspan=\"6\"><i>Falha na obtenção de Usuários!</i></td></tr>\n                    </tfoot>\n                </table>\n            </div>\n            <div class=\"panel-footer\">\n                <button type=\"button\" class=\"btn btn-primary botao-barra\"  data-toggle=\"modal\" data-target=\"#dialogNovoUsuario\" (click)=\"resetEdit()\" [disabled]=\"!editavel\">\n                    <span class=\"span-icon-button\" ><i class=\"bi bi-plus-lg\" style=\"-webkit-text-stroke-width: 0.3rem;\"></i></span>\n                    Novo\n                </button>\n                <a type=\"button\" name=\"retrun\" class=\"btn btn-secondary botao-barra\" href=\"/\">\n                    <span class=\"span-icon-button\"><i class=\"bi bi-box-arrow-left\"></i></span>\n                    Voltar\n                </a>\n            </div>\n        </div>\n    </div>\n</div>\n\n<div class=\"modal fade\" id=\"dialogNovoUsuario\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"dialogNovoUsuarioTitle\" aria-hidden=\"true\">\n    <div class=\"modal-dialog modal-dialog-centered\" role=\"document\">\n        <div class=\"modal-content\">\n            <div class=\"modal-header\">\n                <h5 class=\"modal-title\" id=\"exampleModalLongTitle\">Novo Usuário</h5>\n                <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\">\n                    <span aria-hidden=\"true\">&times;</span>\n                </button>\n            </div>\n            <div class=\"modal-body\" style=\"width: 400px;\">\n                <label class=\"style1\">Nome</label><br>\n                <input class=\"form-control\" type=\"text\" name=\"username\" placeholder=\"Fulano da Silva\" [(ngModel)]=\"usuarioTemp.name\" size=\"60\"><p></p>\n\n                <label class=\"style1\">Login: *</label><br>\n                <input class=\"form-control\" type=\"email\" name=\"email\" placeholder=\"11122233344\" [(ngModel)]=\"usuarioTemp.email\" size=\"60\"><p></p>\n            </div>\n            <div class=\"modal-footer\">\n                <button type=\"button\" class=\"btn btn-primary botao-barra\" (click)=\"novoUsuario()\" [disabled]=\"!editavel\">\n                    <span class=\"span-icon-button\" ><i class=\"bi bi-plus-lg\" style=\"-webkit-text-stroke-width: 0.3rem;\"></i></span>\n                    Criar\n                </button>\n                <button type=\"button\" class=\"btn btn-secondary botao-barra\" data-dismiss=\"modal\">\n                    <span class=\"span-icon-button\"><i class=\"bi bi-box-arrow-left\"></i></span>\n                    Fechar\n                </button>\n            </div>\n        </div>\n    </div>\n</div>\n"
+module.exports = "\n<div class=\"row\">\n    <div class=\"col-md-10 col-md-offset-1\">\n        <div class=\"panel panel-default\">\n            <div class=\"panel-heading\">Usuários</div>\n            <table class=\"table\">\n                <caption>\n                    <table>\n                        <tr>\n                            <td class=\"col-md-1\"><label for=\"filtro\" class=\"col-md-1 control-label\">Buscar:</label></td>\n                            <td class=\"col-md-8\"><input id=\"filtro\" type=\"text\" class=\"form-control\" name=\"filtro\" [(ngModel)]=\"criteria\" autofocus></td>\n                        </tr>\n                    </table>\n                </caption>\n                <colgroup>\n                    <col width=\"50px\"/>\n                    <col width=\"100%\"/>\n                    <col width=\"170px\"/>\n                    <col width=\"135px\"/>\n                    <col width=\"54px\"/>\n                </colgroup>\n                <thead class=\"thead-light\">\n                    <tr>\n                        <th scope=\"col\">#</th>\n                        <th scope=\"col\">Nome</th>\n                        <th scope=\"col\">Login</th>\n                        <th scope=\"col\">Permissão</th>\n                        <th scope=\"col\"></th>\n                    </tr>\n                </thead>\n            </table>\n            <div redimensionar=\"310\" style=\"overflow-y:scroll\">\n                <table class=\"table\">\n                    <colgroup>\n                        <col width=\"50px\"/>\n                        <col width=\"100%\"/>\n                        <col width=\"170px\"/>\n                        <col width=\"135px\"/>\n                        <col width=\"39px\"/>\n                    </colgroup>\n                    <tbody>\n                        <tr *ngFor=\"let u of (usuarios | filtroUsuario:criteria)\">\n                            <td>{{u.id}}</td>\n                            <td>{{u.name}}</td>\n                            <td>{{u.email}}</td>\n                            <td *ngIf=\"usuarioTemp.id != u.id\">{{u.permissao}}</td>\n                            <td *ngIf=\"usuarioTemp.id != u.id\">\n                                <button type=\"button\" class=\"btn btn-primary botao-reduzido\" (click)=\"habilitarEdicao(u.clone())\">\n                                    <span class=\"span-icon-button\"><i class=\"bi bi-pencil\"></i></span>\n                                </button>\n                            </td>\n                            <td colspan=\"2\" *ngIf=\"usuarioTemp.id == u.id\">\n                                <select id=\"selectPermissao\" class=\"form-control form-control-micro\" (change)=\"altararPermissao()\" (blur)=\"resetEdit()\" [(ngModel)]=\"usuarioTemp.permissao\">\n                                    <option value=\"ADMINISTRADOR\">ADMINISTRADOR</option>\n                                    <option value=\"SERVIDOR\">SERVIDOR</option>\n                                    <option value=\"USUARIO\">USUARIO</option>\n                                    <option value=\"INATIVO\">INATIVO</option>\n                                </select>\n                            </td>\n                        </tr>\n                    </tbody>\n                    <tfoot class=\"status-tabela\">\n                        <tr *ngIf=\"status == LOADING\"><td colspan=\"6\"><i>Carregando Usuários...</i></td></tr>\n                        <tr *ngIf=\"salas != null && (usuarios).length == 0 && status == COMPLETE\"><td colspan=\"6\"><i>Não Há Usuários para serem listadas</i></td></tr>\n                        <tr *ngIf=\"status == ERROR\"><td class=\"erro\" colspan=\"6\"><i>Falha na obtenção de Usuários!</i></td></tr>\n                    </tfoot>\n                </table>\n            </div>\n            <div class=\"panel-footer\">\n                <button type=\"button\" class=\"btn btn-primary botao-barra\"  data-toggle=\"modal\" data-target=\"#dialogNovoUsuario\" (click)=\"resetEdit()\" [disabled]=\"!editavel\">\n                    <span class=\"span-icon-button\" ><i class=\"bi bi-plus-lg\" style=\"-webkit-text-stroke-width: 0.3rem;\"></i></span>\n                    Novo\n                </button>\n                <a type=\"button\" name=\"retrun\" class=\"btn btn-secondary botao-barra\" href=\"/\">\n                    <span class=\"span-icon-button\"><i class=\"bi bi-box-arrow-left\"></i></span>\n                    Voltar\n                </a>\n            </div>\n        </div>\n    </div>\n</div>\n\n<div class=\"modal fade\" id=\"dialogNovoUsuario\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"dialogNovoUsuarioTitle\" aria-hidden=\"true\">\n    <div class=\"modal-dialog modal-dialog-centered\" role=\"document\">\n        <div class=\"modal-content\">\n            <div class=\"modal-header\">\n                <h5 class=\"modal-title\" id=\"exampleModalLongTitle\">Novo Usuário</h5>\n                <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\">\n                    <span aria-hidden=\"true\">&times;</span>\n                </button>\n            </div>\n            <div class=\"modal-body\" style=\"width: 400px;\">\n                <label class=\"style1\">Nome</label><br>\n                <input class=\"form-control\" type=\"text\" name=\"username\" placeholder=\"Fulano da Silva\" [(ngModel)]=\"usuarioTemp.name\" size=\"60\"><p></p>\n\n                <label class=\"style1\">Login: *</label><br>\n                <input class=\"form-control\" type=\"email\" name=\"email\" placeholder=\"11122233344\" [(ngModel)]=\"usuarioTemp.email\" size=\"60\"><p></p>\n            </div>\n            <div class=\"modal-footer\">\n                <button type=\"button\" class=\"btn btn-primary botao-barra\" (click)=\"novoUsuario()\" [disabled]=\"!editavel\">\n                    <span class=\"span-icon-button\" ><i class=\"bi bi-plus-lg\" style=\"-webkit-text-stroke-width: 0.3rem;\"></i></span>\n                    Criar\n                </button>\n                <button type=\"button\" class=\"btn btn-secondary botao-barra\" data-dismiss=\"modal\">\n                    <span class=\"span-icon-button\"><i class=\"bi bi-box-arrow-left\"></i></span>\n                    Fechar\n                </button>\n            </div>\n        </div>\n    </div>\n</div>\n"
 
 /***/ }),
 

@@ -52,6 +52,7 @@
                             <td colspan="2" *ngIf="usuarioTemp.id == u.id">
                                 <select id="selectPermissao" class="form-control form-control-micro" (change)="altararPermissao()" (blur)="resetEdit()" [(ngModel)]="usuarioTemp.permissao">
                                     <option value="ADMINISTRADOR">ADMINISTRADOR</option>
+                                    <option value="SERVIDOR">SERVIDOR</option>
                                     <option value="USUARIO">USUARIO</option>
                                     <option value="INATIVO">INATIVO</option>
                                 </select>

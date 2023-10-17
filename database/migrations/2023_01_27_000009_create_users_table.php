@@ -29,7 +29,7 @@ return new class extends Migration
             $table->string('email', 64);
             $table->string('password', 191);
             $table->rememberToken();
-            $table->enum('permissao', ['ADMINISTRADOR', 'USUARIO', 'INATIVO'])->default('USUARIO');
+            $table->enum('permissao', ['ADMINISTRADOR', 'SERVIDOR', 'USUARIO', 'INATIVO'])->default('USUARIO');
 
             $table->unique(["email"], 'email');
             $table->nullableTimestamps();

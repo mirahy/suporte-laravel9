@@ -339,8 +339,9 @@ table.table>tbody>tr>th {
 }
 
 .panel-default>.panel-heading {
-    /*background-color: #69af72;*/
-    background-color: #19882c;
+    background-color: #5cb85c;
+    /* background-color: #19882c; */
+    border-color: #4cae4c;
     font-weight: bold;
     color: white;
 }
@@ -491,10 +492,13 @@ a.botao-reduzido span {
 .panel {
     margin-bottom: 0px;
     background-color: var(--bg-grey-light);
+    padding-right: 0px;
+    padding-left: 0px;
+    margin-top: 5px;
 }
 
-label {
-    color: var(--text-dark)
+label, h1, a, p {
+    color: var(--text-dark) !important
 }
 
 @media (max-width: 767.99px) {
@@ -1056,6 +1060,7 @@ body .ui-progressbar .ui-progressbar-value {
     position: fixed;
     top: 50%;
     left: 50%;
+    display: flex;
   }
   @media (max-width: 500px) {
     .loading {
@@ -1069,6 +1074,7 @@ body .ui-progressbar .ui-progressbar-value {
     height: 36px;
     border-radius: 4px;
     animation: loading 1s ease-in-out infinite;
+    margin: 1px;
   }
   .loading-bar:nth-child(1) {
     background-color: #27ae60;
@@ -1127,4 +1133,13 @@ body .ui-progressbar .ui-progressbar-value {
   .swal2-popup{
     background: var(--bg-grey-light);
     color: var(--text-dark);
+  }
+
+  .btnMoodleclass{
+    text-align: left; 
+    font-size: large;
+  }
+
+  .caretMoodleclass{
+    float: right
   }

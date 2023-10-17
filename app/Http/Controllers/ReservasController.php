@@ -21,7 +21,7 @@ class ReservasController extends Controller
         $this->middleware('auth');
         //$this->middleware('authdev:RubensMarcon');
         //$this->middleware('authdev:JoaoNormando');
-        $this->middleware('permissao:'.User::PERMISSAO_ADMINISTRADOR.','.User::PERMISSAO_USUARIO);
+        $this->middleware('permissao:'.User::PERMISSAO_ADMINISTRADOR.','.User::PERMISSAO_SERVIDOR);
         $this->middleware('gestor')->except(['index', 'listar', 'usuarioLogado','store','cancelar','recurso']);
     }
     /**

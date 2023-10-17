@@ -65,15 +65,33 @@ return [
     */
 
     'providers' => [
-        'users' => [
-            'driver' => 'ldap',
-            'model' => App\User::class,
-        ],
+        // 'users' => [
+        //     'driver' => 'ldap',
+        //     'model' => App\User::class,
+        // ],
 
         // 'users' => [
         //     'driver' => 'database',
         //     'table' => 'users',
         // ],
+
+        'users' => [
+            'driver' => 'ldap',
+            'model' => LdapRecord\Models\ActiveDirectory\User::class,
+            'rules' => [],
+            'scopes' => [],
+            'database' => [
+                'model' => App\User::class,
+                'sync_passwords' => false,
+                'sync_attributes' => [
+                    'name' => 'displayname',
+                    'email' => 'samaccountname',
+                ],
+                'sync_existing' => [
+                    'email' => 'samaccountname',
+                ],
+            ],
+        ],
     ],
 
     /*

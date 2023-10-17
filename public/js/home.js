@@ -1,4 +1,4 @@
-var guias = ['solicitacoes', 'universidade', 'administracao', 'gestaoUsuarios'];
+var guias = ['solicitacoes', 'universidade', 'administracao', 'gestaoUsuarios', 'cursos'];
 // ocultar guia aberta ao abrir outra
 $('button').click(function() {
     $('div').removeClass('in');

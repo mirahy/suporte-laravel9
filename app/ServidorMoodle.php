@@ -11,6 +11,11 @@ class ServidorMoodle extends Model
     protected $fillable = [
         'nome',
         'url',
+        'nome_banco',
+        'ip_banco',
+        'ip_server',
+        'prefixo',
+        'status',
         'ativo',
     ];
 
@@ -18,6 +23,11 @@ class ServidorMoodle extends Model
         'id',
         'nome',
         'url',
+        'nome_banco',
+        'ip_banco',
+        'ip_server',
+        'prefixo',
+        'status',
         'ativo',
     ];
 }

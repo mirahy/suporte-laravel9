@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>Página em Manutenção</title>		
+		<link rel="stylesheet" type="text/css" href="css/manutencao/style.css" />
+		
+		<script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js'></script>
+		<script type='text/javascript' src='js/manutencao/jquery.tipsy.js'></script>
+		<script type='text/javascript'>
+		
+		
+		
+		
+		$(function() {
+			$('#tipsy').tipsy({fade: true, gravity: 's'});
+		});
+		</script>
+		
+
+		
+		<!--[if IE]>
+		<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+		<![endif]-->
+		
+	</head>
+	<body>
+		<div class="wrapper">
+			<img class="logo" src="img/EAD-logo-Branco.png" alt="Logo UFGD EaD" title="Logo UFGD EaD" width="450" height="300"/>
+			<div class="hr"></div>
+			<h1>Estamos passando por uma manutenção.</h1>
+			<p>É rapidinho, estamos implementando novas funcionalidades e melhorias de segurança!!!</p>
+						
+						
+						
+			<script>
+				start_date = new Date("September 27, 2023 11:50:00");
+				end_date = new Date("September 27, 2023 15:34:00");
+				var start = start_date.getTime();
+				var end = end_date.getTime();
+				
+				
+				
+				window.setInterval(function(){
+						var now = + new Date;
+						restante= end - start;
+						porcentagem =  ( now - start ) / ( end - start ) * 100; //73%
+						if (porcentagem > 100) {
+							porcentagem = "100";
+						}
+						
+						
+						document.getElementById('tipsy').setAttribute('title',Math.round(porcentagem) + "% Completo.");
+						document.getElementById('percent').innerHTML =  "<article id='progress-bar' class='progress-bar'   ><div id='textpercent'>" + Math.round(porcentagem) + "%" +  "</div></article>";
+						porcentagem = porcentagem + "%";
+						
+						document.getElementById("progress-bar").style.width=porcentagem;
+
+						
+						}, 1000);
+					</script>
+			<section class="progress" id="tipsy" title="99% Completo">
+				<div class="progress-bar-container" > <!-- Edit this title for the tooltip pop up -->
+					<div id="percent">
+					</div>
+					
+				</div>
+				
+			</section>
+
+
+
+		</div>
+	</body>
+</html>

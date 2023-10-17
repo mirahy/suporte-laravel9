@@ -9,7 +9,7 @@ class SigecadController extends Controller
 {
     const DBCONN_DISCIPLINAS_VIEW = "secretaria.disciplinas_para_moodle";
     const DBCONN_ACADEMICOS_VIEW = "secretaria.disciplinas_academicos_para_moodle";
-    const DBCONN_CARTOES_VIEW = "secretaria.cartoes_para_moodle";
+    const DBCONN_CARTOES_VIEW = "secretaria.cartoes_para_sophia_moodle";
     const DBCONN_PLETIVOS_VIEW = "secretaria.view_periodos_letivos";
     const DBCONN_PESSOAS_VIEW = "public.pessoas_view";
 
