@@ -68,7 +68,7 @@ export class FormularioInsercaoUsuariosAdComponent extends AbstractComponent imp
 	}
 	adicionarEstudante() {
         if (this.estudanteTemp.isValid()) {
-            this.estudantes.push(new Estudante (this.estudanteTemp.username, this.estudanteTemp.email, this.estudanteTemp.fullname, this.estudanteTemp.is_professor, this.estudanteTemp.senha));
+            this.estudantes.push(new Estudante (this.estudanteTemp.username, this.estudanteTemp.email, this.estudanteTemp.fullname, this.estudanteTemp.is_professor, this.estudanteTemp.email_alternativo));
             jQuery('#dialogCreateEstudante').modal('hide');
             this.estudanteTemp = Estudante.generateEstudante();
         }
