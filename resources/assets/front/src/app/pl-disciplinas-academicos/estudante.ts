@@ -3,14 +3,14 @@ export class Estudante {
     email;
     fullname;
     is_professor = false;
-    senha;
+    email_alternativo;
 
-    constructor (username, email, fullname, is_professor?, senha?) {
+    constructor (username, email, fullname, is_professor?, email_alternativo?) {
         this.username = username;
         this.email = email;
         this.fullname = fullname;
         this.is_professor = is_professor ? is_professor : false;
-        this.senha = senha;
+        this.email_alternativo = email_alternativo;
     }
     isValid() {
         return this.username.length > 0 && this.email.length > 0 && this.fullname.length > 0;
@@ -20,7 +20,7 @@ export class Estudante {
             this.email == estudante.email &&
             this.fullname == estudante.fullname &&
             this.is_professor == estudante.is_professor &&
-            this.senha == estudante.senha;
+            this.email_alternativo == estudante.email_alternativo;
     }
     
     static processaCSV(allText):Array<Estudante> {
@@ -82,7 +82,7 @@ export class Estudante {
         var linhas = [];
 
         for (var i = 0; i < estudantes.length; i++) {
-            var tupla = [estudantes[i].username, estudantes[i].email, estudantes[i].fullname, estudantes[i].senha, estudantes[i].is_professor];
+            var tupla = [estudantes[i].username, estudantes[i].email, estudantes[i].fullname, estudantes[i].email_alternativo, estudantes[i].is_professor];
             linhas.push(tupla);
         }
         return JSON.stringify(linhas);

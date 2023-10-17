@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Auth;
-use Adldap\Laravel\Facades\Adldap;
+use LdapRecord\Models\ActiveDirectory\User as UserLdap;
 use Illuminate\Support\Facades\Validator;
 use Session;
 use App\User;
@@ -55,9 +55,9 @@ class UsuarioController extends Controller
         $email = "";
         if($usuario) {
             try {
-                $usuarioLdap = Adldap::search()->users()->find($usuario->email);
-                if ($usuarioLdap != NULL && isset ($usuarioLdap->getAttributes()["mail"]))
-                    $email = strtolower ($usuarioLdap->getAttributes()["mail"][0]);
+                $usuarioLdap = UserLdap::where('samaccountname', '=', $usuario->email)->get();
+                if ($usuarioLdap != NULL && isset ($usuarioLdap[0]["mail"]))
+                    $email = strtolower ($usuarioLdap[0]["mail"][0]);
             } catch (Exception $e) {
 
             }
@@ -73,7 +73,7 @@ class UsuarioController extends Controller
             return null;
         if (strlen($cpf) == 11)
             $cpf = substr($cpf,0,3).".".substr($cpf,3,3).".".substr($cpf,6,3)."-".substr($cpf,9,2);
-        $us = Adldap::search()->where('description', '=', $cpf)->get();
+        $us = UserLdap::where('description', '=', $cpf)->get();
         $u = null;
         if (count($us)) {
             if (count($us) > 1) {

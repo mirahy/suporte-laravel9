@@ -42,7 +42,7 @@
 					<col width="105px" />
 					<col width="50%" />
 					<col width="50%" />
-					<col width="100px" />
+					<col width="160px" />
 					<col width="36px" />
 					<col width="17px" />
 				</colgroup>
@@ -51,7 +51,7 @@
 						<th>USER</th>
 						<th>EMAIL</th>
 						<th>NOME</th>
-						<th>SENHA</th>
+						<th>EMAIL ALTERNATIVO</th>
 						<th>
 							<button style="text-align: center;" title="Limpar Todos" type="button"
 								class="btn btn-danger botao-reduzido" (click)="limparEstudantes()"
@@ -69,7 +69,7 @@
 						<col width="105px" />
 						<col width="50%" />
 						<col width="50%" />
-						<col width="100px" />
+						<col width="160px" />
 						<col width="36px" />
 					</colgroup>
 					<tbody>
@@ -77,7 +77,7 @@
 							<td class="celula-trunca-texto" title="{{e.username}}">{{e.username}}</td>
 							<td class="celula-trunca-texto" title="{{e.email}}">{{e.email}}</td>
 							<td class="celula-trunca-texto" title="{{e.fullname}}">{{e.fullname}}</td>
-							<td class="celula-trunca-texto" title="{{e.senha}}">{{e.senha}}</td>
+							<td class="celula-trunca-texto" title="{{e.senha}}">{{e.email_alternativo}}</td>
 							<td>
 								<button style="text-align: center;" title="Remover" type="button"
 									class="btn btn-danger botao-reduzido" (click)="removerEstudante(e)"
@@ -139,9 +139,9 @@
 					[(ngModel)]="estudanteTemp.fullname" size="60">
 				<p></p>
 
-				<label class="style1">Senha: </label><br>
-				<input class="form-control" type="text" name="senha" placeholder="********"
-					[(ngModel)]="estudanteTemp.senha" size="60">
+				<label class="style1">Email Alternativo: </label><br>
+				<input class="form-control" type="text" name="email_alternativo" placeholder="user@email.com"
+					[(ngModel)]="estudanteTemp.email_alternativo" size="60">
 				<p></p>
 			</div>
 			<div class="modal-footer">
@@ -206,7 +206,7 @@
 					<option *ngFor="let ou of unidadesOrganizacionais" [value]="ou.id">{{ou.nome}}</option>       
 				</select>
 				<br>
-				<label class="style1">Senha Padrão: </label>
+				<!-- <label class="style1">Senha Padrão: </label>
 				<table style="width: 100%;">
 					<colgroup>
 						<col width="50px"/>
@@ -224,7 +224,7 @@
 							<input class="form-control" type="text" name="senha-padrao" [disabled]="!usarSenha" placeholder="********" [(ngModel)]="senhaPadrao" size="30">
 						</td>
 					</tr>
-				</table>
+				</table> -->
 				<p></p>
             </div>
             <div class="modal-footer">
@@ -314,9 +314,9 @@
 				importa um arquivo CSV que contêm os usuários; o formato do arquivo deve seguir algum dos seguintes
 				padrões:<br>
 				<pre style="font-size: 12px;">
-username,email,fullname,password
-11122233344,fulano.silva111@academico.ufgd.edu.br,Fulano da Silva,12345678
-BeltranoOliveira,BeltranoOliveira@ufgd.edu.br,Beltrano dos Santos Oliveira,00000000</pre>
+username,email,fullname,email_alternativo
+11122233344,fulano.silva111@academico.ufgd.edu.br,Fulano da Silva,fulano.silva111@mail.com
+BeltranoOliveira,BeltranoOliveira@ufgd.edu.br,Beltrano dos Santos Oliveira,BeltranoOliveira@mail.com</pre>
 				ou
 				<pre style="font-size: 12px;">
 username,email,fullname

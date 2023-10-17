@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Adldap\Laravel\Facades\Adldap;
 use App\ServidorMoodle;
 use App\Usuario;
 use Illuminate\Http\Request;
@@ -161,7 +160,7 @@ class CursosMoodleController extends Controller
                 INNER JOIN {$prefixo}_context E ON RS.contextid=E.id
                 INNER JOIN {$prefixo}_course C ON C.id=E.instanceid
                 WHERE E.contextlevel=50 AND U.username='{$nomeDeUsuario}' AND (C.visible = 1 OR ( C.visible = 0 AND RS.roleid != 5))
-                AND C.startdate >= 1688248294
+                {$sqlIntervalo}
                 group by C.id, C.shortname, C.fullname, U.suspended
                 ORDER BY C.startdate DESC";
 

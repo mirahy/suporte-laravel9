@@ -7,9 +7,14 @@ use App\UnidadeOrganizacional;
 use App\User;
 use Exception;
 use Illuminate\Support\Facades\Validator;
-use Adldap\Laravel\Facades\Adldap;
-use Adldap\Models\Attributes\AccountControl;
+use LdapRecord\Models\ActiveDirectory\User as UserLdap;
+use LdapRecord\Models\ActiveDirectory\OrganizationalUnit;
+use LdapRecord\Models\Attributes\AccountControl;
+use LdapRecord\Models\ActiveDirectory\Group;
 use App\Configuracoes;
+use App\Mail\SendMailUserLdap;
+use Illuminate\Support\Facades\Mail;
+
 
 class UnidadeOrganizacionalController extends Controller
 {
@@ -17,7 +22,8 @@ class UnidadeOrganizacionalController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        $this->middleware('permissao:'.User::PERMISSAO_ADMINISTRADOR);
+        $this->middleware('authhost');
+        $this->middleware('permissao:' . User::PERMISSAO_ADMINISTRADOR); 
     }
 
     public function all()
@@ -25,12 +31,14 @@ class UnidadeOrganizacionalController extends Controller
         return UnidadeOrganizacional::all();
     }
 
-    public function getOuDirRoot (Request $request) {
+    public function getOuDirRoot(Request $request)
+    {
         $ouRootBase = Configuracoes::where('nome', Configuracoes::CONFIGURACAO_OU_ROOT_DIR)->first();
         return $ouRootBase->valor;
     }
 
-    public function setOuDirRoot (Request $request) {
+    public function setOuDirRoot(Request $request)
+    {
         $ouRoot = $request->has('ou-dir-root') ? $request->input('ou-dir-root') : null;
         if (!$ouRoot)
             abort(403, "Erro de validação! Parâmetros inválidos!");
@@ -59,7 +67,8 @@ class UnidadeOrganizacionalController extends Controller
         //
     }
 
-    private function getValidationRules() {
+    private function getValidationRules()
+    {
         $rules = array(
             'nome'            => 'required',
             'valor'           => 'required'
@@ -67,71 +76,77 @@ class UnidadeOrganizacionalController extends Controller
         return $rules;
     }
 
-    public function getLdapUser(Request $request, $username) {
-        //$usuarioLdap = Adldap::search()->users()->find($username);
-        $usuarioLdap = @Adldap::search()->where('samaccountname', '=', $username)->get()[0];
-        if (!$usuarioLdap)
+    public function getLdapUser(Request $request, $username)
+    {
+        $usuarioLdap = UserLdap::where('samaccountname', '=', $username)->get();
+        if (!isset($usuarioLdap[0]))
             return false;
         return $usuarioLdap;
     }
 
-    public function getLdapUserByEmail(Request $request, $email) {
-        $usuarioLdap = @Adldap::search()->where('mail', '=', $email)->get()[0];
-        if (!$usuarioLdap)
+    public function getLdapUserByEmail(Request $request, $email)
+    {
+        $usuarioLdap = UserLdap::where('mail', '=', $email)->get();
+        if (!isset($usuarioLdap[0]))
             return false;
         return $usuarioLdap;
     }
 
-    private function isCPF ($value) {
+    private function isCPF($value)
+    {
         if (strlen($value) !== 11 || preg_match('/(\d)\1{10}/', $value)) {
             return false;
         }
-    
+
         for ($t = 9; $t < 11; $t++) {
             for ($d = 0, $c = 0; $c < $t; $c++) {
                 $d += $value[$c] * (($t + 1) - $c);
             }
-    
+
             $d = ((10 * $d) % 11) % 10;
-    
+
             if ($value[$c] != $d) {
                 return false;
             }
         }
-    
+
         return true;
     }
 
-    private function tratarNome ($nome) {
+    private function tratarNome($nome)
+    {
         $saida = "";
-    
+
         $nome = mb_strtolower($nome, 'UTF-8'); // Converter o nome todo para minúsculo
         $nome = explode(" ", $nome); // Separa o nome por espaços
-    
-        for ($i=0; $i < count($nome); $i++) {
+
+        for ($i = 0; $i < count($nome); $i++) {
             $array_de_tratamento = ["da", "e", "da", "dos", "do", "das"];
             if (in_array($nome[$i], $array_de_tratamento)) {
-                $saida .= $nome[$i].' '; // Se a palavra estiver dentro das complementares mostrar toda em minúsculo
-            }else {
-                $saida .=  mb_convert_case($nome[$i], MB_CASE_TITLE, "UTF-8").' '; // Se for um nome, mostrar a primeira letra maiúscula
+                $saida .= $nome[$i] . ' '; // Se a palavra estiver dentro das complementares mostrar toda em minúsculo
+            } else {
+                $saida .=  mb_convert_case($nome[$i], MB_CASE_TITLE, "UTF-8") . ' '; // Se for um nome, mostrar a primeira letra maiúscula
             }
         }
         return trim($saida);
     }
-    
-    private function quebraNome ($nome) {
+
+    private function quebraNome($nome)
+    {
         for ($i = 0; $i < strlen($nome); $i++)
             if ($nome[$i] == ' ')
-                return [substr($nome, 0, $i), substr($nome, $i+1)];
-        return [$nome,""];
+                return [substr($nome, 0, $i), substr($nome, $i + 1)];
+        return [$nome, ""];
     }
 
-    private function tirarAcentos($string){
-        return preg_replace(array("/(á|à|ã|â|ä)/","/(Á|À|Ã|Â|Ä)/","/(é|è|ê|ë)/","/(É|È|Ê|Ë)/","/(í|ì|î|ï)/","/(Í|Ì|Î|Ï)/","/(ó|ò|õ|ô|ö)/","/(Ó|Ò|Õ|Ô|Ö)/","/(ú|ù|û|ü)/","/(Ú|Ù|Û|Ü)/","/(ñ)/","/(Ñ)/","/(ç)/","/(Ç)/"),explode(" ","a A e E i I o O u U n N c C"),$string);
+    private function tirarAcentos($string)
+    {
+        return preg_replace(array("/(á|à|ã|â|ä)/", "/(Á|À|Ã|Â|Ä)/", "/(é|è|ê|ë)/", "/(É|È|Ê|Ë)/", "/(í|ì|î|ï)/", "/(Í|Ì|Î|Ï)/", "/(ó|ò|õ|ô|ö)/", "/(Ó|Ò|Õ|Ô|Ö)/", "/(ú|ù|û|ü)/", "/(Ú|Ù|Û|Ü)/", "/(ñ)/", "/(Ñ)/", "/(ç)/", "/(Ç)/"), explode(" ", "a A e E i I o O u U n N c C"), $string);
     }
-    
-    private function geraEmail ($nome,$cpf,$sufixo) {
-        $nome = str_replace("'","",$nome);
+
+    private function geraEmail($nome, $cpf, $sufixo)
+    {
+        $nome = str_replace("'", "", $nome);
         $fname = "";
         $lname = "";
         for ($i = 0; $i < strlen($nome); $i++)
@@ -139,9 +154,9 @@ class UnidadeOrganizacionalController extends Controller
                 $fname = mb_strtolower(substr($nome, 0, $i), 'UTF-8');
                 break;
             }
-        for ($i = strlen($nome) -1; $i >= 0; $i--)
+        for ($i = strlen($nome) - 1; $i >= 0; $i--)
             if ($nome[$i] == ' ') {
-                $lname = mb_strtolower(substr($nome, $i+1, strlen($nome)), 'UTF-8');
+                $lname = mb_strtolower(substr($nome, $i + 1, strlen($nome)), 'UTF-8');
                 break;
             }
         return $this->tirarAcentos($fname) . '.' . $this->tirarAcentos($lname) . substr($cpf, 0, 3) . $sufixo;
@@ -151,16 +166,17 @@ class UnidadeOrganizacionalController extends Controller
      * $user array [0]: username, [1]: email, [2]: nome, [3]?: senha
      * 
      */
-    private function gerarAdUser ($user, $company, $department, $userprincipalnameSufixo) {
-        
-        $nomeTratado = $user[2];//$this->tratarNome($user[2]);
+    private function gerarAdUser($user, $company, $department, $userprincipalnameSufixo)
+    {
+
+        $nomeTratado = $user[2]; //$this->tratarNome($user[2]);
         $nomeQuebrado = $this->quebraNome($nomeTratado);
         $adUser = [
             'cn' => $nomeTratado,
             'instancetype' => 4,
             'samaccountname' => $user[0],
             'objectclass' => [
-                'top','person','organizationalPerson','user'
+                'top', 'person', 'organizationalPerson', 'user'
             ],
             'displayname' => $nomeTratado,
             'name' => $nomeTratado,
@@ -168,23 +184,23 @@ class UnidadeOrganizacionalController extends Controller
             'sn' => $nomeQuebrado[1],
             'company' => $company,
             'department' => $department,
-            'description' => substr($user[0],0,3).".".substr($user[0],3,3).".".substr($user[0],6,3)."-".substr($user[0],9,2),
+            'description' => substr($user[0], 0, 3) . "." . substr($user[0], 3, 3) . "." . substr($user[0], 6, 3) . "-" . substr($user[0], 9, 2),
             'mail' => $user[1],
             'userprincipalname' => $user[0] . "@" . $userprincipalnameSufixo
         ];
         return $adUser;
     }
 
-    public function alterarSenha(Request $request) {
+    public function alterarSenha(Request $request)
+    {
         $estudantes = $request->has('estudantes') ? json_decode($request->input('estudantes')) : null;
-        $senhaPadrao = $request->has('senhaPadrao') ? $request->input('senhaPadrao') : null;
+        $configEmail = Configuracoes::where('nome', Configuracoes::CONFIGURACAO_EMAIL_SUPORTE)->first();
+        $configSeparadorEmail = Configuracoes::where('nome', Configuracoes::CONFIGURACAO_SEPARADOR_EMAIL)->first();
 
         if (!$estudantes)
             abort(403, "Erro de validação! Parâmetros inválidos!");
 
         $ret = "<h4><b>Alteração de Senha de Usuários no AD</b></h4><br>";
-
-        $ret .= "<br><br><b>Senha Padrão:</b><br>" . ($senhaPadrao ? '"' . $senhaPadrao . '"' : "<i>sem senha padrão</i>") . "<br>";
 
         $ret .= "<br><b>Iniciando processo...</b><br><br>";
 
@@ -196,40 +212,53 @@ class UnidadeOrganizacionalController extends Controller
             . '</tr></thead><tbody>';
         foreach ($estudantes as $e) {
             try {
-                $user = $this->getLdapUser($request, $e[0]);
+                $pass = $this->generateStrongPassword();
+                $user = UserLdap::where('samaccountname', '=', $e[0])->get();
+                $user = $user[0];
+
                 if (!$user) {
-                    $ret .= "<tr><td>". $e[0] . '</td><td></td><td>'.($e[3] ? '"'.$e[3].'"</td><td>'  : '<i>senha padrão</i></td><td>').'<span style="color: #e9d700;">Usuário não encontrado</span>';
+                    $ret .= "<tr><td>" . $e[0] . '</td><td></td><td>'  . $pass . '</td><td><span style="color: #e9d700;">Usuário não encontrado</span>';
                     continue;
                 }
 
                 $nomeUser = $user->getAttributes()['name'][0];
-                $ret .= "<tr><td>". $e[0] . '</td><td>' . $nomeUser . "</td><td>".($e[3] ? '"'.$e[3].'"</td><td>'  : '<i>senha padrão</i></td><td>');
-                
-                if (!$senhaPadrao && !$e[3]) {
-                    $ret .= '<span style="color: #e9d700;">Ausência de senha</span>';
-                    continue;
-                }
+                $ret .= "<tr><td>" . $e[0] . '</td><td>' . $nomeUser . "</td><td>" . $pass . "</td><td>";
 
-                $user->setPassword($e[3] ? $e[3] : $senhaPadrao);
+                $user->unicodePwd = $pass;
 
                 $user->save();
 
                 $ret .= "<span style=\"color: #1bb300;\">Senha alterada!</span>";
-            }
-            catch (Exception $ex) {
-                $ret .= '<span style="color: #ff0000;"> Erro: '.$ex->getMessage().' </span>';
+            } catch (Exception $ex) {
+                $ret .= '<span style="color: #ff0000;"> Erro: ' . $ex->getMessage() . ' </span>';
             }
             $ret .= "</td></tr>";
         }
         $ret .= "</tbody></table>";
 
-        $ret .= "<br><br><b>Criação de usuários no AD Finalizada!</b>";
-    
+        $ret .= "<br><br><b>Alteração de usuários no AD Finalizada!</b>";
+
+        if (config('app.debug')) {
+            return view('email.emailLdap', ['user' => $user->getAttributes(),
+                                            'pass' => $pass,
+                                            'email' => ($configEmail == NULL ? "" : $configEmail->valor ),
+                                            'ret' => $ret,
+                                            'acao' => 'alterada']);
+        }
+        else {
+            Mail::to(array_map('trim', explode($configSeparadorEmail, $e[3])))
+                ->cc($configEmail != null ? array_map('trim', explode($configSeparadorEmail, $configEmail->valor)) : "")
+                ->send(new SendMailUserLdap($user, $pass));
+
+            return $ret;
+        }
+
         return $ret;
     }
 
-    public function substituiEmailsPorPadrao (Request $request) {
-        
+    public function substituiEmailsPorPadrao(Request $request)
+    {
+
         $sufixo = Configuracoes::where('nome', Configuracoes::CONFIGURACAO_AD_EMAIL_PADRAO_SUFIXO)->first()->valor;
 
         $estudantes = $request->has('estudantes') ? json_decode($request->input('estudantes')) : null;
@@ -240,23 +269,23 @@ class UnidadeOrganizacionalController extends Controller
             $estRet[] = (object) [
                 'username' => $e[0],
                 'fullname' => $e[2],
-                'email' => ($this->isCPF($e[0]) ? $this->geraEmail($e[2], $e[0], "@".$sufixo) : $e[1]),
+                'email' => ($this->isCPF($e[0]) ? $this->geraEmail($e[2], $e[0], "@" . $sufixo) : $e[1]),
                 'senha' => $e[3],
                 'is_professor' => false
             ];
-            
         }
         return $estRet;
     }
 
-    public function getOusFilhas () {
+    public function getOusFilhas()
+    {
         $ouRootBase = Configuracoes::where('nome', Configuracoes::CONFIGURACAO_OU_ROOT_DIR)->first();
-        $us = Adldap::search()->ous()->in($ouRootBase->valor)->get();
+        $us = OrganizationalUnit::in($ouRootBase->valor)->get();
         $ous = [];
         foreach ($us as $uu) {
             $ous[] = $uu->getAttributes()['distinguishedname'][0];
         }
-        return $ous; 
+        return $ous;
     }
 
     public function criarContasAD(Request $request)
@@ -264,82 +293,83 @@ class UnidadeOrganizacionalController extends Controller
         $ouCadastro = $request->has('ouCadastro') ? $request->input('ouCadastro') : null;
         $ousIds = $request->has('ous') ? $request->input('ous') : null;
         $estudantes = $request->has('estudantes') ? json_decode($request->input('estudantes')) : null;
-        $senhaPadrao = $request->has('senhaPadrao') ? $request->input('senhaPadrao') : null;
+        // $senhaPadrao = $request->has('senhaPadrao') ? $request->input('senhaPadrao') : null;
 
         $company = Configuracoes::where('nome', Configuracoes::CONFIGURACAO_AD_COMPANY)->first()->valor;
         $department = Configuracoes::where('nome', Configuracoes::CONFIGURACAO_AD_DEPARTMENT)->first()->valor;
         $userprincipalnameSufixo = Configuracoes::where('nome', Configuracoes::CONFIGURACAO_AD_USER_PRINCIPAL_NAME_SUFIXO)->first()->valor;
+        $configEmail = Configuracoes::where('nome', Configuracoes::CONFIGURACAO_EMAIL_SUPORTE)->first();
+        $configSeparadorEmail = Configuracoes::where('nome', Configuracoes::CONFIGURACAO_SEPARADOR_EMAIL)->first();
 
         if (!$ouCadastro || !$ousIds || !$estudantes)
             abort(403, "Erro de validação! Parâmetros inválidos!");
 
-        $ous = UnidadeOrganizacional::whereIn ('id' , $ousIds)->get();
+        $ous = UnidadeOrganizacional::whereIn('id', $ousIds)->get();
 
         $ret = "<h4><b>Criação de Usuários no AD</b></h4><br>";
 
-        $ret .= "<br><b>Diretório de Criação:</b><br>". $ouCadastro."<br>";
+        $ret .= "<br><b>Diretório de Criação:</b><br>" . $ouCadastro . "<br>";
 
         $ret .= "<br><b>Grupos selecionados (Membro de):</b>";
         $memberof = [];
         foreach ($ous as $ou) {
-            $ret .= "<br>".$ou->nome;
+            $ret .= "<br>" . $ou->nome;
             $memberof[] = $ou->valor;
         }
-        $ret .= "<br><br><b>Senha Padrão:</b><br>" . ($senhaPadrao ? '"' . $senhaPadrao . '"' : "<i>sem senha padrão</i>") . "<br>";
 
         $ret .= "<br><b>Iniciando processo de criação de usuários no AD...</b><br><br>";
 
         $ret .= '<table class="tabela-relatorio"><thead><tr>'
             . '<th>Username</th>'
             . '<th>Nome</th>'
-            . '<th>Senha</th>'
+            . '<th>Email</th>'
             . '<th>Processamento</th>'
             . '</tr></thead><tbody>';
         foreach ($estudantes as $e) {
+            $pass = $this->generateStrongPassword();
             $e[2] = $this->tratarNome($e[2]);
-            $ret .= "<tr><td>". $e[0] . '</td><td>' . $e[2] . "</td><td>".($e[3] ? '"'.$e[3].'"</td><td>'  : '<i>senha padrão</i></td><td>');
+            $ret .= "<tr><td>" . $e[0] . "</td><td>" . $e[2] . "</td><td>" . $pass ."</td><td>";
             if (!$this->isCPF($e[0])) {
                 $ret .= '<span style="color: #e9d700;">CPF Inválido para username </span>';
                 continue;
             }
-            if (!$senhaPadrao && !$e[3]) {
-                $ret .= '<span style="color: #e9d700;">Ausência de senha</span>';
-                continue;
-            }
+           
             if ($ldapuser = $this->getLdapUser($request, $e[0])) {
-                $distinguishedname = @$ldapuser->getAttributes()['distinguishedname'][0];
-                $ret .= '<span style="color: #e9d700;" title="'.$distinguishedname.'">
-                ' . (stripos($distinguishedname, $ouCadastro) !== FALSE ? 'Cadastrado anteriormente': 'Usuário já existente (*)' ) . '
+                $distinguishedname = $ldapuser[0]['distinguishedname'][0];
+                $ret .= '<span style="color: #e9d700;" title="' . $distinguishedname . '">
+                ' . (stripos($distinguishedname, $ouCadastro) !== FALSE ? 'Cadastrado anteriormente' : 'Usuário já existente (*)') . '
                 </span>';
                 continue;
             }
             if ($ldapuser = $this->getLdapUserByEmail($request, $e[1])) {
-                $distinguishedname = @$ldapuser->getAttributes()['distinguishedname'][0];
-                $ret .= '<span style="color: #e9d700;" title="'.$distinguishedname.'">Email já utilizado (*)</span>';
+                $distinguishedname = $ldapuser[0]['distinguishedname'][0];
+                $ret .= '<span style="color: #e9d700;" title="' . $distinguishedname . '">Email já utilizado (*)</span>';
                 continue;
             }
             try {
                 $adUserAbstr = $this->gerarAdUser($e, $company, $department, $userprincipalnameSufixo);
 
-                $user = Adldap::make()->user(
-                    $adUserAbstr
-                );
-                $user->setDn("CN=".$e[2] . "," . $ouCadastro);
+                $user = (new UserLdap($adUserAbstr))->inside($ouCadastro);
 
-                $user->setPassword($e[3] ? $e[3] : $senhaPadrao);
-
+                $user->unicodePwd = $pass;
+                
                 $user->save();
+                $user->refresh();
+                
+                foreach ($memberof as $grupo) {
+                    if($group = Group::findOrFail($grupo))
+                       $user->groups()->attach($group);
+                }
 
-                foreach ($memberof as $grupo) 
-                    $user->addGroup($grupo);
+                $user->userAccountControl = (AccountControl::NORMAL_ACCOUNT + AccountControl::DONT_EXPIRE_PASSWORD) ; // Normal, enabled account.
 
-                $user->setUserAccountControl(AccountControl::NORMAL_ACCOUNT + AccountControl::DONT_EXPIRE_PASSWORD);
                 $user->save();
 
                 $ret .= "<span style=\"color: #1bb300;\">Usuário criado!</span>";
-            }
-            catch (Exception $ex) {
-                $ret .= '<span style="color: #ff0000;"> Erro: '.$ex->getMessage().' </span>';
+
+
+            } catch (Exception $ex) {
+                $ret .= '<span style="color: #ff0000;"> Erro: ' . $ex->getMessage() . ' </span>';
             }
             $ret .= "</td></tr>";
         }
@@ -347,6 +377,20 @@ class UnidadeOrganizacionalController extends Controller
         $ret .= "<br>*: passe o mouse sobre o item para ver mais detalhes";
 
         $ret .= "<br><br><b>Criação de usuários no AD Finalizada!</b>";
+        if (config('app.debug')) {
+            return view('email.emailLdap', ['user' => $user->getAttributes(),
+                                            'pass' => $pass,
+                                            'email' => ($configEmail == NULL ? "" : $configEmail->valor ),
+                                            'ret' => $ret,
+                                            'acao' => 'criada']);
+        }
+        else {
+            Mail::to(array_map('trim', explode($configSeparadorEmail, $e[3])))
+                ->cc($configEmail != null ? array_map('trim', explode($configSeparadorEmail, $configEmail->valor)) : "")
+                ->send(new SendMailUserLdap($user, $pass));
+
+                return $ret;
+        }
 
         return $ret;
     }
@@ -360,7 +404,7 @@ class UnidadeOrganizacionalController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), $this->getValidationRules());
-        if ($validator->fails()) 
+        if ($validator->fails())
             abort(403, 'Erro de Validação');
 
         $ou = new UnidadeOrganizacional();
@@ -402,10 +446,10 @@ class UnidadeOrganizacionalController extends Controller
     public function update(Request $request, $id)
     {
         $ou = UnidadeOrganizacional::find($id);
-        if (!$ou) 
+        if (!$ou)
             abort(404, 'Unidade Organizacional não encontrada');
         $validator = Validator::make($request->all(), $this->getValidationRules());
-        if ($validator->fails()) 
+        if ($validator->fails())
             abort(403, 'Erro de Validação');
         $ou->nome = $request->input('nome');
         $ou->valor = $request->input('valor');
@@ -422,14 +466,62 @@ class UnidadeOrganizacionalController extends Controller
     public function destroy($id)
     {
         $ou = UnidadeOrganizacional::find($id);
-        if (!$ou) 
+        if (!$ou)
             abort(404, 'Unidade Organizacional não encontrada');
-        try{
+        try {
             $ou->delete();
             return new UnidadeOrganizacional();
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             abort(400, $e->getMessage());
         }
+    }
+
+    // Generates a strong password of N length containing at least one lower case letter,
+    // one uppercase letter, one digit, and one special character. The remaining characters
+    // in the password are chosen at random from those four sets.
+    //
+    // The available characters in each set are user friendly - there are no ambiguous
+    // characters such as i, l, 1, o, 0, etc. This, coupled with the $add_dashes option,
+    // makes it much easier for users to manually type or speak their passwords.
+    //
+    // Note: the $add_dashes option will increase the length of the password by
+    // floor(sqrt(N)) characters.
+
+    function generateStrongPassword($length = 12, $add_dashes = false, $available_sets = 'luds')
+    {
+        $sets = array();
+        if (strpos($available_sets, 'l') !== false)
+            $sets[] = 'abcdefghjkmnpqrstuvwxyz';
+        if (strpos($available_sets, 'u') !== false)
+            $sets[] = 'ABCDEFGHJKMNPQRSTUVWXYZ';
+        if (strpos($available_sets, 'd') !== false)
+            $sets[] = '23456789';
+        if (strpos($available_sets, 's') !== false)
+            $sets[] = '!@#$%&*?';
+
+        $all = '';
+        $password = '';
+        foreach ($sets as $set) {
+            $password .= $set[array_rand(str_split($set))];
+            $all .= $set;
+        }
+
+        $all = str_split($all);
+        for ($i = 0; $i < $length - count($sets); $i++)
+            $password .= $all[array_rand($all)];
+
+        $password = str_shuffle($password);
+
+        if (!$add_dashes)
+            return $password;
+
+        $dash_len = floor(sqrt($length));
+        $dash_str = '';
+        while (strlen($password) > $dash_len) {
+            $dash_str .= substr($password, 0, $dash_len) . '-';
+            $password = substr($password, $dash_len);
+        }
+        $dash_str .= $password;
+        return $dash_str;
     }
 }

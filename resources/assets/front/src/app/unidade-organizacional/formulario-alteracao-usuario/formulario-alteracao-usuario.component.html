@@ -52,7 +52,7 @@
 						<th>USER</th>
 						<th>EMAIL</th>
 						<th>NOME</th>
-						<th>SENHA</th>
+						<th>EMAIL ALTERNATIVO</th>
 						<th>
 							<button style="text-align: center;" title="Limpar Todos" type="button"
 								class="btn btn-danger botao-reduzido" (click)="limparEstudantes()"
@@ -78,7 +78,7 @@
 							<td class="celula-trunca-texto" title="{{e.username}}">{{e.username}}</td>
 							<td class="celula-trunca-texto" style="color: #cdcdcd;" title="{{e.email}}">{{e.email}}</td>
 							<td class="celula-trunca-texto" style="color: #cdcdcd;" title="{{e.fullname}}">{{e.fullname}}</td>
-							<td class="celula-trunca-texto" title="{{e.senha}}">{{e.senha}}</td>
+							<td class="celula-trunca-texto" title="{{e.senha}}">{{e.email_alternativo}}</td>
 							<td>
 								<button style="text-align: center;" title="Remover" type="button"
 									class="btn btn-danger botao-reduzido" (click)="removerEstudante(e)"

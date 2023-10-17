@@ -86,29 +86,29 @@
             </div>
         </div>
         @endif
-        @if(isset($resources->permissao) && ($resources->permissao == 'ADMINISTRADOR'))
+        @if(isset($resources->permissao) && ($resources->permissao == 'ADMINISTRADOR' && $resources->keepUser === true))
         <button class="btn btn-secondary btn-dropmain" type="button" data-toggle="collapse" data-target="#gestaoUsuarios" aria-expanded="false" aria-controls="multiCollapseExample2" >
             Gestão Usuários
             <i class="bi bi-caret-down-fill" id="imggestaoUsuarios"></i>
         </button>
         <div class="collapse multi-collapse delay-1" id="gestaoUsuarios">
             <div class="card card-body delay-2">
-                @if(isset($resources->permissao) && ($resources->permissao == 'ADMINISTRADOR'))
+                @if(isset($resources->permissao) && ($resources->permissao == 'ADMINISTRADOR' && $resources->keepUser === true))
                 @include('templates.cards', ['link' => '/formulario-insere-usuarios/', 'text' => 'Inserir Usuários Moodle', 'classIcon' => 'bi bi-person-add', 'classLink' => '' ])
                 @endif
-                @if(isset($resources->permissao) && ($resources->permissao == 'ADMINISTRADOR'))
+                @if(isset($resources->permissao) && ($resources->permissao == 'ADMINISTRADOR' && $resources->keepUser === true))
                 @include('templates.cards', ['link' => '/formulario-insere-ad/', 'text' => 'Inserir Usuários AD', 'classIcon' => 'bi bi-person-add', 'classLink' => '' ])
                 @endif
-                @if(isset($resources->permissao) && ($resources->permissao == 'ADMINISTRADOR'))
+                @if(isset($resources->permissao) && ($resources->permissao == 'ADMINISTRADOR' && $resources->keepUser === true))
                 @include('templates.cards', ['link' => '/formulario-altera-usuario/', 'text' => 'Alterar Senha Usuários AD', 'classIcon' => 'bi bi-person-lock', 'classLink' => '' ])
                 @endif
-                @if(isset($resources->permissao) && ($resources->permissao == 'ADMINISTRADOR'))
+                @if(isset($resources->permissao) && ($resources->permissao == 'ADMINISTRADOR' && $resources->keepUser === true))
                 @include('templates.cards', ['link' => '/usuarios/', 'text' => 'Lista de Usuários', 'classIcon' => 'bi bi-person-lines-fill', 'classLink' => '' ])
                 @endif
-                @if(isset($resources->permissao) && ($resources->permissao == 'ADMINISTRADOR'))
+                @if(isset($resources->permissao) && ($resources->permissao == 'ADMINISTRADOR' && $resources->keepUser === true))
                 @include('templates.cards', ['link' => '/roles/', 'text' => 'Perfis - Acessos', 'classIcon' => 'bi bi-shield-lock', 'classLink' => '' ])
                 @endif
-                @if(isset($resources->permissao) && ($resources->permissao == 'ADMINISTRADOR'))
+                @if(isset($resources->permissao) && ($resources->permissao == 'ADMINISTRADOR' && $resources->keepUser === true))
                 @include('templates.cards', ['link' => '/formulario-pessoas-estatus-lotacao/', 'text' => 'Lista de Pessoas Por Lotação', 'classIcon' => 'bi bi-person-down', 'classLink' => '' ])
                 @endif
             </div>
