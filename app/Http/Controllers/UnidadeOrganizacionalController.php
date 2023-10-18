@@ -13,22 +13,67 @@ use LdapRecord\Models\Attributes\AccountControl;
 use LdapRecord\Models\ActiveDirectory\Group;
 use App\Configuracoes;
 use App\Mail\SendMailUserLdap;
+use Illuminate\Http\Client\Request as ClientRequest;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
-
+use LdapRecord\Connection;
+use LdapRecord\Container;
 
 class UnidadeOrganizacionalController extends Controller
 {
+    private $connection;
+    private $crypt;
+    private $trying = 0;
 
-    public function __construct()
+    public function __construct(Request $request, Crypt $crypt)
     {
         $this->middleware('auth');
         $this->middleware('authhost');
-        $this->middleware('permissao:' . User::PERMISSAO_ADMINISTRADOR); 
+        $this->middleware('permissao:' . User::PERMISSAO_ADMINISTRADOR);
+        $this->crypt = $crypt;
+        
     }
 
     public function all()
     {
         return UnidadeOrganizacional::all();
+    }
+
+    private function adConnection(Request $request){
+
+        $usuario = $usuario = Auth::user();
+        $name = $usuario->name;
+        
+        $this->connection = new Connection([
+                // Mandatory Configuration Options
+                'hosts'            => [env('LDAP_USERKEEP_HOSTS')],
+                'base_dn'          => env('LDAP_USERKEEP_BASE_DN'),
+                'username'         => 'cn='.$name.','.env('OU_USER'),
+                'password'         => $this->crypt->decrypt($request->session()->get('pass')),
+            
+                // Optional Configuration Options
+                'port'             => 636,
+                'use_ssl'          => true,
+                'use_tls'          => false,
+                'use_sasl'         => false,
+                'timeout'          => 5,
+                'follow_referrals' => false,
+            
+                // Custom LDAP Options
+                'options' => [
+                    // See: http://php.net/ldap_set_option
+                    LDAP_OPT_X_TLS_REQUIRE_CERT => LDAP_OPT_X_TLS_NEVER
+                ],
+
+                // See: https://www.php.net/manual/en/function.ldap-sasl-bind.php
+                'sasl_options' => [
+                    'mech' => null,
+                    'realm' => null,
+                    'authc_id' => null,
+                    'authz_id' => null,
+                    'props' => null,
+                ],
+        ]);
     }
 
     public function getOuDirRoot(Request $request)
@@ -146,7 +191,11 @@ class UnidadeOrganizacionalController extends Controller
 
     private function geraEmail($nome, $cpf, $sufixo)
     {
+
         $nome = str_replace("'", "", $nome);
+        // verifica se existe espaço em branco e retira
+        if(str_contains($nome, ""))
+            $nome = trim($nome);    
         $fname = "";
         $lname = "";
         for ($i = 0; $i < strlen($nome); $i++)
@@ -229,6 +278,22 @@ class UnidadeOrganizacionalController extends Controller
                 $user->save();
 
                 $ret .= "<span style=\"color: #1bb300;\">Senha alterada!</span>";
+
+                if (config('app.debug')) {
+                    return view('email.emailLdap', ['user' => $user->getAttributes(),
+                                                    'pass' => $pass,
+                                                    'email' => ($configEmail == NULL ? "" : $configEmail->valor ),
+                                                    'ret' => $ret,
+                                                    'acao' => 'alterada']);
+                }
+                else {
+                    Mail::to(array_map('trim', explode($configSeparadorEmail, $e[3])))
+                        ->cc($configEmail != null ? array_map('trim', explode($configSeparadorEmail, $configEmail->valor)) : "")
+                        ->send(new SendMailUserLdap($user, $pass));
+        
+                    return $ret;
+                }
+
             } catch (Exception $ex) {
                 $ret .= '<span style="color: #ff0000;"> Erro: ' . $ex->getMessage() . ' </span>';
             }
@@ -238,20 +303,7 @@ class UnidadeOrganizacionalController extends Controller
 
         $ret .= "<br><br><b>Alteração de usuários no AD Finalizada!</b>";
 
-        if (config('app.debug')) {
-            return view('email.emailLdap', ['user' => $user->getAttributes(),
-                                            'pass' => $pass,
-                                            'email' => ($configEmail == NULL ? "" : $configEmail->valor ),
-                                            'ret' => $ret,
-                                            'acao' => 'alterada']);
-        }
-        else {
-            Mail::to(array_map('trim', explode($configSeparadorEmail, $e[3])))
-                ->cc($configEmail != null ? array_map('trim', explode($configSeparadorEmail, $configEmail->valor)) : "")
-                ->send(new SendMailUserLdap($user, $pass));
-
-            return $ret;
-        }
+        
 
         return $ret;
     }
@@ -290,109 +342,141 @@ class UnidadeOrganizacionalController extends Controller
 
     public function criarContasAD(Request $request)
     {
-        $ouCadastro = $request->has('ouCadastro') ? $request->input('ouCadastro') : null;
-        $ousIds = $request->has('ous') ? $request->input('ous') : null;
-        $estudantes = $request->has('estudantes') ? json_decode($request->input('estudantes')) : null;
-        // $senhaPadrao = $request->has('senhaPadrao') ? $request->input('senhaPadrao') : null;
+        $this->trying++;
+        try {
+            $this->adConnection($request);
 
-        $company = Configuracoes::where('nome', Configuracoes::CONFIGURACAO_AD_COMPANY)->first()->valor;
-        $department = Configuracoes::where('nome', Configuracoes::CONFIGURACAO_AD_DEPARTMENT)->first()->valor;
-        $userprincipalnameSufixo = Configuracoes::where('nome', Configuracoes::CONFIGURACAO_AD_USER_PRINCIPAL_NAME_SUFIXO)->first()->valor;
-        $configEmail = Configuracoes::where('nome', Configuracoes::CONFIGURACAO_EMAIL_SUPORTE)->first();
-        $configSeparadorEmail = Configuracoes::where('nome', Configuracoes::CONFIGURACAO_SEPARADOR_EMAIL)->first();
+            $this->connection->connect();
 
-        if (!$ouCadastro || !$ousIds || !$estudantes)
-            abort(403, "Erro de validação! Parâmetros inválidos!");
-
-        $ous = UnidadeOrganizacional::whereIn('id', $ousIds)->get();
-
-        $ret = "<h4><b>Criação de Usuários no AD</b></h4><br>";
-
-        $ret .= "<br><b>Diretório de Criação:</b><br>" . $ouCadastro . "<br>";
-
-        $ret .= "<br><b>Grupos selecionados (Membro de):</b>";
-        $memberof = [];
-        foreach ($ous as $ou) {
-            $ret .= "<br>" . $ou->nome;
-            $memberof[] = $ou->valor;
-        }
-
-        $ret .= "<br><b>Iniciando processo de criação de usuários no AD...</b><br><br>";
-
-        $ret .= '<table class="tabela-relatorio"><thead><tr>'
-            . '<th>Username</th>'
-            . '<th>Nome</th>'
-            . '<th>Email</th>'
-            . '<th>Processamento</th>'
-            . '</tr></thead><tbody>';
-        foreach ($estudantes as $e) {
-            $pass = $this->generateStrongPassword();
-            $e[2] = $this->tratarNome($e[2]);
-            $ret .= "<tr><td>" . $e[0] . "</td><td>" . $e[2] . "</td><td>" . $pass ."</td><td>";
-            if (!$this->isCPF($e[0])) {
-                $ret .= '<span style="color: #e9d700;">CPF Inválido para username </span>';
-                continue;
+           if (!Container::hasConnection('default')) {
+                Container::addConnection('default');
             }
-           
-            if ($ldapuser = $this->getLdapUser($request, $e[0])) {
-                $distinguishedname = $ldapuser[0]['distinguishedname'][0];
-                $ret .= '<span style="color: #e9d700;" title="' . $distinguishedname . '">
-                ' . (stripos($distinguishedname, $ouCadastro) !== FALSE ? 'Cadastrado anteriormente' : 'Usuário já existente (*)') . '
-                </span>';
-                continue;
-            }
-            if ($ldapuser = $this->getLdapUserByEmail($request, $e[1])) {
-                $distinguishedname = $ldapuser[0]['distinguishedname'][0];
-                $ret .= '<span style="color: #e9d700;" title="' . $distinguishedname . '">Email já utilizado (*)</span>';
-                continue;
-            }
-            try {
-                $adUserAbstr = $this->gerarAdUser($e, $company, $department, $userprincipalnameSufixo);
 
-                $user = (new UserLdap($adUserAbstr))->inside($ouCadastro);
+            if(!Container::hasConnection('keepuser')) {
+                Container::addConnection($this->connection, 'keepuser');
+            }
 
-                $user->unicodePwd = $pass;
-                
-                $user->save();
-                $user->refresh();
-                
-                foreach ($memberof as $grupo) {
-                    if($group = Group::findOrFail($grupo))
-                       $user->groups()->attach($group);
+            Container::setDefaultConnection('keepuser');
+
+
+        
+            $ouCadastro = $request->has('ouCadastro') ? $request->input('ouCadastro') : null;
+            $ousIds = $request->has('ous') ? $request->input('ous') : null;
+            $estudantes = $request->has('estudantes') ? json_decode($request->input('estudantes')) : null;
+            // $senhaPadrao = $request->has('senhaPadrao') ? $request->input('senhaPadrao') : null;
+    
+            $company = Configuracoes::where('nome', Configuracoes::CONFIGURACAO_AD_COMPANY)->first()->valor;
+            $department = Configuracoes::where('nome', Configuracoes::CONFIGURACAO_AD_DEPARTMENT)->first()->valor;
+            $userprincipalnameSufixo = Configuracoes::where('nome', Configuracoes::CONFIGURACAO_AD_USER_PRINCIPAL_NAME_SUFIXO)->first()->valor;
+            $configEmail = Configuracoes::where('nome', Configuracoes::CONFIGURACAO_EMAIL_SUPORTE)->first();
+            $configSeparadorEmail = Configuracoes::where('nome', Configuracoes::CONFIGURACAO_SEPARADOR_EMAIL)->first();
+    
+            if (!$ouCadastro || !$ousIds || !$estudantes)
+                abort(403, "Erro de validação! Parâmetros inválidos!");
+    
+            $ous = UnidadeOrganizacional::whereIn('id', $ousIds)->get();
+    
+            $ret = "<h4><b>Criação de Usuários no AD</b></h4><br>";
+    
+            $ret .= "<br><b>Diretório de Criação:</b><br>" . $ouCadastro . "<br>";
+    
+            $ret .= "<br><b>Grupos selecionados (Membro de):</b>";
+
+            $ret .= "<br><b>Tentativas de conexão: ". $this->trying."</b>";
+            $memberof = [];
+            foreach ($ous as $ou) {
+                $ret .= "<br>" . $ou->nome;
+                $memberof[] = $ou->valor;
+            }
+    
+            $ret .= "<br><b>Iniciando processo de criação de usuários no AD...</b><br><br>";
+    
+            $ret .= '<table class="tabela-relatorio"><thead><tr>'
+                . '<th>Username</th>'
+                . '<th>Nome</th>'
+                . '<th>Processamento</th>'
+                . '</tr></thead><tbody>';
+            foreach ($estudantes as $e) {
+                $pass = $this->generateStrongPassword();
+                $e[2] = $this->tratarNome($e[2]);
+                $ret .= "<tr><td>" . $e[0] . "</td><td>" . $e[2] . "</td><td>";
+                if (!$this->isCPF($e[0])) {
+                    $ret .= '<span style="color: #e9d700;">CPF Inválido para username </span>';
+                    continue;
                 }
-
-                $user->userAccountControl = (AccountControl::NORMAL_ACCOUNT + AccountControl::DONT_EXPIRE_PASSWORD) ; // Normal, enabled account.
-
-                $user->save();
-
-                $ret .= "<span style=\"color: #1bb300;\">Usuário criado!</span>";
-
-
-            } catch (Exception $ex) {
-                $ret .= '<span style="color: #ff0000;"> Erro: ' . $ex->getMessage() . ' </span>';
+               
+                if ($ldapuser = $this->getLdapUser($request, $e[0])) {
+                    $distinguishedname = $ldapuser[0]['distinguishedname'][0];
+                    $ret .= '<span style="color: #e9d700;" title="' . $distinguishedname . '">
+                    ' . (stripos($distinguishedname, $ouCadastro) !== FALSE ? 'Cadastrado anteriormente' : 'Usuário já existente (*)') . '
+                    </span>';
+                    continue;
+                }
+                if ($ldapuser = $this->getLdapUserByEmail($request, $e[1])) {
+                    $distinguishedname = $ldapuser[0]['distinguishedname'][0];
+                    $ret .= '<span style="color: #e9d700;" title="' . $distinguishedname . '">Email já utilizado (*)</span>';
+                    continue;
+                }
+                try {
+                    $adUserAbstr = $this->gerarAdUser($e, $company, $department, $userprincipalnameSufixo);
+    
+                    $user = (new UserLdap($adUserAbstr))->inside($ouCadastro)->setConnection('keepuser');
+    
+                    $user->unicodePwd = $pass;
+                    
+                    $user->save();
+                    $user->refresh();
+                    
+                    foreach ($memberof as $grupo) {
+                        if($group = Group::findOrFail($grupo))
+                           $user->groups()->attach($group);
+                    }
+    
+                    $user->userAccountControl = (AccountControl::NORMAL_ACCOUNT + AccountControl::DONT_EXPIRE_PASSWORD) ; // Normal, enabled account.
+                    
+                    $user->save();
+    
+                    $ret .= "<span style=\"color: #1bb300;\">Usuário criado!</span>";
+    
+                    if (config('app.debug')) {
+                        return view('email.emailLdap', ['user' => $user->getAttributes(),
+                                                        'pass' => $pass,
+                                                        'email' => ($configEmail == NULL ? "" : $configEmail->valor ),
+                                                        'ret' => $ret,
+                                                        'acao' => 'criada']);
+                    }
+                    else {
+                        Mail::to(array_map('trim', explode($configSeparadorEmail, $e[3])))
+                            ->cc($configEmail != null ? array_map('trim', explode($configSeparadorEmail, $configEmail->valor)) : "")
+                            ->send(new SendMailUserLdap($user, $pass));
+            
+                    }
+    
+                } catch (Exception $ex) {
+                    $ret .= '<span style="color: #ff0000;"> Erro: ' . $ex->getMessage() . ' </span>';
+                }
+                $ret .= "</td></tr>";
             }
-            $ret .= "</td></tr>";
-        }
-        $ret .= "</tbody></table>";
-        $ret .= "<br>*: passe o mouse sobre o item para ver mais detalhes";
+            $ret .= "</tbody></table>";
+            $ret .= "<br>*: passe o mouse sobre o item para ver mais detalhes";
+    
+            $ret .= "<br><br><b>Criação de usuários no AD Finalizada!</b>";
+            
+            Container::setDefaultConnection('default');
 
-        $ret .= "<br><br><b>Criação de usuários no AD Finalizada!</b>";
-        if (config('app.debug')) {
-            return view('email.emailLdap', ['user' => $user->getAttributes(),
-                                            'pass' => $pass,
-                                            'email' => ($configEmail == NULL ? "" : $configEmail->valor ),
-                                            'ret' => $ret,
-                                            'acao' => 'criada']);
-        }
-        else {
-            Mail::to(array_map('trim', explode($configSeparadorEmail, $e[3])))
-                ->cc($configEmail != null ? array_map('trim', explode($configSeparadorEmail, $configEmail->valor)) : "")
-                ->send(new SendMailUserLdap($user, $pass));
+            return $ret;
 
-                return $ret;
+        } catch (\LdapRecord\Auth\BindException $e) {
+            if($this->trying < 3){
+                sleep(5);
+                $this->criarContasAD($request);
+            }else{
+                $this->trying = 0;
+                $error = $e->getDetailedError();
+                $message = $error->getErrorCode().' || '. $error->getErrorMessage(). '|| '. $error->getDiagnosticMessage();
+                abort(500, $message);
+            }
         }
-
-        return $ret;
     }
 
     /**
