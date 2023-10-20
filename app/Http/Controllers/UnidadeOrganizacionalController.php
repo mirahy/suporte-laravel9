@@ -31,7 +31,6 @@ class UnidadeOrganizacionalController extends Controller
         $this->middleware('authhost');
         $this->middleware('permissao:' . User::PERMISSAO_ADMINISTRADOR);
         $this->crypt = $crypt;
-        
     }
 
     public function all()
@@ -39,41 +38,150 @@ class UnidadeOrganizacionalController extends Controller
         return UnidadeOrganizacional::all();
     }
 
-    private function adConnection(Request $request){
+    private function adConnectionSsl(Request $request)
+    {
 
         $usuario = $usuario = Auth::user();
         $name = $usuario->name;
-        
-        $this->connection = new Connection([
-                // Mandatory Configuration Options
-                'hosts'            => [env('LDAP_USERKEEP_HOSTS')],
-                'base_dn'          => env('LDAP_USERKEEP_BASE_DN'),
-                'username'         => 'cn='.$name.','.env('OU_USER'),
-                'password'         => $this->crypt->decrypt($request->session()->get('pass')),
-            
-                // Optional Configuration Options
-                'port'             => 636,
-                'use_ssl'          => true,
-                'use_tls'          => false,
-                'use_sasl'         => false,
-                'timeout'          => 5,
-                'follow_referrals' => false,
-            
-                // Custom LDAP Options
-                'options' => [
-                    // See: http://php.net/ldap_set_option
-                    LDAP_OPT_X_TLS_REQUIRE_CERT => LDAP_OPT_X_TLS_NEVER
-                ],
 
-                // See: https://www.php.net/manual/en/function.ldap-sasl-bind.php
-                'sasl_options' => [
-                    'mech' => null,
-                    'realm' => null,
-                    'authc_id' => null,
-                    'authz_id' => null,
-                    'props' => null,
-                ],
+        $this->connection = new Connection([
+            // Mandatory Configuration Options
+            'hosts'            => [env('LDAP_USERKEEP_HOSTS'), env('LDAP_USERKEEP_HOSTS_2')],
+            'base_dn'          => env('LDAP_USERKEEP_BASE_DN'),
+            'username'         => 'cn=' . $name . ',' . env('OU_USER'),
+            'password'         => $this->crypt->decrypt($request->session()->get('pass')),
+
+            // Optional Configuration Options
+            'port'             => 636,
+            'use_ssl'          => true,
+            'use_tls'          => false,
+            'timeout'          => 5,
+            'follow_referrals' => false,
+
+            // Custom LDAP Options
+            'options' => [
+                // See: http://php.net/ldap_set_option
+                LDAP_OPT_X_TLS_REQUIRE_CERT => LDAP_OPT_X_TLS_NEVER
+            ],
+
         ]);
+    }
+
+    private function adConnectionNoSsl()
+    {
+
+        $this->connection = new Connection([
+            // Mandatory Configuration Options
+            'hosts'            => [env('LDAP_DEFAULT_HOSTS'), env('LDAP_DEFAULT_HOSTS_2')],
+            'base_dn'          => env('LDAP_DEFAULT_BASE_DN'),
+            'username'         => env('LDAP_DEFAULT_USERNAME'),
+            'password'         => env('LDAP_DEFAULT_PASSWORD'),
+
+            // Optional Configuration Options
+            'port'             => env('LDAP_DEFAULT_PORT'),
+            'use_ssl'          => env('LDAP_DEFAULT_SSL'),
+            'use_tls'          => env('LDAP_DEFAULT_TLS'),
+            'timeout'          => env('LDAP_DEFAULT_TIMEOUT'),
+            'follow_referrals' => false,
+
+            // Custom LDAP Options
+            'options' => [
+                // See: http://php.net/ldap_set_option
+                LDAP_OPT_X_TLS_REQUIRE_CERT => LDAP_OPT_X_TLS_NEVER
+            ],
+
+        ]);
+    }
+
+    private function adConnect389()
+    {
+
+        if (Container::hasConnection('ad636')){
+            $this->connection = Container::getConnection('ad636');
+            if ($this->connection->isConnected())
+                $this->connection->disconnect();
+        }
+
+        // verifica se exite conexão default, se não existir cria e add ao container
+        if (!Container::hasConnection('default')) {
+            $this->adConnectionNoSsl();
+            Container::addConnection($this->connection, 'default');
+        }
+
+        // verifica se existe conexao default
+        if (Container::hasConnection('default')) {
+
+            $this->connection = Container::getConnection('default');
+
+            // verificar se esta connectado
+            if (!$this->connection->isConnected()){
+                try {
+                    $this->connection->connect();
+                } catch (\LdapRecord\Auth\BindException $e) {
+                    if ($this->trying < 3) {
+                        sleep(5);
+                        $this->adConnect389();
+                    } else {
+                        $this->trying = 0;
+                        $error = $e->getDetailedError();
+                        $message = $error->getErrorCode() . ' || ' . $error->getErrorMessage() . ' || ' . $error->getDiagnosticMessage();
+                        abort(500, $message);
+                    }
+                }
+            }
+                
+
+            // seta a conexão 'default' como default no container
+            Container::setDefaultConnection('default');
+        }
+    }
+
+    private function adConnect636(Request $request)
+    {
+        $this->trying++;
+
+        if (Container::hasConnection('default')){
+            $this->connection = Container::getConnection('default');
+            if ($this->connection->isConnected())
+                $this->connection->disconnect();
+        }
+
+        // verifica se exite conexão ad636 se não existir, cria e add ao container
+        if (!Container::hasConnection('ad636')) {
+            $this->adConnectionSsl($request);
+            Container::addConnection($this->connection, 'ad636');
+        }
+
+        // verifica se exite conexão ad636
+        if (Container::hasConnection('ad636')) {
+
+            $this->connection = Container::getConnection('ad636');
+
+            // verificar se esta connectado
+            if (!$this->connection->isConnected()){
+                try {
+                    $this->connection->connect();
+                } catch (\LdapRecord\Auth\BindException $e) {
+                    if ($this->trying < 3) {
+                        sleep(5);
+                        $this->adConnect636($request);
+                    } else {
+                        $this->trying = 0;
+                        $error = $e->getDetailedError();
+                        $message = $error->getErrorCode() . ' || ' . $error->getErrorMessage() . ' || ' . $error->getDiagnosticMessage();
+                        abort(500, $message);
+                    }
+                }
+            }
+
+            // verifica se exite conexão keepuser e add ao container
+            if (!Container::hasConnection('ad636')) {
+                Container::addConnection($this->connection, 'ad636');
+            }
+
+            // seta a conexão 'keepuser' como default no container
+            Container::setDefaultConnection('ad636');
+        }
     }
 
     public function getOuDirRoot(Request $request)
@@ -194,8 +302,8 @@ class UnidadeOrganizacionalController extends Controller
 
         $nome = str_replace("'", "", $nome);
         // verifica se existe espaço em branco e retira
-        if(str_contains($nome, ""))
-            $nome = trim($nome);    
+        if (str_contains($nome, ""))
+            $nome = trim($nome);
         $fname = "";
         $lname = "";
         for ($i = 0; $i < strlen($nome); $i++)
@@ -280,20 +388,20 @@ class UnidadeOrganizacionalController extends Controller
                 $ret .= "<span style=\"color: #1bb300;\">Senha alterada!</span>";
 
                 if (config('app.debug')) {
-                    return view('email.emailLdap', ['user' => $user->getAttributes(),
-                                                    'pass' => $pass,
-                                                    'email' => ($configEmail == NULL ? "" : $configEmail->valor ),
-                                                    'ret' => $ret,
-                                                    'acao' => 'alterada']);
-                }
-                else {
+                    return view('email.emailLdap', [
+                        'user' => $user->getAttributes(),
+                        'pass' => $pass,
+                        'email' => ($configEmail == NULL ? "" : $configEmail->valor),
+                        'ret' => $ret,
+                        'acao' => 'alterada'
+                    ]);
+                } else {
                     Mail::to(array_map('trim', explode($configSeparadorEmail, $e[3])))
                         ->cc($configEmail != null ? array_map('trim', explode($configSeparadorEmail, $configEmail->valor)) : "")
                         ->send(new SendMailUserLdap($user, $pass));
-        
+
                     return $ret;
                 }
-
             } catch (Exception $ex) {
                 $ret .= '<span style="color: #ff0000;"> Erro: ' . $ex->getMessage() . ' </span>';
             }
@@ -303,7 +411,7 @@ class UnidadeOrganizacionalController extends Controller
 
         $ret .= "<br><br><b>Alteração de usuários no AD Finalizada!</b>";
 
-        
+
 
         return $ret;
     }
@@ -342,55 +450,43 @@ class UnidadeOrganizacionalController extends Controller
 
     public function criarContasAD(Request $request)
     {
-        $this->trying++;
+       
         try {
-            $this->adConnection($request);
 
-            $this->connection->connect();
+            $this->adConnect636($request);
 
-           if (!Container::hasConnection('default')) {
-                Container::addConnection('default');
-            }
-
-            if(!Container::hasConnection('keepuser')) {
-                Container::addConnection($this->connection, 'keepuser');
-            }
-
-            Container::setDefaultConnection('keepuser');
-
-
-        
             $ouCadastro = $request->has('ouCadastro') ? $request->input('ouCadastro') : null;
             $ousIds = $request->has('ous') ? $request->input('ous') : null;
             $estudantes = $request->has('estudantes') ? json_decode($request->input('estudantes')) : null;
             // $senhaPadrao = $request->has('senhaPadrao') ? $request->input('senhaPadrao') : null;
-    
+
             $company = Configuracoes::where('nome', Configuracoes::CONFIGURACAO_AD_COMPANY)->first()->valor;
             $department = Configuracoes::where('nome', Configuracoes::CONFIGURACAO_AD_DEPARTMENT)->first()->valor;
             $userprincipalnameSufixo = Configuracoes::where('nome', Configuracoes::CONFIGURACAO_AD_USER_PRINCIPAL_NAME_SUFIXO)->first()->valor;
             $configEmail = Configuracoes::where('nome', Configuracoes::CONFIGURACAO_EMAIL_SUPORTE)->first();
             $configSeparadorEmail = Configuracoes::where('nome', Configuracoes::CONFIGURACAO_SEPARADOR_EMAIL)->first();
-    
+
             if (!$ouCadastro || !$ousIds || !$estudantes)
                 abort(403, "Erro de validação! Parâmetros inválidos!");
-    
+
             $ous = UnidadeOrganizacional::whereIn('id', $ousIds)->get();
-    
+
             $ret = "<h4><b>Criação de Usuários no AD</b></h4><br>";
-    
+
+            $ret .= "<br><b>Tentativas de conexão: " . $this->trying . "</b><br>";
+
             $ret .= "<br><b>Diretório de Criação:</b><br>" . $ouCadastro . "<br>";
-    
+
             $ret .= "<br><b>Grupos selecionados (Membro de):</b>";
 
-            $ret .= "<br><b>Tentativas de conexão: ". $this->trying."</b>";
             $memberof = [];
             foreach ($ous as $ou) {
                 $ret .= "<br>" . $ou->nome;
                 $memberof[] = $ou->valor;
             }
-    
+
             $ret .= "<br><b>Iniciando processo de criação de usuários no AD...</b><br><br>";
-    
+
             $ret .= '<table class="tabela-relatorio"><thead><tr>'
                 . '<th>Username</th>'
                 . '<th>Nome</th>'
@@ -404,7 +500,7 @@ class UnidadeOrganizacionalController extends Controller
                     $ret .= '<span style="color: #e9d700;">CPF Inválido para username </span>';
                     continue;
                 }
-               
+
                 if ($ldapuser = $this->getLdapUser($request, $e[0])) {
                     $distinguishedname = $ldapuser[0]['distinguishedname'][0];
                     $ret .= '<span style="color: #e9d700;" title="' . $distinguishedname . '">
@@ -419,39 +515,38 @@ class UnidadeOrganizacionalController extends Controller
                 }
                 try {
                     $adUserAbstr = $this->gerarAdUser($e, $company, $department, $userprincipalnameSufixo);
-    
-                    $user = (new UserLdap($adUserAbstr))->inside($ouCadastro)->setConnection('keepuser');
-    
+
+                    $user = (new UserLdap($adUserAbstr))->inside($ouCadastro);
+
                     $user->unicodePwd = $pass;
-                    
+
                     $user->save();
                     $user->refresh();
-                    
+
                     foreach ($memberof as $grupo) {
-                        if($group = Group::findOrFail($grupo))
-                           $user->groups()->attach($group);
+                        if ($group = Group::findOrFail($grupo))
+                            $user->groups()->attach($group);
                     }
-    
-                    $user->userAccountControl = (AccountControl::NORMAL_ACCOUNT + AccountControl::DONT_EXPIRE_PASSWORD) ; // Normal, enabled account.
-                    
+
+                    $user->userAccountControl = (AccountControl::NORMAL_ACCOUNT + AccountControl::DONT_EXPIRE_PASSWORD); // Normal, enabled account.
+
                     $user->save();
-    
+
                     $ret .= "<span style=\"color: #1bb300;\">Usuário criado!</span>";
-    
+
                     if (config('app.debug')) {
-                        return view('email.emailLdap', ['user' => $user->getAttributes(),
-                                                        'pass' => $pass,
-                                                        'email' => ($configEmail == NULL ? "" : $configEmail->valor ),
-                                                        'ret' => $ret,
-                                                        'acao' => 'criada']);
-                    }
-                    else {
+                        return view('email.emailLdap', [
+                            'user' => $user->getAttributes(),
+                            'pass' => $pass,
+                            'email' => ($configEmail == NULL ? "" : $configEmail->valor),
+                            'ret' => $ret,
+                            'acao' => 'criada'
+                        ]);
+                    } else {
                         Mail::to(array_map('trim', explode($configSeparadorEmail, $e[3])))
                             ->cc($configEmail != null ? array_map('trim', explode($configSeparadorEmail, $configEmail->valor)) : "")
                             ->send(new SendMailUserLdap($user, $pass));
-            
                     }
-    
                 } catch (Exception $ex) {
                     $ret .= '<span style="color: #ff0000;"> Erro: ' . $ex->getMessage() . ' </span>';
                 }
@@ -459,23 +554,16 @@ class UnidadeOrganizacionalController extends Controller
             }
             $ret .= "</tbody></table>";
             $ret .= "<br>*: passe o mouse sobre o item para ver mais detalhes";
-    
+
             $ret .= "<br><br><b>Criação de usuários no AD Finalizada!</b>";
-            
-            Container::setDefaultConnection('default');
+
+            $this->adConnect389();
 
             return $ret;
-
         } catch (\LdapRecord\Auth\BindException $e) {
-            if($this->trying < 3){
-                sleep(5);
-                $this->criarContasAD($request);
-            }else{
-                $this->trying = 0;
                 $error = $e->getDetailedError();
-                $message = $error->getErrorCode().' || '. $error->getErrorMessage(). '|| '. $error->getDiagnosticMessage();
+                $message = $error->getErrorCode() . ' | ' . $error->getErrorMessage() . ' | ' . $error->getDiagnosticMessage();
                 abort(500, $message);
-            }
         }
     }
 
