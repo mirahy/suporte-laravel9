@@ -16,16 +16,18 @@ class SendMailUserLdap extends Mailable
 
     private $user;
     private $pass;
+    private $acao;
     private $email_suporte;
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($user, $pass)
+    public function __construct($user, $pass, $acao)
     {
         $this->user = $user;
         $this->pass = $pass;
+        $this->acao = $acao;
         if ($this->user == NULL)
             abort(404, "Usuário não encontrado!");
         $configEmail = Configuracoes::where('nome', Configuracoes::CONFIGURACAO_EMAIL_SUPORTE)->first();
@@ -43,12 +45,12 @@ class SendMailUserLdap extends Mailable
         $view = "email.emailLdap";
         return $this->from(env('MAIL_FROM_ADDRESS'))
             ->view($view)
-            ->subject('Conta AD criada para: '.$this->user['cn'][0])
+            ->subject('Conta AD '.$this->acao.' : '.$this->user['cn'][0])
             ->with([
                 'user' => $this->user, 
                 'email' => $this->email_suporte, 
                 'pass' => $this->pass,
-                'acao' => 'criada'
+                'acao' => $this->acao,
             ]);
     }
 }

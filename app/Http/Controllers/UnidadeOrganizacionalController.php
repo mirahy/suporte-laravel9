@@ -357,6 +357,7 @@ class UnidadeOrganizacionalController extends Controller
             $estudantes = $request->has('estudantes') ? json_decode($request->input('estudantes')) : null;
             $configEmail = Configuracoes::where('nome', Configuracoes::CONFIGURACAO_EMAIL_SUPORTE)->first();
             $configSeparadorEmail = Configuracoes::where('nome', Configuracoes::CONFIGURACAO_SEPARADOR_EMAIL)->first();
+            $acao = 'alterada';
     
             if (!$estudantes)
                 abort(403, "Erro de validação! Parâmetros inválidos!");
@@ -398,12 +399,12 @@ class UnidadeOrganizacionalController extends Controller
                             'pass' => $pass,
                             'email' => ($configEmail == NULL ? "" : $configEmail->valor),
                             'ret' => $ret,
-                            'acao' => 'alterada'
+                            'acao' => $acao
                         ]);
                     } else {
                         Mail::to(array_map('trim', explode($configSeparadorEmail, $e[3])))
                             ->cc($configEmail != null ? array_map('trim', explode($configSeparadorEmail, $configEmail->valor)) : "")
-                            ->send(new SendMailUserLdap($user, $pass));
+                            ->send(new SendMailUserLdap($user, $pass, $acao ));
     
                         return $ret;
                     }
@@ -474,6 +475,7 @@ class UnidadeOrganizacionalController extends Controller
             $userprincipalnameSufixo = Configuracoes::where('nome', Configuracoes::CONFIGURACAO_AD_USER_PRINCIPAL_NAME_SUFIXO)->first()->valor;
             $configEmail = Configuracoes::where('nome', Configuracoes::CONFIGURACAO_EMAIL_SUPORTE)->first();
             $configSeparadorEmail = Configuracoes::where('nome', Configuracoes::CONFIGURACAO_SEPARADOR_EMAIL)->first();
+            $acao = 'criada';
 
             if (!$ouCadastro || !$ousIds || !$estudantes)
                 abort(403, "Erro de validação! Parâmetros inválidos!");
@@ -549,12 +551,12 @@ class UnidadeOrganizacionalController extends Controller
                             'pass' => $pass,
                             'email' => ($configEmail == NULL ? "" : $configEmail->valor),
                             'ret' => $ret,
-                            'acao' => 'criada'
+                            'acao' => $acao
                         ]);
                     } else {
                         Mail::to(array_map('trim', explode($configSeparadorEmail, $e[3])))
                             ->cc($configEmail != null ? array_map('trim', explode($configSeparadorEmail, $configEmail->valor)) : "")
-                            ->send(new SendMailUserLdap($user, $pass));
+                            ->send(new SendMailUserLdap($user, $pass, $acao));
                     }
                 } catch (Exception $ex) {
                     $ret .= '<span style="color: #ff0000;"> Erro: ' . $ex->getMessage() . ' </span>';
