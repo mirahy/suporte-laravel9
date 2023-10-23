@@ -34,7 +34,7 @@
         <p></p>
         © Equipe EAD <br/>
     Contato: <a href="mailto:{{$email}}">{{$email}}</a></p>
-    <img src="img/assinaturaf.png">
+    <img src="{{ asset('img/assinaturaf.png')}}">
     @if(config('app.debug'))
     <button class="btn btn-secondary botao-barra" type="button" onclick="window.location.href = '/salas'">Voltar</button>
     @endif

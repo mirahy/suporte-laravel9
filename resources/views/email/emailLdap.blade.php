@@ -20,7 +20,7 @@
     <p></p>
     © Equipe EAD <br />
     Contato: <a href="mailto:{{ $email }}">{{ $email }}</a></p>
-    <img src="img/assinaturaf.png">
+    <img src="{{ asset('img/assinaturaf.png')}}">
     <br />
     <br />
     @if (config('app.debug'))

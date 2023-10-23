@@ -350,70 +350,80 @@ class UnidadeOrganizacionalController extends Controller
 
     public function alterarSenha(Request $request)
     {
-        $estudantes = $request->has('estudantes') ? json_decode($request->input('estudantes')) : null;
-        $configEmail = Configuracoes::where('nome', Configuracoes::CONFIGURACAO_EMAIL_SUPORTE)->first();
-        $configSeparadorEmail = Configuracoes::where('nome', Configuracoes::CONFIGURACAO_SEPARADOR_EMAIL)->first();
 
-        if (!$estudantes)
-            abort(403, "Erro de validação! Parâmetros inválidos!");
-
-        $ret = "<h4><b>Alteração de Senha de Usuários no AD</b></h4><br>";
-
-        $ret .= "<br><b>Iniciando processo...</b><br><br>";
-
-        $ret .= '<table class="tabela-relatorio"><thead><tr>'
-            . '<th>Username</th>'
-            . '<th>Nome</th>'
-            . '<th>Nova Senha</th>'
-            . '<th>Processamento</th>'
-            . '</tr></thead><tbody>';
-        foreach ($estudantes as $e) {
-            try {
-                $pass = $this->generateStrongPassword();
-                $user = UserLdap::where('samaccountname', '=', $e[0])->get();
-                $user = $user[0];
-
-                if (!$user) {
-                    $ret .= "<tr><td>" . $e[0] . '</td><td></td><td>'  . $pass . '</td><td><span style="color: #e9d700;">Usuário não encontrado</span>';
-                    continue;
+        try {
+            $this->adConnect636($request);
+            
+            $estudantes = $request->has('estudantes') ? json_decode($request->input('estudantes')) : null;
+            $configEmail = Configuracoes::where('nome', Configuracoes::CONFIGURACAO_EMAIL_SUPORTE)->first();
+            $configSeparadorEmail = Configuracoes::where('nome', Configuracoes::CONFIGURACAO_SEPARADOR_EMAIL)->first();
+    
+            if (!$estudantes)
+                abort(403, "Erro de validação! Parâmetros inválidos!");
+    
+            $ret = "<h4><b>Alteração de Senha de Usuários no AD</b></h4><br>";
+    
+            $ret .= "<br><b>Tentativas de conexão: " . $this->trying . "</b><br>";
+    
+            $ret .= "<br><b>Iniciando processo...</b><br><br>";
+    
+            $ret .= '<table class="tabela-relatorio"><thead><tr>'
+                . '<th>Username</th>'
+                . '<th>Nome</th>'
+                . '<th>Processamento</th>'
+                . '</tr></thead><tbody>';
+            foreach ($estudantes as $e) {
+                try {
+                    $pass = $this->generateStrongPassword();
+                    $user = UserLdap::where('samaccountname', '=', $e[0])->get();
+                    $user = $user[0];
+    
+                    if (!$user) {
+                        $ret .= "<tr><td>" . $e[0] . '</td><td></td><td>'  . $pass . '</td><td><span style="color: #e9d700;">Usuário não encontrado</span>';
+                        continue;
+                    }
+    
+                    $nomeUser = $user->getAttributes()['name'][0];
+                    $ret .= "<tr><td>" . $e[0] . '</td><td>' . $nomeUser . "</td><td>";
+    
+                    $user->unicodePwd = $pass;
+    
+                    $user->save();
+    
+                    $ret .= "<span style=\"color: #1bb300;\">Senha alterada!</span>";
+    
+                    if (config('app.debug')) {
+                        return view('email.emailLdap', [
+                            'user' => $user->getAttributes(),
+                            'pass' => $pass,
+                            'email' => ($configEmail == NULL ? "" : $configEmail->valor),
+                            'ret' => $ret,
+                            'acao' => 'alterada'
+                        ]);
+                    } else {
+                        Mail::to(array_map('trim', explode($configSeparadorEmail, $e[3])))
+                            ->cc($configEmail != null ? array_map('trim', explode($configSeparadorEmail, $configEmail->valor)) : "")
+                            ->send(new SendMailUserLdap($user, $pass));
+    
+                        return $ret;
+                    }
+                } catch (Exception $ex) {
+                    $ret .= '<span style="color: #ff0000;"> Erro: ' . $ex->getMessage() . ' </span>';
                 }
-
-                $nomeUser = $user->getAttributes()['name'][0];
-                $ret .= "<tr><td>" . $e[0] . '</td><td>' . $nomeUser . "</td><td>" . $pass . "</td><td>";
-
-                $user->unicodePwd = $pass;
-
-                $user->save();
-
-                $ret .= "<span style=\"color: #1bb300;\">Senha alterada!</span>";
-
-                if (config('app.debug')) {
-                    return view('email.emailLdap', [
-                        'user' => $user->getAttributes(),
-                        'pass' => $pass,
-                        'email' => ($configEmail == NULL ? "" : $configEmail->valor),
-                        'ret' => $ret,
-                        'acao' => 'alterada'
-                    ]);
-                } else {
-                    Mail::to(array_map('trim', explode($configSeparadorEmail, $e[3])))
-                        ->cc($configEmail != null ? array_map('trim', explode($configSeparadorEmail, $configEmail->valor)) : "")
-                        ->send(new SendMailUserLdap($user, $pass));
-
-                    return $ret;
-                }
-            } catch (Exception $ex) {
-                $ret .= '<span style="color: #ff0000;"> Erro: ' . $ex->getMessage() . ' </span>';
+                $ret .= "</td></tr>";
             }
-            $ret .= "</td></tr>";
-        }
-        $ret .= "</tbody></table>";
-
-        $ret .= "<br><br><b>Alteração de usuários no AD Finalizada!</b>";
-
-
-
-        return $ret;
+            $ret .= "</tbody></table>";
+    
+            $ret .= "<br><br><b>Alteração de usuários no AD Finalizada!</b>";
+    
+            $this->adConnect389();
+    
+            return $ret;
+        } catch (\LdapRecord\Auth\BindException $e) {
+            $error = $e->getDetailedError();
+            $message = $error->getErrorCode() . ' | ' . $error->getErrorMessage() . ' | ' . $error->getDiagnosticMessage();
+            abort(500, $message);
+    }
     }
 
     public function substituiEmailsPorPadrao(Request $request)
@@ -452,7 +462,6 @@ class UnidadeOrganizacionalController extends Controller
     {
        
         try {
-
             $this->adConnect636($request);
 
             $ouCadastro = $request->has('ouCadastro') ? $request->input('ouCadastro') : null;

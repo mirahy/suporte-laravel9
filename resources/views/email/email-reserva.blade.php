@@ -26,6 +26,7 @@
         <p></p>
         © Equipe EAD <br/>
     Contato: <a href="mailto:{{$email}}">{{$email}}</a></p>
+    <img src="{{ asset('img/assinaturaf.png')}}">
     @if(config('app.debug'))
     {{var_dump($gestores)}}
     <button class="btn btn-secondary botao-barra" type="button" onclick="window.location.href = '/reservas'">Voltar</button>
