@@ -33,8 +33,9 @@
         <p style="color: gray;"><i>Este é um email automático enviado pelo sistema, não responda este email!</i> </p>
         <p></p>
         © Equipe EAD <br/>
-    Contato: <a href="mailto:{{$email}}">{{$email}}</a></p>
-    <img src="img/assinaturaf.png">
+    Contato: <a href="mailto:{{$email}}">{{$email}}</a>
+    <p></p>
+    <img src="{{ asset('img/assinaturaf.png')}}">
     @if(config('app.debug'))
     <button class="btn btn-secondary botao-barra" type="button" onclick="window.location.href = '/salas'">Voltar</button>
     @endif
