@@ -87,6 +87,7 @@ export class Estudante {
         }
         return JSON.stringify(linhas);
     }
+    //inserção no moodle
     static converteJSONParaEstudantesComSenha(estudantesJSON:string) : Array<Estudante> {
         var linhas:Array<Estudante> = [];
         if (estudantesJSON) {
@@ -99,10 +100,10 @@ export class Estudante {
         return linhas;
     }
 
-    static converteObjectParaEstudantesComSenha (estudantesObj) {
+    static converteObjectParaEstudantes (estudantesObj) {
         var estudantes : Estudante[] = [];
         for (var i = 0; i < estudantesObj.length; i++) {
-            estudantes.push(new Estudante(estudantesObj[i].username, estudantesObj[i].email, estudantesObj[i].fullname, estudantesObj[i].is_professor, estudantesObj[i].senha));
+            estudantes.push(new Estudante(estudantesObj[i].username, estudantesObj[i].email, estudantesObj[i].fullname, estudantesObj[i].is_professor, estudantesObj[i].email_alternativo));
         }
         return estudantes;
     }

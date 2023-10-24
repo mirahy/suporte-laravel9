@@ -26,9 +26,6 @@ export class FormularioInsercaoUsuariosAdComponent extends AbstractComponent imp
 
     linksMoodles = [];
 
-    usarSenha = false;
-    senhaPadrao = "";
-
     ousPastaCreate:Arvore[] = [null];
     ousPastaCreateSelected:Array<number|string> = [""];
 	ous = [];
@@ -187,7 +184,7 @@ export class FormularioInsercaoUsuariosAdComponent extends AbstractComponent imp
         jQuery('#saidaExport').html("<i>Aguarde...<i>");
         this.editavel = false;
         this.aviso = "";
-        this.unidadeOrganizacionalService.criarContasAD(this.geraDirCadastro, this.ous, Estudante.converteEstudantesParaJSONcomSenha( this.estudantes ), this.usarSenha ? this.senhaPadrao : "")
+        this.unidadeOrganizacionalService.criarContasAD(this.geraDirCadastro, this.ous, Estudante.converteEstudantesParaJSONcomSenha( this.estudantes ))
             .then(response => {
                 jQuery('#saidaExport').html(response);
                 this.editavel = true;
