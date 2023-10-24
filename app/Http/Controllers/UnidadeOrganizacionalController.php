@@ -13,9 +13,11 @@ use LdapRecord\Models\Attributes\AccountControl;
 use LdapRecord\Models\ActiveDirectory\Group;
 use App\Configuracoes;
 use App\Mail\SendMailUserLdap;
+use App\Notifications\UserAdCreate;
 use Illuminate\Http\Client\Request as ClientRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Notification;
 use LdapRecord\Connection;
 use LdapRecord\Container;
 
@@ -402,9 +404,8 @@ class UnidadeOrganizacionalController extends Controller
                             'acao' => $acao
                         ]);
                     } else {
-                        Mail::to(array_map('trim', explode($configSeparadorEmail, $e[3])))
-                            // ->cc($configEmail != null ? array_map('trim', explode($configSeparadorEmail, $configEmail->valor)) : "")
-                            ->send(new SendMailUserLdap($user, $pass, $acao ));
+                            Notification::route('mail', $e[3])
+                                    ->notify(new UserAdCreate($user, $pass, $acao));
     
                         return $ret;
                     }
@@ -441,7 +442,7 @@ class UnidadeOrganizacionalController extends Controller
                 'username' => $e[0],
                 'fullname' => $e[2],
                 'email' => ($this->isCPF($e[0]) ? $this->geraEmail($e[2], $e[0], "@" . $sufixo) : $e[1]),
-                'senha' => $e[3],
+                'email_alternativo' => $e[3],
                 'is_professor' => false
             ];
         }
@@ -554,9 +555,8 @@ class UnidadeOrganizacionalController extends Controller
                             'acao' => $acao
                         ]);
                     } else {
-                        Mail::to(array_map('trim', explode($configSeparadorEmail, $e[3])))
-                            // ->cc($configEmail != null ? array_map('trim', explode($configSeparadorEmail, $configEmail->valor)) : "")
-                            ->send(new SendMailUserLdap($user, $pass, $acao));
+                        Notification::route('mail', $e[3])
+                                    ->notify(new UserAdCreate($user, $pass, $acao));
                     }
                 } catch (Exception $ex) {
                     $ret .= '<span style="color: #ff0000;"> Erro: ' . $ex->getMessage() . ' </span>';

@@ -10,7 +10,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use App\Configuracoes;
 use App\SalaOld;
 
-class SendMailUser extends Mailable
+class SendMailUser extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
