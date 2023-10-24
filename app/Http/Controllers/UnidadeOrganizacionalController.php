@@ -403,7 +403,7 @@ class UnidadeOrganizacionalController extends Controller
                         ]);
                     } else {
                         Mail::to(array_map('trim', explode($configSeparadorEmail, $e[3])))
-                            ->cc($configEmail != null ? array_map('trim', explode($configSeparadorEmail, $configEmail->valor)) : "")
+                            // ->cc($configEmail != null ? array_map('trim', explode($configSeparadorEmail, $configEmail->valor)) : "")
                             ->send(new SendMailUserLdap($user, $pass, $acao ));
     
                         return $ret;
@@ -555,7 +555,7 @@ class UnidadeOrganizacionalController extends Controller
                         ]);
                     } else {
                         Mail::to(array_map('trim', explode($configSeparadorEmail, $e[3])))
-                            ->cc($configEmail != null ? array_map('trim', explode($configSeparadorEmail, $configEmail->valor)) : "")
+                            // ->cc($configEmail != null ? array_map('trim', explode($configSeparadorEmail, $configEmail->valor)) : "")
                             ->send(new SendMailUserLdap($user, $pass, $acao));
                     }
                 } catch (Exception $ex) {
