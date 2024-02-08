@@ -24,9 +24,9 @@
     <img src="{{ asset('img/assinaturaf.png') }}">
     <br />
     <br />
-    @if (config('app.debug'))
+    {{-- @if (config('app.debug'))
         {!! $ret !!}
-    @endif
+    @endif --}}
 </body>
 
 </html>

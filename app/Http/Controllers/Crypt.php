@@ -14,12 +14,13 @@ class Crypt
      *
      * @var string
      */
-    private $key = '4ecf9ad8be9eaff7acbd3df377c75b75e4b00854baed5102dc4bb46e01150e0b';
-    private $nonce = '4614aed4a010bc5d7c3bc0d396261c08ccc61db910b34159';
+    private  $key;
+    private $nonce;
 
     public function __construct()
     {
-        $this->key = '4ecf9ad8be9eaff7acbd3df377c75b75e4b00854baed5102dc4bb46e01150e0b';
+        $this->key = env('CRYPT_KEY');
+        $this->nonce = env('CRYPT_NONCE');
     }
 
     /**
