@@ -140,7 +140,7 @@ class CursosMoodleController extends Controller
                 INNER JOIN {$prefixo}_role_assignments RS ON RS.userid=U.id
                 INNER JOIN {$prefixo}_context E ON RS.contextid=E.id
                 INNER JOIN {$prefixo}_course C ON C.id=E.instanceid
-                WHERE E.contextlevel=50 AND U.username='{$nomeDeUsuario}' AND (C.visible = 1 OR ( C.visible = 0 AND RS.roleid != 5)) AND  C.enddate >= (now())::abstime::int::bigint
+                WHERE E.contextlevel=50 AND U.username='{$nomeDeUsuario}' AND (C.visible = 1 OR ( C.visible = 0 AND RS.roleid != 5)) AND  C.enddate >= extract(epoch FROM now())
                 group by C.id, C.shortname, C.fullname, U.suspended
                 ORDER BY C.startdate DESC
                 EOT;
@@ -150,7 +150,7 @@ class CursosMoodleController extends Controller
                 INNER JOIN " . $prefixo . "_role_assignments RS ON RS.userid=U.id
                 INNER JOIN " . $prefixo . "_context E ON RS.contextid=E.id
                 INNER JOIN " . $prefixo . "_course C ON C.id=E.instanceid
-                WHERE E.contextlevel=50 AND U.username='" . $nomeDeUsuario . "' AND (C.visible = 1 OR ( C.visible = 0 AND RS.roleid != 5)) AND  C.enddate >= (now())::abstime::int::bigint
+                WHERE E.contextlevel=50 AND U.username='" . $nomeDeUsuario . "' AND (C.visible = 1 OR ( C.visible = 0 AND RS.roleid != 5)) AND  C.enddate >= extract(epoch FROM now())
                 group by C.id, C.shortname, C.fullname, U.suspended
                 ORDER BY C.startdate DESC";
 
@@ -172,7 +172,7 @@ class CursosMoodleController extends Controller
         try {
             $pdo = new PDO('pgsql:host=' . $moodle['ip_banco'] . ';dbname=' . $moodle['nome_banco'], 'portal_consulta', '121eadufgd387');
             
-            if ($moodle['nome_banco'] === 'MoodleUabLibras2022') {
+            if ($moodle['nome_banco'] === 'moodle_uablibras_2024') {
                 $stmt = $pdo->prepare($sqlEAD);
             } elseif($moodle['nome_banco'] === 'moodle406' || $moodle['nome_banco'] === 'moodle311'){
                 $stmt = $pdo->prepare($sqlLocal);
