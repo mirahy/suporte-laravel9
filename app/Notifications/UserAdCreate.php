@@ -55,7 +55,7 @@ class UserAdCreate extends Notification implements ShouldQueue
     {
         return (new MailMessage)
                     ->from(env('MAIL_FROM_ADDRESS'), 'Ti Ead')
-                    ->subject('Conta AD '.$this->acao.' : '.$this->user['cn'][0])
+                    ->subject('Conta '.$this->acao.' : '.$this->user['cn'][0])
                     ->markdown('email.emailLdap',[
                         'user' => $this->user, 
                         'email' => $this->email_suporte, 
