@@ -53,7 +53,7 @@
                     <div class="container-flex logo-name">
                         <div class="nav-logo">
                             <a class="nav " href="{{ url('/') }}">
-                                <img src="{{ asset('img/EAD-logo-Branco.png')}}" alt="Salas Moodle">
+                                <img id="logoIcon" src="{{ asset('img/EAD-logo-Branco.png')}}" alt="Salas Moodle">
                             </a>
                         </div>
                         <div class="nav-app-name">

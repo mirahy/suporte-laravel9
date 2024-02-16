@@ -13,6 +13,10 @@ html, body {
     --text-white: #ffffff;
     --text-black: #000000;
     --text-dark: #142136;
+    --text-green: #739719;
+    --text-green-light: #c9d400;
+    --text-app-name: #739719;
+
     
 
     /* cores de fundo */
@@ -21,6 +25,10 @@ html, body {
     --bg-blue-dark: #142136;
     --bg-indigo: #dff0d8;
     --bg-inputs: #ffffff;
+    --bg-green: #739719;
+    --bg-green-light: #c9d400;
+    --bg-green-light-hover: rgba(200,212,0,0.1);
+    --bg-green-light-hover-dropmain: rgba(116,151,25,0.7);
 
     /* cores cards */
     --bd-card: #cccccc;
@@ -31,6 +39,9 @@ html, body {
     --text-white: #e6e6e6;
     --text-black: #000000;
     --text-dark: #ffffff;
+    --text-green: #739719;
+    --text-green-light: #c9d400;
+    --text-app-name: #ffffff;
 
     /* cores de fundo */
     --bg-grey-light: #142136;
@@ -38,9 +49,13 @@ html, body {
     --bg-blue-dark: #142136;
     --bg-indigo: #0f4d35;
     --bg-inputs: #dadada;
+    --bg-green: #739719;
+    --bg-green-light: #c9d400;
+    --bg-green-light-hover: rgba(200,212,0,0.2);
+    --bg-green-light-hover-dropmain: rgba(116,151,25,0.7);
 
     /* cores cards */
-    --bd-card: #025310;
+    --bd-card: #739719;
 }
 
 
@@ -117,37 +132,37 @@ html, body {
 }
 
 .navbar-default {
-    background-image: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(1%, #19882c), color-stop(100%, #025310));
-    background-image: -webkit-radial-gradient(center, ellipse cover, #19882c 1%, #025310 100%);
-    background-image: -o-radial-gradient(center, ellipse cover, #19882c 1%, #025310 100%);
-    background-image: -ms-radial-gradient(center, ellipse cover, #19882c 1%, #025310 100%);
+    /* background-image: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(1%, #739719), color-stop(100%, #c9d400));
+    background-image: -webkit-radial-gradient(center, ellipse cover, #739719 1%, #c9d400 100%);
+    background-image: -o-radial-gradient(center, ellipse cover, #739719 1%, #c9d400 100%);
+    background-image: -ms-radial-gradient(center, ellipse cover, #739719 1%, #c9d400 100%); */
 
     /*Prod*/
-    background-image: radial-gradient(ellipse at center, #19882c 1%, #025310 100%);
+    /* background-image: radial-gradient(ellipse at center, #739719 1%, #c9d400 100%); */
     /*Dev
     background-image: radial-gradient(ellipse at center, #ff0500 1%, #691715 100%);*/
 
-    color: #fff;
-    filter: progid: DXImageTransform.Microsoft.gradient(startColorstr="#19882c", endColorstr="#025310", GradientType=1);
+    /* color: #fff; */
+    /* filter: progid: DXImageTransform.Microsoft.gradient(startColorstr="#739719", endColorstr="#c9d400", GradientType=1); */
 }
 
 .navbar {
     min-height: 70px;
     padding-top: 10px;
     margin-bottom: 0px;
-    color: #fafafa !important;
+    color: var(--text-green) !important;
     border-color: var(--bg-grey-light);
 }
 
 .navbar-default .navbar-nav>li>a {
-    color: #fafafa !important;
+    color: var(--text-green) !important;
 }
 
 .navbar-default,
 .navbar-nav>li>a:hover,
 .navbar-toggle:hover,
 .dropdown-menu>li>a:hover {
-    background-color: #18803c !important;
+    background-color: var(--bg-green-light-hover) !important;
 }
 
 .navbar-default,
@@ -155,14 +170,14 @@ html, body {
 .navbar-toggle:focus,
 .dropdown-menu>li>a:focus,
 .navbar-nav>.open>a {
-    background-color: #1ea04c !important;
+    background-color: var(--bg-grey-light) !important;
 }
 
 .navbar-static-top>.container {
-    background-image: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(1%, #19882c), color-stop(100%, #025310));
-    background-image: -webkit-radial-gradient(center, ellipse cover, #19882c 1%, #025310 100%);
-    background-image: -o-radial-gradient(center, ellipse cover, #19882c 1%, #025310 100%);
-    background-image: -ms-radial-gradient(center, ellipse cover, #19882c 1%, #025310 100%);
+    /* background-image: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(1%, #739719), color-stop(100%, #c9d400));
+    background-image: -webkit-radial-gradient(center, ellipse cover, #739719 1%, #c9d400 100%);
+    background-image: -o-radial-gradient(center, ellipse cover, #739719 1%, #c9d400 100%);
+    background-image: -ms-radial-gradient(center, ellipse cover, #739719 1%, #c9d400 100%); */
     min-height: 90px;
 }
 
@@ -263,7 +278,7 @@ table.table>tbody>tr>td {
 }
 
 .footer {
-    background-color: #00420c;
+    background-color: var(--bg-green);
     position: fixed;
     left: 0;
     bottom: 0;
@@ -752,7 +767,7 @@ body .ui-progressbar .ui-progressbar-value {
     display: table-cell;
     vertical-align: middle;
     font-size: 6rem;
-    color: #025310;
+    color: var(--bg-green);
 }
 
 .icon-card>img {
@@ -857,7 +872,7 @@ body .ui-progressbar .ui-progressbar-value {
 .navbar-nav,
 .dropdown-menu>li>a,
 .nav-app-name>a {
-    color: #fafafa !important;
+    color: var(--text-app-name) !important;
 }
 
 .nav-master {
@@ -912,7 +927,7 @@ body .ui-progressbar .ui-progressbar-value {
 }
 
 .navbar-nav>li>.dropdown-menu {
-    background-color: #025310;
+    background-color: var(--bg-grey-light);
 }
 
 
@@ -942,7 +957,7 @@ body .ui-progressbar .ui-progressbar-value {
     display: flex;
     margin: 5px 0px;
     width: 100%;
-    background-color: #025310;
+    background-color: var(--bg-green);
     font-size: 1.6rem;
     font-weight: 600;
     justify-content: space-between;
@@ -952,12 +967,12 @@ body .ui-progressbar .ui-progressbar-value {
 
 .btn-dropmain:hover {
     color: #fff;
-    background-color: #1ea04c;
+    background-color: var(--bg-green-light-hover-dropmain);
 }
 
 .btn-dropmain:focus {
     color: #fff;
-    background-color: #025310;
+    background-color: var(--bg-green);
 }
 
 .card-body {
