@@ -301,7 +301,7 @@
 
     <footer class="footer">
         <div class="container">
-            <p>© EAD - UFGD 2023</p>
+            <p>Equipe Web EaD UFGD © <b><?php echo date('Y'); ?></b> - Todos os direitos reservados</p>
         </div>
     </footer>
 

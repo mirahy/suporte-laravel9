@@ -4,8 +4,9 @@ html, body {
     height: 100vh;
     margin: 0;
     overflow: hidden;
-    padding: 0px 1px 40px 1px;
+    padding: 0px 1px 38px 1px;
     background-color: #142136;
+    color: #fff;
 }
 
 .light {
@@ -32,6 +33,11 @@ html, body {
 
     /* cores cards */
     --bd-card: #cccccc;
+
+
+    /*shadow*/
+    --shadow-navbar: 0 1px 6px rgba(0, 0, 0, .16);
+    --shadow-card: 4px 4px 5px #00420c;
 }
 
 .dark {
@@ -39,7 +45,7 @@ html, body {
     --text-white: #e6e6e6;
     --text-black: #000000;
     --text-dark: #ffffff;
-    --text-green: #739719;
+    --text-green: #ffffff;
     --text-green-light: #c9d400;
     --text-app-name: #ffffff;
 
@@ -56,6 +62,10 @@ html, body {
 
     /* cores cards */
     --bd-card: #739719;
+
+    /*shadow navbar*/
+    --shadow-navbar: 0 1px 6px rgba(253, 253, 253, 0.25);
+    --shadow-card: 4px 4px 5px rgba(253, 253, 253, 0.45);
 }
 
 
@@ -131,7 +141,7 @@ html, body {
     color: #bbb !important;
 }
 
-.navbar-default {
+/* .navbar-default {
     /* background-image: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(1%, #739719), color-stop(100%, #c9d400));
     background-image: -webkit-radial-gradient(center, ellipse cover, #739719 1%, #c9d400 100%);
     background-image: -o-radial-gradient(center, ellipse cover, #739719 1%, #c9d400 100%);
@@ -144,7 +154,7 @@ html, body {
 
     /* color: #fff; */
     /* filter: progid: DXImageTransform.Microsoft.gradient(startColorstr="#739719", endColorstr="#c9d400", GradientType=1); */
-}
+/* } */
 
 .navbar {
     min-height: 70px;
@@ -171,6 +181,7 @@ html, body {
 .dropdown-menu>li>a:focus,
 .navbar-nav>.open>a {
     background-color: var(--bg-grey-light) !important;
+    box-shadow: var(--shadow-navbar);
 }
 
 .navbar-static-top>.container {
@@ -287,7 +298,7 @@ table.table>tbody>tr>td {
 }
 
 .footer p {
-    color: white;
+    color: var(--text-white) !important;
     margin: 7px 0px 6px 0px;
     text-align: center;
 }
@@ -354,9 +365,9 @@ table.table>tbody>tr>th {
 }
 
 .panel-default>.panel-heading {
-    background-color: #5cb85c;
+    background-color: var(--bg-green);
     /* background-color: #19882c; */
-    border-color: #4cae4c;
+    border-color: var(--bg-green);
     font-weight: bold;
     color: white;
 }
@@ -390,7 +401,7 @@ table.table>tbody>tr>th {
 
 .modal-header {
     /*background-color: #69af72;*/
-    background-color: #19882c;
+    background-color: var(--bg-green);
     color: white;
     border-top-left-radius: 6px;
     border-top-right-radius: 6px;
@@ -555,7 +566,7 @@ label.form-control.form-control-read {
 }
 
 .btn-secondary {
-    color: #fff;
+    color: var(--text-white) !important;
     background-color: #6c757d;
     border-color: #6c757d;
 }
@@ -755,7 +766,7 @@ body .ui-progressbar .ui-progressbar-value {
 }
 
 .card:hover {
-    box-shadow: 4px 4px 5px #00420c;
+    box-shadow: var(--shadow-card);
 }
 
 
@@ -776,7 +787,7 @@ body .ui-progressbar .ui-progressbar-value {
 }
 
 .links-card {
-    background-color: #025310;
+    background-color: var(--bg-green);
     width: 150px;
     height: 60px;
     display: table-row;
