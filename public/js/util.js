@@ -1,5 +1,8 @@
 const themeIcon = document.getElementById("themeIcon");
+const LogoIcon = document.getElementById("logoIcon");
 const themeStorage = window.localStorage.getItem("themeSuporte");
+const logoLight = "img/EAD-logo-Colorido.png";
+const logoDark = "img/EAD-logo-Branco.png";
 const sun = "img/sun.svg";
 const moon = "img/moon.svg";
 const container = document.getElementById("theme-container");
@@ -43,6 +46,7 @@ function setLight() {
     }, 300);
     themeIcon.classList.add("change");
     themeIcon.src = sun;
+    LogoIcon.src = logoLight;
 }
 function setDark() {
     document.body.classList.remove("light");
@@ -55,4 +59,5 @@ function setDark() {
     }, 300);
     themeIcon.classList.add("change");
     themeIcon.src = moon;
+    LogoIcon.src = logoDark;
 }
