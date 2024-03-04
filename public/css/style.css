@@ -364,6 +364,10 @@ table.table>tbody>tr>th {
     border-bottom: 1px solid #ddd;
 }
 
+.panel-default>.btnMoodleclass{
+    background-color: var(--bg-green);
+}
+
 .panel-default>.panel-heading {
     background-color: var(--bg-green);
     /* background-color: #19882c; */
@@ -1103,27 +1107,27 @@ body .ui-progressbar .ui-progressbar-value {
     margin: 1px;
   }
   .loading-bar:nth-child(1) {
-    background-color: #27ae60;
+    background-color: var(--bg-green);
     animation-delay: 0;
   }
   .loading-bar:nth-child(2) {
-    background-color: #27ae60;
+    background-color: var(--bg-green);
     animation-delay: 0.09s;
   }
   .loading-bar:nth-child(3) {
-    background-color: #27ae60;
+    background-color: var(--bg-green);
     animation-delay: .18s;
   }
   .loading-bar:nth-child(4) {
-    background-color: #27ae60;
+    background-color: var(--bg-green);
     animation-delay: .27s;
   }
   .loading-bar:nth-child(5) {
-    background-color: #27ae60;
+    background-color: var(--bg-green);
     animation-delay: .36s;
   }
   .loading-bar:nth-child(6) {
-    background-color: #27ae60;
+    background-color: var(--bg-green);
     animation-delay: .45s;
   }
   
@@ -1168,4 +1172,8 @@ body .ui-progressbar .ui-progressbar-value {
 
   .caretMoodleclass{
     float: right
+  }
+
+  .title-cursos{
+    color: var(--text-green) !important;
   }
