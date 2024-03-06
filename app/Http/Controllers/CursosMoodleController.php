@@ -115,7 +115,7 @@ class CursosMoodleController extends Controller
             $intervalo = $ultimosMeses . ' month';
 
             // concatena na query
-            $sqlIntervalo .= " AND C.startdate >= (now() - interval '{$intervalo}')::abstime::int::bigint";
+            $sqlIntervalo .= " AND C.startdate >= (extract(epoch FROM now() - interval '{$intervalo}'))";
         }
 
         // SQL para buscar os cursos e disciplinas
