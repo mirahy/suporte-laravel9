@@ -68,6 +68,35 @@
                 <div class="collapse navbar-collapse" id="app-navbar-collapse">
                     <!-- Left Side Of Navbar -->
                     <ul class="nav navbar-nav">
+                        @if(isset($resources->permissao) && ($resources->permissao != 'INATIVO'))
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" v-pre>
+                                Cursos <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a href="/meus-cursos">
+                                        Meus Cursos
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/td-cursos">
+                                        Todos os Cursos
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="http://webmail.academico.ufgd.edu.br/">
+                                        Webmail UFGD Acadêmico
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="https://portal.ead.ufgd.edu.br/tutoriais">
+                                        Orientações e Tutoriais
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        @endif
                         @if(isset($resources->permissao) && ($resources->permissao != 'USUARIO' && $resources->permissao != 'INATIVO'))
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" v-pre>
@@ -219,35 +248,6 @@
                                 <li>
                                     <a href="/formulario-pessoas-estatus-lotacao">
                                         Lista de Pessoas Por Lotação
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        @endif
-                        @if(isset($resources->permissao) && ($resources->permissao != 'INATIVO'))
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" v-pre>
-                                Cursos <span class="caret"></span>
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li>
-                                    <a href="/meus-cursos">
-                                        Meus Cursos
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="/td-cursos">
-                                        Todos os Cursos
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="http://webmail.academico.ufgd.edu.br/">
-                                        Webmail UFGD Acadêmico
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="https://portal.ead.ufgd.edu.br/tutoriais">
-                                        Orientações e Tutoriais
                                     </a>
                                 </li>
                             </ul>

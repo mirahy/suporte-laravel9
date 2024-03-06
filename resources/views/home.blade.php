@@ -8,12 +8,36 @@
 
 @section('content')
     <div class="table-row">
-        @if(isset($resources->permissao) && ($resources->permissao != 'USUARIO'))
-        <button class="btn btn-secondary btn-dropmain" type="button" data-toggle="collapse" data-target="#solicitacoes" aria-expanded="true" aria-controls="multiCollapseExample2" >
-            Solicitações
-            <i class="bi bi-caret-up-fill" id="imgsolicitacoes"></i>
+        @if(isset($resources->permissao) && ($resources->permissao != 'INATIVO'))
+        <button class="btn btn-secondary btn-dropmain" type="button" data-toggle="collapse" data-target="#cursos" aria-expanded="true" aria-controls="multiCollapseExample2" >
+            Cursos
+            <i class="bi bi-caret-up-fill" id="imgcursos"></i>
         </button>
-        <div class="collapse in multi-collapse delay-1" id="solicitacoes">
+        @if(isset($resources->permissao) && ($resources->permissao == 'USUARIO'))
+        <div class="collapse in multi-collapse delay-1" id="cursos">
+        @else
+        <div class="collapse in multi-collapse delay-1" id="cursos">
+        @endif
+            <div class="card card-body delay-2">
+                
+                @include('templates.cards', ['link' => '/meus-cursos', 'text' => 'Meus Cursos', 'title' => 'Acesse aqui os cursos que você está matriculado!!', 'classIcon' => 'bi bi-journal', 'classLink' => '' ])
+                
+                @include('templates.cards', ['link' => '/td-cursos', 'text' => 'Todos os Cursos', 'title' => 'Lista todos os cursos da UFGD.', 'classIcon' => 'bi bi-journals', 'classLink' => '' ])
+                
+                @include('templates.cards', ['link' => 'http://webmail.academico.ufgd.edu.br/', 'text' => 'Webmail UFGD Acadêmico', 'title' => 'Acesse seu e-mail acadêmico.', 'classIcon' => 'bi bi-envelope-at', 'classLink' => '' ])
+                
+                @include('templates.cards', ['link' => 'https://portal.ead.ufgd.edu.br/tutoriais', 'text' => 'Orientações e Tutoriais', 'title' => 'Dicas, orientações e tutoriais!', 'classIcon' => 'bi bi-question-lg', 'classLink' => '' ])
+                
+
+            </div>
+        </div>
+        @endif
+        @if(isset($resources->permissao) && ($resources->permissao != 'USUARIO'))
+        <button class="btn btn-secondary btn-dropmain" type="button" data-toggle="collapse" data-target="#solicitacoes" aria-expanded="false" aria-controls="multiCollapseExample2" >
+            Solicitações
+            <i class="bi bi-caret-down-fill" id="imgsolicitacoes"></i>
+        </button>
+        <div class="collapse multi-collapse delay-1" id="solicitacoes">
             <div class="card card-body delay-2">
                 @if(isset($resources->permissao) && ($resources->permissao == 'SERVIDOR' || $resources->permissao == 'ADMINISTRADOR'))
                 @include('templates.cards', ['link' => '/salas/create/', 'text' => 'Nova Solicitação de Sala', 'classIcon' => 'bi bi-file-earmark-plus', 'classLink' => '' ])
@@ -111,30 +135,6 @@
                 @if(isset($resources->permissao) && ($resources->permissao == 'ADMINISTRADOR' && $resources->keepUser === true))
                 @include('templates.cards', ['link' => '/formulario-pessoas-estatus-lotacao/', 'text' => 'Lista de Pessoas Por Lotação', 'classIcon' => 'bi bi-person-down', 'classLink' => '' ])
                 @endif
-            </div>
-        </div>
-        @endif
-        @if(isset($resources->permissao) && ($resources->permissao != 'INATIVO'))
-        <button class="btn btn-secondary btn-dropmain" type="button" data-toggle="collapse" data-target="#cursos" aria-expanded="true" aria-controls="multiCollapseExample2" >
-            Cursos
-            <i class="bi bi-caret-down-fill" id="imgcursos"></i>
-        </button>
-        @if(isset($resources->permissao) && ($resources->permissao == 'USUARIO'))
-        <div class="collapse in multi-collapse delay-1" id="cursos">
-        @else
-        <div class="collapse multi-collapse delay-1" id="cursos">
-        @endif
-            <div class="card card-body delay-2">
-                
-                @include('templates.cards', ['link' => '/meus-cursos', 'text' => 'Meus Cursos', 'title' => 'Acesse aqui os cursos que você está matriculado!!', 'classIcon' => 'bi bi-journal', 'classLink' => '' ])
-                
-                @include('templates.cards', ['link' => '/td-cursos', 'text' => 'Todos os Cursos', 'title' => 'Lista todos os cursos da UFGD.', 'classIcon' => 'bi bi-journals', 'classLink' => '' ])
-                
-                @include('templates.cards', ['link' => 'http://webmail.academico.ufgd.edu.br/', 'text' => 'Webmail UFGD Acadêmico', 'title' => 'Acesse seu e-mail acadêmico.', 'classIcon' => 'bi bi-envelope-at', 'classLink' => '' ])
-                
-                @include('templates.cards', ['link' => 'https://portal.ead.ufgd.edu.br/tutoriais', 'text' => 'Orientações e Tutoriais', 'title' => 'Dicas, orientações e tutoriais!', 'classIcon' => 'bi bi-question-lg', 'classLink' => '' ])
-                
-
             </div>
         </div>
         @endif
