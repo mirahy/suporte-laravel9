@@ -110,14 +110,14 @@
             </div>
         </div>
         @endif
-        @if(isset($resources->permissao) && ($resources->permissao == 'ADMINISTRADOR' && $resources->keepUser === true))
+        @if(isset($resources->permissao) && (($resources->permissao == 'ADMINISTRADOR' || $resources->permissao == 'SERVIDOR') && $resources->keepUser === true))
         <button class="btn btn-secondary btn-dropmain" type="button" data-toggle="collapse" data-target="#gestaoUsuarios" aria-expanded="false" aria-controls="multiCollapseExample2" >
             Gestão Usuários
             <i class="bi bi-caret-down-fill" id="imggestaoUsuarios"></i>
         </button>
         <div class="collapse multi-collapse delay-1" id="gestaoUsuarios">
             <div class="card card-body delay-2">
-                @if(isset($resources->permissao) && ($resources->permissao == 'ADMINISTRADOR' && $resources->keepUser === true))
+                @if(isset($resources->permissao) && (($resources->permissao == 'ADMINISTRADOR' || $resources->permissao == 'SERVIDOR')  && $resources->keepUser === true))
                 @include('templates.cards', ['link' => '/formulario-insere-usuarios/', 'text' => 'Inserir Usuários Moodle', 'classIcon' => 'bi bi-person-add', 'classLink' => '' ])
                 @endif
                 @if(isset($resources->permissao) && ($resources->permissao == 'ADMINISTRADOR' && $resources->keepUser === true))

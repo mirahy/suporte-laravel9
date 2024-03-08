@@ -17,7 +17,7 @@ class ServidoresMoodleController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        $this->middleware('permissao:'.User::PERMISSAO_ADMINISTRADOR)->except(['links']);
+        $this->middleware('permissao:'.User::PERMISSAO_ADMINISTRADOR.','.User::PERMISSAO_SERVIDOR)->except(['links']);
     }
 
     public function all()

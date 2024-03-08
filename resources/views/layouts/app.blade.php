@@ -214,42 +214,54 @@
                             </ul>
                         </li>
                         @endif
-                        @if(isset($resources->permissao) && ($resources->permissao == 'ADMINISTRADOR'  && $resources->keepUser === true))
+                        @if(isset($resources->permissao) && (($resources->permissao == 'ADMINISTRADOR' || $resources->permissao == 'SERVIDOR')  && $resources->keepUser === true))
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" v-pre>
                                 Gestão Usuários <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu">
+                                @if(isset($resources->permissao) && (($resources->permissao == 'ADMINISTRADOR' || $resources->permissao == 'SERVIDOR')  && $resources->keepUser === true))
                                 <li>
                                     <a href="/formulario-insere-usuarios">
                                         Inserir Usuários Moodle
                                     </a>
                                 </li>
+                                @endif
+                                @if(isset($resources->permissao) && ($resources->permissao == 'ADMINISTRADOR' && $resources->keepUser === true))
                                 <li>
                                     <a href="/formulario-insere-ad">
                                         Inserir Usuários AD
                                     </a>
                                 </li>
+                                @endif
+                                @if(isset($resources->permissao) && ($resources->permissao == 'ADMINISTRADOR' && $resources->keepUser === true))
                                 <li>
                                     <a href="/formulario-altera-usuario">
                                         Alterar Senha Usuários AD
                                     </a>
                                 </li>
+                                @endif
+                                @if(isset($resources->permissao) && ($resources->permissao == 'ADMINISTRADOR' && $resources->keepUser === true))
                                 <li>
                                     <a href="/usuarios">
                                         Lista de Usuários
                                     </a>
                                 </li>
+                                @endif
+                                @if(isset($resources->permissao) && ($resources->permissao == 'ADMINISTRADOR' && $resources->keepUser === true))
                                 <li>
                                     <a href="/roles">
                                         Perfis - Acessos
                                     </a>
                                 </li>
+                                @endif
+                                @if(isset($resources->permissao) && ($resources->permissao == 'ADMINISTRADOR' && $resources->keepUser === true))
                                 <li>
                                     <a href="/formulario-pessoas-estatus-lotacao">
                                         Lista de Pessoas Por Lotação
                                     </a>
                                 </li>
+                                @endif
                             </ul>
                         </li>
                         @endif
