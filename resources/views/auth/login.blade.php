@@ -55,8 +55,8 @@
                                     Entrar
                                 </button>
 
-                                <a class="btn btn-link" href="{{ route('password.request') }}">
-                                    Problemas de Acesso?
+                                <a class="btn btn-link" href="https://login.app.ufgd.edu.br/recuperar_senha" target="_blank">
+                                    Recuperar a senha!
                                 </a>
                             </div>
                         </div>
