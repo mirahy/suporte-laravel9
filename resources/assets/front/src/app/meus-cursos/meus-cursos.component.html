@@ -29,7 +29,7 @@
                <ng-container *ngFor="let curso of moodle.cursos">
                 <div class="panel-body">
                  
-                  <a type="button" id="curso{{ curso.id + moodle.id }}" title="{{ curso.fullname }}"class="btn btn-primary btn-group-justified celula-trunca-texto" role="group" href="{{ curso.href }}" target="_blank">
+                  <a type="button" id="curso{{ curso.id + moodle.id }}" title="{{ curso.fullname }}"class="btn btn-cursos btn-group-justified celula-trunca-texto" role="group" href="{{ curso.href }}" target="_blank">
                     <span class="text-truncate" style="display: block;" title="{{ curso.fullname }}">{{ curso.fullname }}</span>
                   </a>
                 </div>

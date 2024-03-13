@@ -26,13 +26,13 @@
                 </a>
                     <div id="moodle{{ moodle.id }}" class="collapse multi-collapse delay-2">
                       <div class="panel-body">
-                        <a type="button" class="btn btn-success btn-group-justified" title="{{ moodle.nome }}" href="{{ moodle.href }}" target="_blank">
+                        <a type="button" class="btn btn-login-moodle btn-group-justified" title="{{ moodle.nome }}" href="{{ moodle.href }}" target="_blank">
                           {{ moodle.nome }}
                         </a>
                       </div>
                       <ng-container *ngFor="let curso of moodle.cursos">
                         <div class="panel-body">
-                          <a type="button" class="btn btn-primary btn-group-justified celula-trunca-texto" title="{{ curso.fullname }}" href="{{ curso.href }}" target="_blank">
+                          <a type="button" class="btn btn-cursos btn-group-justified celula-trunca-texto" title="{{ curso.fullname }}" href="{{ curso.href }}" target="_blank">
                             {{ curso.fullname }}
                           </a>
                         </div>
@@ -58,7 +58,7 @@
                     <div class="panel-body">
                       <a
                         type="button"
-                        class="btn btn-primary btn-group-justified celula-trunca-texto"
+                        class="btn btn-cursos btn-group-justified celula-trunca-texto"
                         href="http://200.129.215.36/computacao/login/index.php"
                         target="_blank"
                         title="Moodle Licenciatura em Computação (2016)"
@@ -69,7 +69,7 @@
                     <div class="panel-body">
                       <a
                         type="button"
-                        class="btn btn-primary btn-group-justified celula-trunca-texto"
+                        class="btn btn-cursos btn-group-justified celula-trunca-texto"
                         href="http://200.129.215.36/admpublica/login/index.php"
                         target="_blank"
                         title="Moodle Bacharelado em Administração Pública (2016)"
@@ -81,7 +81,7 @@
                     <div class="panel-body">
                       <a
                         type="button"
-                        class="btn btn-primary btn-group-justified celula-trunca-texto"
+                        class="btn btn-cursos btn-group-justified celula-trunca-texto"
                         href="http://200.129.215.36/fisica/login/index.php"
                         target="_blank"
                         title="Moodle Licenciatura em Física (2016)"
@@ -92,7 +92,7 @@
                     <div class="panel-body">
                       <a
                         type="button"
-                        class="btn btn-primary btn-group-justified celula-trunca-texto"
+                        class="btn btn-cursos btn-group-justified celula-trunca-texto"
                         href="http://200.129.215.36/pedagogia/login/index.php"
                         target="_blank"
                         title="Moodle Licenciatura em Pedagogia (2016)"
@@ -103,7 +103,7 @@
                     <div class="panel-body">
                       <a
                         type="button"
-                        class="btn btn-primary btn-group-justified celula-trunca-texto"
+                        class="btn btn-cursos btn-group-justified celula-trunca-texto"
                         href="http://200.129.215.36/posgrad/login/index.php"
                         target="_blank"
                         title="Moodle Pós-Graduações EaD (2015)"
